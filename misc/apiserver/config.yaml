@@ -1,0 +1,16 @@
+apiserver:
+  insecureServing:
+    enabled: true
+    bindAddress: 0.0.0.0
+    bindPort: 8080
+  secureServing:
+    enabled: false
+
+db:
+  connMaxIdletime: 0
+  connMaxLifetime: 0
+  maxOpenConns: 1
+  driver: sqlite3
+  #dsn: file:test.db?cache=shared&mode=memory
+  dsn: file:test.db?cache=shared
+  ignoreNotFound: true
