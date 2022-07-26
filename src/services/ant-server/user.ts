@@ -13,8 +13,8 @@ export async function listUser(
     params: {
       // pageSize has a default value: 10
       pageSize: '10',
-      // currentPage has a default value: 1
-      currentPage: '1',
+      // current has a default value: 1
+      current: '1',
 
       // order has a default value: asc
       order: 'asc',
@@ -26,7 +26,7 @@ export async function listUser(
 
 /** update user PUT /api/v1/users */
 export async function updateUser(body: API.UpdateUserInput, options?: { [key: string]: any }) {
-  return request<any>('/api/v1/users', {
+  return request<API.Response200>('/api/v1/users', {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
@@ -69,7 +69,7 @@ export async function deleteUser(
   options?: { [key: string]: any },
 ) {
   const { name: param0, ...queryParams } = params;
-  return request<any>(`/api/v1/users/${param0}`, {
+  return request<API.Response200>(`/api/v1/users/${param0}`, {
     method: 'DELETE',
     params: { ...queryParams },
     ...(options || {}),

@@ -19,6 +19,7 @@ fix:
 	npm run lint:fix
 
 openapi:
+	curl -o config/apidocs.json http://localhost:8080/apidocs.json && \
 	npm run openapi
 
 install:

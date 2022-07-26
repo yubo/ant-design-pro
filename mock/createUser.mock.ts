@@ -4,23 +4,28 @@ import { Request, Response } from 'express';
 export default {
   'POST /api/v1/users': (req: Request, res: Response) => {
     res.status(200).send({
-      address: '宁夏回族自治区 银川市 其它区',
-      avatar: 'https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png',
-      createdAt: '1984-12-19 15:40:43',
-      email: 'v.coddzp@nupftz.ki',
-      group: '前端 6 组',
-      id: 93,
-      name: '叶秀英',
-      notifyCount: 67,
-      phone: '11275545573',
-      tags: {
-        additionalProp1: '者适广况类况状条交通亲油四素只认见。',
-        additionalProp2: '此离适复议十法点位用标被多力院社。',
-        additionalProp3: '边少队出织备油该入内通界酸直了。',
+      data: {
+        address: '天津 天津市 武清区',
+        avatar: 'https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png',
+        createdAt: '2014-06-14 23:29:07',
+        email: 'l.stkkb@ntxeuyt.mc',
+        group: '前端 6 组',
+        id: 72,
+        name: '廖强',
+        notifyCount: 90,
+        phone: '11428057042',
+        tags: {
+          additionalProp1: '影要道什当十心半人门号文大料。',
+          additionalProp2: '而感量公除你儿团反治件现内。',
+          additionalProp3: '常育象场速生民道土白决细走值厂。',
+        },
+        title: '由想收别始效级效社院制形感化北各。',
+        unreadCount: 80,
+        updatedAt: '2002-11-28 02:12:22',
       },
-      title: '育按每共象体教五利什转目边。',
-      unreadCount: 62,
-      updatedAt: '2011-11-27 08:41:08',
+      host: '去只时全装而书相四办她市反外行而。',
+      success: true,
+      traceId: '7Ded13fc-d2B0-71eF-1c23-072EaDF12f1f',
     });
   },
 };

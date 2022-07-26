@@ -4,23 +4,28 @@ import { Request, Response } from 'express';
 export default {
   'GET /api/v1/users/:name': (req: Request, res: Response) => {
     res.status(200).send({
-      address: '广东省 阳江市 阳西县',
-      avatar: 'https://avatars0.githubusercontent.com/u/507615?s=40&v=4',
-      createdAt: '2018-08-09 05:57:09',
-      email: 'a.rqvnewe@gjux.pg',
-      group: '创新科技组',
-      id: 72,
-      name: '谢秀兰',
-      notifyCount: 64,
-      phone: '11476270726',
-      tags: {
-        additionalProp1: '着新参准即此代能老种或列委着。',
-        additionalProp2: '专安多油为速速许子完少月打。',
-        additionalProp3: '无到每入片起观同自无北合用来。',
+      data: {
+        address: '浙江省 衢州市 江山市',
+        avatar: 'https://gw.alipayobjects.com/zos/rmsportal/OKJXDXrmkNshAMvwtvhu.png',
+        createdAt: '1984-05-07 06:02:05',
+        email: 'x.hmmyjzhp@vdkpxokhz.pm',
+        group: '服务技术部',
+        id: 81,
+        name: '任刚',
+        notifyCount: 71,
+        phone: '11160367453',
+        tags: {
+          additionalProp1: '实加种改声火而置组路东感进性。',
+          additionalProp2: '效志局手军式气消方然提看严。',
+          additionalProp3: '置格非地数领都思精示分究先满须当。',
+        },
+        title: '率划查切数听土处儿也社严应机斗金者。',
+        unreadCount: 76,
+        updatedAt: '1978-01-02 08:06:46',
       },
-      title: '先周准然产器群市达算打除条直。',
-      unreadCount: 91,
-      updatedAt: '2007-01-19 13:36:56',
+      host: '心质即不学角将间再后先名离。',
+      success: false,
+      traceId: 'cB4DA9Fa-7c7A-b30b-04ce-FeD78Ef8DADd',
     });
   },
 };

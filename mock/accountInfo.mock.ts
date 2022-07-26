@@ -4,23 +4,23 @@ import { Request, Response } from 'express';
 export default {
   'GET /api/v1/account/info': (req: Request, res: Response) => {
     res.status(200).send({
-      address: '内蒙古自治区 巴彦淖尔市 杭锦后旗',
-      avatar: 'https://gw.alipayobjects.com/zos/rmsportal/OKJXDXrmkNshAMvwtvhu.png',
-      createdAt: '2002-11-22 17:00:00',
-      email: 's.tckkiusuep@ype.gov.cn',
-      group: '区块链平台部',
-      id: 79,
-      name: '萧刚',
-      notifyCount: 80,
-      phone: '11234869492',
+      address: '贵州省 安顺市 关岭布依族苗族自治县',
+      avatar: 'https://gw.alipayobjects.com/zos/rmsportal/ThXAXghbEsBCCSDihZxY.png',
+      createdAt: '2019-02-02 07:46:36',
+      email: 'z.frzdb@rapbuqpc.fm',
+      group: '前端 6 组',
+      id: 77,
+      name: '傅军',
+      notifyCount: 68,
+      phone: '11479807681',
       tags: {
-        additionalProp1: '温示是六子照易面调阶状如育。',
-        additionalProp2: '没定如做众老派声包自质往道美。',
-        additionalProp3: '入区火验同史王文想历越各共斯价取气。',
+        additionalProp1: '集位使因增求认事加通多查严划清同。',
+        additionalProp2: '他张山达想头工物斯将制完管子九战展看。',
+        additionalProp3: '眼平太存运该特科平斯达响称员质习。',
       },
-      title: '来而品速务约即价响求情文话路期。',
-      unreadCount: 65,
-      updatedAt: '1994-09-13 21:18:04',
+      title: '还明水是人热者情料许到被她太第儿。',
+      unreadCount: 83,
+      updatedAt: '2012-01-28 06:40:12',
     });
   },
 };

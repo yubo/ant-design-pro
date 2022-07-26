@@ -34,6 +34,8 @@ declare namespace API {
     platform: string;
   };
 
+  type ListUserOutput = ListUserOutput;
+
   type ListUserOutput = {
     list: User[];
     total: number;
@@ -45,7 +47,7 @@ declare namespace API {
     /** page size */
     pageSize?: number;
     /** current page number, start at 1(defualt) */
-    currentPage?: number;
+    current?: number;
     /** column name */
     sorter?: string;
     /** asc(default)/desc */
@@ -64,6 +66,18 @@ declare namespace API {
     type: string;
   };
 
+  type Response200 = {
+    host?: string;
+    success: boolean;
+    traceId?: string;
+  };
+
+  type Response400 = {
+    errorCode: string;
+    errorMessage: string;
+    success: boolean;
+  };
+
   type UpdateUserInput = {
     address: string;
     avatar: string;
@@ -74,6 +88,8 @@ declare namespace API {
     tags: Record<string, any>;
     title: string;
   };
+
+  type User = User;
 
   type User = {
     address: string;

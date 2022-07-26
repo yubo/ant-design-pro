@@ -1,0 +1,705 @@
+{
+ "swagger": "2.0",
+ "info": {
+  "description": "apiserver examples all in one",
+  "title": "ant-server",
+  "contact": {
+   "name": "yubo",
+   "url": "http://github.com/yubo",
+   "email": "yubo@yubo.org"
+  },
+  "license": {
+   "name": "Apache-2.0",
+   "url": "https://www.apache.org/licenses/LICENSE-2.0.txt"
+  },
+  "version": "v0.0.0"
+ },
+ "paths": {
+  "/api/v1/account/captcha": {
+   "post": {
+    "consumes": [
+     "application/json"
+    ],
+    "produces": [
+     "application/json"
+    ],
+    "tags": [
+     "account"
+    ],
+    "summary": "发送验证码",
+    "operationId": "accountCaptcha",
+    "parameters": [
+     {
+      "name": "body",
+      "in": "body",
+      "required": true,
+      "schema": {
+       "$ref": "#/definitions/api.CaptchaInput"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "OK"
+     }
+    }
+   }
+  },
+  "/api/v1/account/info": {
+   "get": {
+    "consumes": [
+     "application/json"
+    ],
+    "produces": [
+     "application/json"
+    ],
+    "tags": [
+     "account"
+    ],
+    "summary": "get curent user info",
+    "operationId": "accountInfo",
+    "responses": {
+     "200": {
+      "description": "OK",
+      "schema": {
+       "$ref": "#/definitions/api.User"
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/account/login": {
+   "post": {
+    "consumes": [
+     "application/json"
+    ],
+    "produces": [
+     "application/json"
+    ],
+    "tags": [
+     "account"
+    ],
+    "summary": "account login",
+    "operationId": "accountLogin",
+    "parameters": [
+     {
+      "name": "body",
+      "in": "body",
+      "required": true,
+      "schema": {
+       "$ref": "#/definitions/api.LoginInput"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "OK",
+      "schema": {
+       "$ref": "#/definitions/api.LoginOutput"
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/account/logout": {
+   "post": {
+    "consumes": [
+     "application/json"
+    ],
+    "produces": [
+     "application/json"
+    ],
+    "tags": [
+     "account"
+    ],
+    "summary": "account logout",
+    "operationId": "accountLogout",
+    "responses": {
+     "200": {
+      "description": "OK"
+     }
+    }
+   }
+  },
+  "/api/v1/users": {
+   "get": {
+    "consumes": [
+     "application/json"
+    ],
+    "produces": [
+     "application/json"
+    ],
+    "tags": [
+     "user"
+    ],
+    "summary": "search/list users",
+    "operationId": "listUser",
+    "parameters": [
+     {
+      "type": "string",
+      "description": "query user",
+      "name": "query",
+      "in": "query"
+     },
+     {
+      "maximum": 500,
+      "type": "integer",
+      "default": 10,
+      "description": "page size",
+      "name": "pageSize",
+      "in": "query"
+     },
+     {
+      "type": "integer",
+      "default": 1,
+      "description": "current page number, start at 1(defualt)",
+      "name": "current",
+      "in": "query"
+     },
+     {
+      "type": "string",
+      "description": "column name",
+      "name": "sorter",
+      "in": "query"
+     },
+     {
+      "enum": [
+       "asc",
+       "desc"
+      ],
+      "type": "string",
+      "default": "asc",
+      "description": "asc(default)/desc",
+      "name": "order",
+      "in": "query"
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "OK",
+      "schema": {
+       "$ref": "#/definitions/__umi__.api.ListUserOutput"
+      }
+     },
+     "400": {
+      "description": "Bad Request",
+      "schema": {
+       "$ref": "#/definitions/__umi__.Response400"
+      }
+     }
+    }
+   },
+   "put": {
+    "consumes": [
+     "application/json"
+    ],
+    "produces": [
+     "application/json"
+    ],
+    "tags": [
+     "user"
+    ],
+    "summary": "update user",
+    "operationId": "updateUser",
+    "parameters": [
+     {
+      "name": "body",
+      "in": "body",
+      "required": true,
+      "schema": {
+       "$ref": "#/definitions/api.UpdateUserInput"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "OK",
+      "schema": {
+       "$ref": "#/definitions/__umi__.Response200"
+      }
+     },
+     "400": {
+      "description": "Bad Request",
+      "schema": {
+       "$ref": "#/definitions/__umi__.Response400"
+      }
+     }
+    }
+   },
+   "post": {
+    "consumes": [
+     "application/json"
+    ],
+    "produces": [
+     "application/json"
+    ],
+    "tags": [
+     "user"
+    ],
+    "summary": "create user",
+    "operationId": "createUser",
+    "parameters": [
+     {
+      "name": "body",
+      "in": "body",
+      "required": true,
+      "schema": {
+       "$ref": "#/definitions/api.CreateUserInput"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "OK",
+      "schema": {
+       "$ref": "#/definitions/__umi__.api.User"
+      }
+     },
+     "400": {
+      "description": "Bad Request",
+      "schema": {
+       "$ref": "#/definitions/__umi__.Response400"
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/users/{name}": {
+   "get": {
+    "consumes": [
+     "application/json"
+    ],
+    "produces": [
+     "application/json"
+    ],
+    "tags": [
+     "user"
+    ],
+    "summary": "get user",
+    "operationId": "getUser",
+    "parameters": [
+     {
+      "type": "string",
+      "name": "name",
+      "in": "path",
+      "required": true
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "OK",
+      "schema": {
+       "$ref": "#/definitions/__umi__.api.User"
+      }
+     },
+     "400": {
+      "description": "Bad Request",
+      "schema": {
+       "$ref": "#/definitions/__umi__.Response400"
+      }
+     }
+    }
+   },
+   "delete": {
+    "consumes": [
+     "application/json"
+    ],
+    "produces": [
+     "application/json"
+    ],
+    "tags": [
+     "user"
+    ],
+    "summary": "delete user",
+    "operationId": "deleteUser",
+    "parameters": [
+     {
+      "type": "string",
+      "name": "name",
+      "in": "path",
+      "required": true
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "OK",
+      "schema": {
+       "$ref": "#/definitions/__umi__.Response200"
+      }
+     },
+     "400": {
+      "description": "Bad Request",
+      "schema": {
+       "$ref": "#/definitions/__umi__.Response400"
+      }
+     }
+    }
+   }
+  },
+  "/version": {
+   "get": {
+    "consumes": [
+     "application/json"
+    ],
+    "produces": [
+     "application/json"
+    ],
+    "summary": "get the code version",
+    "operationId": "getCodeVersion",
+    "responses": {
+     "200": {
+      "description": "OK",
+      "schema": {
+       "$ref": "#/definitions/version.Info"
+      }
+     }
+    }
+   }
+  }
+ },
+ "definitions": {
+  "__umi__.Response200": {
+   "required": [
+    "success"
+   ],
+   "properties": {
+    "host": {
+     "type": "string"
+    },
+    "success": {
+     "type": "boolean"
+    },
+    "traceId": {
+     "type": "string"
+    }
+   }
+  },
+  "__umi__.Response400": {
+   "required": [
+    "errorCode",
+    "errorMessage",
+    "success"
+   ],
+   "properties": {
+    "errorCode": {
+     "type": "string"
+    },
+    "errorMessage": {
+     "type": "string"
+    },
+    "success": {
+     "type": "boolean"
+    }
+   }
+  },
+  "__umi__.api.ListUserOutput": {
+   "required": [
+    "success"
+   ],
+   "properties": {
+    "data": {
+     "$ref": "#/definitions/api.ListUserOutput"
+    },
+    "host": {
+     "type": "string"
+    },
+    "success": {
+     "type": "boolean"
+    },
+    "traceId": {
+     "type": "string"
+    }
+   }
+  },
+  "__umi__.api.User": {
+   "required": [
+    "success"
+   ],
+   "properties": {
+    "data": {
+     "$ref": "#/definitions/api.User"
+    },
+    "host": {
+     "type": "string"
+    },
+    "success": {
+     "type": "boolean"
+    },
+    "traceId": {
+     "type": "string"
+    }
+   }
+  },
+  "api.CaptchaInput": {
+   "required": [
+    "phone"
+   ],
+   "properties": {
+    "phone": {
+     "type": "string"
+    }
+   }
+  },
+  "api.CreateUserInput": {
+   "required": [
+    "name",
+    "avatar",
+    "email",
+    "title",
+    "group",
+    "tags",
+    "address",
+    "phone"
+   ],
+   "properties": {
+    "address": {
+     "type": "string"
+    },
+    "avatar": {
+     "type": "string"
+    },
+    "email": {
+     "type": "string"
+    },
+    "group": {
+     "type": "string"
+    },
+    "name": {
+     "type": "string"
+    },
+    "phone": {
+     "type": "string"
+    },
+    "tags": {
+     "type": "object",
+     "additionalProperties": {
+      "type": "string"
+     }
+    },
+    "title": {
+     "type": "string"
+    }
+   }
+  },
+  "api.ListUserOutput": {
+   "required": [
+    "total",
+    "list"
+   ],
+   "properties": {
+    "list": {
+     "type": "array",
+     "items": {
+      "$ref": "#/definitions/api.User"
+     }
+    },
+    "total": {
+     "type": "integer",
+     "format": "int64"
+    }
+   }
+  },
+  "api.LoginInput": {
+   "required": [
+    "username",
+    "password",
+    "autoLogin",
+    "type"
+   ],
+   "properties": {
+    "autoLogin": {
+     "type": "boolean"
+    },
+    "password": {
+     "type": "string"
+    },
+    "type": {
+     "type": "string"
+    },
+    "username": {
+     "type": "string"
+    }
+   }
+  },
+  "api.LoginOutput": {
+   "required": [
+    "type",
+    "currentAuthority"
+   ],
+   "properties": {
+    "currentAuthority": {
+     "type": "string"
+    },
+    "type": {
+     "type": "string"
+    }
+   }
+  },
+  "api.UpdateUserInput": {
+   "required": [
+    "name",
+    "avatar",
+    "email",
+    "title",
+    "group",
+    "tags",
+    "address",
+    "phone"
+   ],
+   "properties": {
+    "address": {
+     "type": "string"
+    },
+    "avatar": {
+     "type": "string"
+    },
+    "email": {
+     "type": "string"
+    },
+    "group": {
+     "type": "string"
+    },
+    "name": {
+     "type": "string"
+    },
+    "phone": {
+     "type": "string"
+    },
+    "tags": {
+     "type": "object",
+     "additionalProperties": {
+      "type": "string"
+     }
+    },
+    "title": {
+     "type": "string"
+    }
+   }
+  },
+  "api.User": {
+   "required": [
+    "id",
+    "name",
+    "avatar",
+    "email",
+    "title",
+    "group",
+    "tags",
+    "notifyCount",
+    "unreadCount",
+    "address",
+    "phone",
+    "createdAt",
+    "updatedAt"
+   ],
+   "properties": {
+    "address": {
+     "type": "string"
+    },
+    "avatar": {
+     "type": "string"
+    },
+    "createdAt": {
+     "type": "string",
+     "format": "date-time"
+    },
+    "email": {
+     "type": "string"
+    },
+    "group": {
+     "type": "string"
+    },
+    "id": {
+     "type": "integer",
+     "format": "int64"
+    },
+    "name": {
+     "type": "string"
+    },
+    "notifyCount": {
+     "type": "integer",
+     "format": "int32"
+    },
+    "phone": {
+     "type": "string"
+    },
+    "tags": {
+     "type": "object",
+     "additionalProperties": {
+      "type": "string"
+     }
+    },
+    "title": {
+     "type": "string"
+    },
+    "unreadCount": {
+     "type": "integer",
+     "format": "int32"
+    },
+    "updatedAt": {
+     "type": "string",
+     "format": "date-time"
+    }
+   }
+  },
+  "version.Info": {
+   "required": [
+    "major",
+    "minor",
+    "gitVersion",
+    "gitCommit",
+    "gitTreeState",
+    "buildDate",
+    "goVersion",
+    "compiler",
+    "platform"
+   ],
+   "properties": {
+    "buildDate": {
+     "type": "string"
+    },
+    "compiler": {
+     "type": "string"
+    },
+    "gitCommit": {
+     "type": "string"
+    },
+    "gitTreeState": {
+     "type": "string"
+    },
+    "gitVersion": {
+     "type": "string"
+    },
+    "goVersion": {
+     "type": "string"
+    },
+    "major": {
+     "type": "string"
+    },
+    "minor": {
+     "type": "string"
+    },
+    "platform": {
+     "type": "string"
+    }
+   }
+  }
+ },
+ "securityDefinitions": {
+  "BearerToken": {
+   "type": "apiKey",
+   "name": "authorization",
+   "in": "header"
+  }
+ },
+ "tags": [
+  {
+   "description": "account Api",
+   "name": "account"
+  },
+  {
+   "description": "user Api",
+   "name": "user"
+  }
+ ]
+}

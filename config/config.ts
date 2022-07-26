@@ -52,24 +52,24 @@ export default defineConfig({
   // Fast Refresh 热更新
   fastRefresh: {},
   openAPI: [
-    {
-      requestLibPath: "import { request } from 'umi'",
-      // 或者使用在线的版本
-      // schemaPath: "https://gw.alipayobjects.com/os/antfincdn/M%24jrzTTYJN/oneapi.json"
-      schemaPath: join(__dirname, 'oneapi.json'),
-      mock: false,
-    },
-    {
-      requestLibPath: "import { request } from 'umi'",
-      schemaPath: 'https://gw.alipayobjects.com/os/antfincdn/CA1dOm%2631B/openapi.json',
-      projectName: 'swagger',
-      mock: false,
-    },
+    //{
+    //  requestLibPath: "import { request } from 'umi'",
+    //  // 或者使用在线的版本
+    //  // schemaPath: "https://gw.alipayobjects.com/os/antfincdn/M%24jrzTTYJN/oneapi.json"
+    //  schemaPath: join(__dirname, 'oneapi.json'),
+    //  mock: false,
+    //},
+    //{
+    //  requestLibPath: "import { request } from 'umi'",
+    //  schemaPath: 'https://gw.alipayobjects.com/os/antfincdn/CA1dOm%2631B/openapi.json',
+    //  projectName: 'swagger',
+    //  mock: false,
+    //},
     {
       requestLibPath: "import { request } from 'umi'",
       projectName: 'ant-server',
-      schemaPath: "http://127.0.0.1:8080/apidocs.json",
-      //schemaPath: join(__dirname, 'apidocs.json'),
+      //schemaPath: "http://127.0.0.1:8080/apidocs.json",
+      schemaPath: join(__dirname, 'apidocs.json'),
       // 开启后，使用 npm run openapi 生成src/services/{projectName}, mock/*.mock.ts
       mock: true,
     },

@@ -49,7 +49,7 @@
     component: './TableList',
   },
   {
-    name: 'list.users',
+    name: '用户列表',
     icon: 'table',
     path: '/users',
     component: './UserList',

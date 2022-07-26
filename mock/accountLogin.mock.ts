@@ -3,6 +3,6 @@ import { Request, Response } from 'express';
 
 export default {
   'POST /api/v1/account/login': (req: Request, res: Response) => {
-    res.status(200).send({ currentAuthority: 'guest', type: 1 });
+    res.status(200).send({ currentAuthority: 'user', type: 1 });
   },
 };
