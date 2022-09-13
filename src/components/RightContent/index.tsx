@@ -1,12 +1,11 @@
 import { Space } from 'antd';
 import { QuestionCircleOutlined } from '@ant-design/icons';
 import React from 'react';
-import { useModel, SelectLang } from 'umi';
+import { useModel } from 'umi';
 import Avatar from './AvatarDropdown';
 import HeaderSearch from '../HeaderSearch';
 import NoticeIcon from '../NoticeIcon';
 import styles from './index.less';
-
 export type SiderTheme = 'light' | 'dark';
 
 const GlobalHeaderRight: React.FC = () => {
@@ -22,6 +21,7 @@ const GlobalHeaderRight: React.FC = () => {
   if ((navTheme === 'dark' && layout === 'top') || layout === 'mix') {
     className = `${styles.right}  ${styles.dark}`;
   }
+
   return (
     <Space className={className}>
       <HeaderSearch
@@ -29,7 +29,10 @@ const GlobalHeaderRight: React.FC = () => {
         placeholder="站内搜索"
         defaultValue="umi ui"
         options={[
-          { label: <a href="https://umijs.org/zh/guide/umi-ui.html">umi ui</a>, value: 'umi ui' },
+          {
+            label: <a href="https://umijs.org/zh/guide/umi-ui.html">umi ui</a>,
+            value: 'umi ui',
+          },
           {
             label: <a href="next.ant.design">Ant Design</a>,
             value: 'Ant Design',
@@ -43,11 +46,11 @@ const GlobalHeaderRight: React.FC = () => {
             value: 'Pro Layout',
           },
         ]}
-        // onSearch={value => {
-        //   console.log('input', value);
-        // }}
+        onSearch={(value) => {
+          console.log('input', value);
+        }}
       />
-      {false && <NoticeIcon />}
+      {true && <NoticeIcon />}
       <span
         className={styles.action}
         onClick={() => {
@@ -56,9 +59,9 @@ const GlobalHeaderRight: React.FC = () => {
       >
         <QuestionCircleOutlined />
       </span>
-      <Avatar menu={false} />
-      <SelectLang className={styles.action} />
+      <Avatar menu={true} />
     </Space>
   );
 };
+
 export default GlobalHeaderRight;

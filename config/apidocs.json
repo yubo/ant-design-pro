@@ -1,705 +1,3700 @@
 {
- "swagger": "2.0",
- "info": {
-  "description": "apiserver examples all in one",
-  "title": "ant-server",
-  "contact": {
-   "name": "yubo",
-   "url": "http://github.com/yubo",
-   "email": "yubo@yubo.org"
+  "swagger": "2.0",
+  "info": {
+    "description": "fuxinzhumeng.com",
+    "title": "wx-server",
+    "contact": {
+      "name": "yubo",
+      "url": "http://fuxingzhumeng.com",
+      "email": "yubo@yubo.org"
+    },
+    "version": "v0.1.0-4+3c8cb07a125991-dirty-dirty"
   },
-  "license": {
-   "name": "Apache-2.0",
-   "url": "https://www.apache.org/licenses/LICENSE-2.0.txt"
-  },
-  "version": "v0.0.0"
- },
- "paths": {
-  "/api/v1/account/captcha": {
-   "post": {
-    "consumes": [
-     "application/json"
-    ],
-    "produces": [
-     "application/json"
-    ],
-    "tags": [
-     "account"
-    ],
-    "summary": "发送验证码",
-    "operationId": "accountCaptcha",
-    "parameters": [
-     {
-      "name": "body",
-      "in": "body",
-      "required": true,
-      "schema": {
-       "$ref": "#/definitions/api.CaptchaInput"
+  "paths": {
+    "/api/v1/auth/authorize": {
+      "get": {
+        "consumes": ["application/json", "*/*"],
+        "produces": ["application/json", "*/*"],
+        "tags": ["auth"],
+        "summary": "获取微信登陆二维码地址",
+        "operationId": "getAuthorizeInfo",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/__umi__.webapp.AuthorizerResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/__umi__.Response400"
+            }
+          }
+        }
       }
-     }
-    ],
-    "responses": {
-     "200": {
-      "description": "OK"
-     }
-    }
-   }
-  },
-  "/api/v1/account/info": {
-   "get": {
-    "consumes": [
-     "application/json"
-    ],
-    "produces": [
-     "application/json"
-    ],
-    "tags": [
-     "account"
-    ],
-    "summary": "get curent user info",
-    "operationId": "accountInfo",
-    "responses": {
-     "200": {
-      "description": "OK",
-      "schema": {
-       "$ref": "#/definitions/api.User"
+    },
+    "/api/v1/auth/captcha": {
+      "get": {
+        "consumes": ["application/json", "*/*"],
+        "produces": ["application/json", "*/*"],
+        "tags": ["auth"],
+        "summary": "手机验证码登陆",
+        "operationId": "authCaptcha",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/auth.captchaRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/__umi__.auth.captchaResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/__umi__.Response400"
+            }
+          }
+        }
       }
-     }
-    }
-   }
-  },
-  "/api/v1/account/login": {
-   "post": {
-    "consumes": [
-     "application/json"
-    ],
-    "produces": [
-     "application/json"
-    ],
-    "tags": [
-     "account"
-    ],
-    "summary": "account login",
-    "operationId": "accountLogin",
-    "parameters": [
-     {
-      "name": "body",
-      "in": "body",
-      "required": true,
-      "schema": {
-       "$ref": "#/definitions/api.LoginInput"
+    },
+    "/api/v1/auth/info": {
+      "get": {
+        "consumes": ["application/json", "*/*"],
+        "produces": ["application/json", "*/*"],
+        "tags": ["auth"],
+        "summary": "print auth userinfo",
+        "operationId": "authInfo",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/__umi__.api.User"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/__umi__.Response400"
+            }
+          }
+        }
       }
-     }
-    ],
-    "responses": {
-     "200": {
-      "description": "OK",
-      "schema": {
-       "$ref": "#/definitions/api.LoginOutput"
+    },
+    "/api/v1/auth/login": {
+      "post": {
+        "consumes": ["application/json", "*/*"],
+        "produces": ["application/json", "*/*"],
+        "tags": ["auth"],
+        "summary": "login, 登陆",
+        "operationId": "authLogin",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/auth.LoginRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/__umi__.api.User"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/__umi__.Response400"
+            }
+          }
+        }
       }
-     }
+    },
+    "/api/v1/auth/logout": {
+      "post": {
+        "consumes": ["application/json", "*/*"],
+        "produces": ["application/json", "*/*"],
+        "tags": ["auth"],
+        "summary": "logout, 注销",
+        "operationId": "authLogout",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/__umi__.Response200"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/__umi__.Response400"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/auth/signature": {
+      "get": {
+        "consumes": ["application/json", "*/*"],
+        "produces": ["application/json", "*/*"],
+        "tags": ["auth"],
+        "summary": "signature - 微信接入验证接口",
+        "operationId": "authSignature",
+        "parameters": [
+          {
+            "type": "string",
+            "name": "signature",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "name": "timestamp",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "name": "nonce",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "name": "echostr",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/__umi__.array.integer"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/__umi__.Response400"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/courses": {
+      "get": {
+        "consumes": ["application/json", "*/*"],
+        "produces": ["application/json", "*/*"],
+        "tags": ["course"],
+        "summary": "search/list courses",
+        "operationId": "listCourse",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "query",
+            "name": "query",
+            "in": "query"
+          },
+          {
+            "maximum": 500,
+            "type": "integer",
+            "default": 10,
+            "description": "page size",
+            "name": "pageSize",
+            "in": "query"
+          },
+          {
+            "type": "integer",
+            "default": 1,
+            "description": "current page number, start at 1(defualt)",
+            "name": "current",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "description": "column name",
+            "name": "sorter",
+            "in": "query"
+          },
+          {
+            "enum": ["asc", "desc"],
+            "type": "string",
+            "description": "asc(default)/desc",
+            "name": "order",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/__umi__.course.listCourseOutput"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/__umi__.Response400"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/courses/{id}": {
+      "get": {
+        "consumes": ["application/json", "*/*"],
+        "produces": ["application/json", "*/*"],
+        "tags": ["course"],
+        "summary": "get course",
+        "operationId": "getCourse",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "resource name",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/__umi__.api.Course"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/__umi__.Response400"
+            }
+          }
+        }
+      },
+      "put": {
+        "consumes": ["application/json", "*/*"],
+        "produces": ["application/json", "*/*"],
+        "tags": ["course"],
+        "summary": "update course",
+        "operationId": "updateCourse",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "resource name",
+            "name": "id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/course.updateInput"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/__umi__.Response200"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/__umi__.Response400"
+            }
+          }
+        }
+      },
+      "delete": {
+        "consumes": ["application/json", "*/*"],
+        "produces": ["application/json", "*/*"],
+        "tags": ["course"],
+        "summary": "delete course",
+        "operationId": "deleteCourse",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "resource name",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/__umi__.Response200"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/__umi__.Response400"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/files": {
+      "post": {
+        "consumes": ["application/json", "*/*"],
+        "produces": ["application/json", "*/*"],
+        "tags": ["file"],
+        "summary": "create file",
+        "operationId": "createFile",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/__umi__.file.uploadFileResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/__umi__.Response400"
+            }
+          }
+        }
+      },
+      "delete": {
+        "consumes": ["application/json", "*/*"],
+        "produces": ["application/json", "*/*"],
+        "tags": ["file"],
+        "summary": "delete file",
+        "operationId": "deleteFile",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "file path",
+            "name": "filepath",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/__umi__.Response200"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/__umi__.Response400"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/orders": {
+      "get": {
+        "consumes": ["application/json", "*/*"],
+        "produces": ["application/json", "*/*"],
+        "tags": ["order"],
+        "summary": "search/list orders",
+        "operationId": "listOrder",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "query",
+            "name": "query",
+            "in": "query"
+          },
+          {
+            "maximum": 500,
+            "type": "integer",
+            "default": 10,
+            "description": "page size",
+            "name": "pageSize",
+            "in": "query"
+          },
+          {
+            "type": "integer",
+            "default": 1,
+            "description": "current page number, start at 1(defualt)",
+            "name": "current",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "description": "column name",
+            "name": "sorter",
+            "in": "query"
+          },
+          {
+            "enum": ["asc", "desc"],
+            "type": "string",
+            "description": "asc(default)/desc",
+            "name": "order",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/__umi__.order.listOutput"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/__umi__.Response400"
+            }
+          }
+        }
+      },
+      "post": {
+        "consumes": ["application/json", "*/*"],
+        "produces": ["application/json", "*/*"],
+        "tags": ["order"],
+        "summary": "create order",
+        "operationId": "createOrder",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/order.createRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/__umi__.Response200"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/__umi__.Response400"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/orders/{id}": {
+      "get": {
+        "consumes": ["application/json", "*/*"],
+        "produces": ["application/json", "*/*"],
+        "tags": ["order"],
+        "summary": "get order",
+        "operationId": "getOrder",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "order id",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/__umi__.api.Order"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/__umi__.Response400"
+            }
+          }
+        }
+      },
+      "put": {
+        "consumes": ["application/json", "*/*"],
+        "produces": ["application/json", "*/*"],
+        "tags": ["order"],
+        "summary": "update order",
+        "operationId": "updateOrder",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "order id",
+            "name": "id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/order.updateRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/__umi__.Response200"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/__umi__.Response400"
+            }
+          }
+        }
+      },
+      "delete": {
+        "consumes": ["application/json", "*/*"],
+        "produces": ["application/json", "*/*"],
+        "tags": ["order"],
+        "summary": "delete order",
+        "operationId": "deleteOrder",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "order id",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/__umi__.Response200"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/__umi__.Response400"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/orgs": {
+      "get": {
+        "consumes": ["application/json", "*/*"],
+        "produces": ["application/json", "*/*"],
+        "tags": ["org"],
+        "summary": "search/list orgs",
+        "operationId": "listOrg",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "query",
+            "name": "query",
+            "in": "query"
+          },
+          {
+            "maximum": 500,
+            "type": "integer",
+            "default": 10,
+            "description": "page size",
+            "name": "pageSize",
+            "in": "query"
+          },
+          {
+            "type": "integer",
+            "default": 1,
+            "description": "current page number, start at 1(defualt)",
+            "name": "current",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "description": "column name",
+            "name": "sorter",
+            "in": "query"
+          },
+          {
+            "enum": ["asc", "desc"],
+            "type": "string",
+            "description": "asc(default)/desc",
+            "name": "order",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/__umi__.org.listOutput"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/__umi__.Response400"
+            }
+          }
+        }
+      },
+      "post": {
+        "consumes": ["application/json", "*/*"],
+        "produces": ["application/json", "*/*"],
+        "tags": ["org"],
+        "summary": "create org",
+        "operationId": "createOrg",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/org.createRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/__umi__.Response200"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/__umi__.Response400"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/orgs/{id}": {
+      "get": {
+        "consumes": ["application/json", "*/*"],
+        "produces": ["application/json", "*/*"],
+        "tags": ["org"],
+        "summary": "get org",
+        "operationId": "getOrg",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "org id",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/__umi__.api.Org"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/__umi__.Response400"
+            }
+          }
+        }
+      },
+      "put": {
+        "consumes": ["application/json", "*/*"],
+        "produces": ["application/json", "*/*"],
+        "tags": ["org"],
+        "summary": "update org",
+        "operationId": "updateOrg",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "org id",
+            "name": "id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/org.updateRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/__umi__.Response200"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/__umi__.Response400"
+            }
+          }
+        }
+      },
+      "delete": {
+        "consumes": ["application/json", "*/*"],
+        "produces": ["application/json", "*/*"],
+        "tags": ["org"],
+        "summary": "delete org",
+        "operationId": "deleteOrg",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "org id",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/__umi__.Response200"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/__umi__.Response400"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/payments": {
+      "get": {
+        "consumes": ["application/json", "*/*"],
+        "produces": ["application/json", "*/*"],
+        "tags": ["payment"],
+        "summary": "search/list payments",
+        "operationId": "listPayment",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "query",
+            "name": "query",
+            "in": "query"
+          },
+          {
+            "maximum": 500,
+            "type": "integer",
+            "default": 10,
+            "description": "page size",
+            "name": "pageSize",
+            "in": "query"
+          },
+          {
+            "type": "integer",
+            "default": 1,
+            "description": "current page number, start at 1(defualt)",
+            "name": "current",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "description": "column name",
+            "name": "sorter",
+            "in": "query"
+          },
+          {
+            "enum": ["asc", "desc"],
+            "type": "string",
+            "description": "asc(default)/desc",
+            "name": "order",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/__umi__.payment.listOutput"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/__umi__.Response400"
+            }
+          }
+        }
+      },
+      "post": {
+        "consumes": ["application/json", "*/*"],
+        "produces": ["application/json", "*/*"],
+        "tags": ["payment"],
+        "summary": "create payment",
+        "operationId": "createPayment",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/payment.createRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/__umi__.Response200"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/__umi__.Response400"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/payments/{id}": {
+      "get": {
+        "consumes": ["application/json", "*/*"],
+        "produces": ["application/json", "*/*"],
+        "tags": ["payment"],
+        "summary": "get payment",
+        "operationId": "getPayment",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "payment id",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/__umi__.api.Payment"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/__umi__.Response400"
+            }
+          }
+        }
+      },
+      "put": {
+        "consumes": ["application/json", "*/*"],
+        "produces": ["application/json", "*/*"],
+        "tags": ["payment"],
+        "summary": "update payment",
+        "operationId": "updatePayment",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "payment id",
+            "name": "id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/payment.updateRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/__umi__.Response200"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/__umi__.Response400"
+            }
+          }
+        }
+      },
+      "delete": {
+        "consumes": ["application/json", "*/*"],
+        "produces": ["application/json", "*/*"],
+        "tags": ["payment"],
+        "summary": "delete payment",
+        "operationId": "deletePayment",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "payment id",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/__umi__.Response200"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/__umi__.Response400"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/refunds": {
+      "get": {
+        "consumes": ["application/json", "*/*"],
+        "produces": ["application/json", "*/*"],
+        "tags": ["refund"],
+        "summary": "search/list refunds",
+        "operationId": "listRefund",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "query",
+            "name": "query",
+            "in": "query"
+          },
+          {
+            "maximum": 500,
+            "type": "integer",
+            "default": 10,
+            "description": "page size",
+            "name": "pageSize",
+            "in": "query"
+          },
+          {
+            "type": "integer",
+            "default": 1,
+            "description": "current page number, start at 1(defualt)",
+            "name": "current",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "description": "column name",
+            "name": "sorter",
+            "in": "query"
+          },
+          {
+            "enum": ["asc", "desc"],
+            "type": "string",
+            "description": "asc(default)/desc",
+            "name": "order",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/__umi__.refund.listOutput"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/__umi__.Response400"
+            }
+          }
+        }
+      },
+      "post": {
+        "consumes": ["application/json", "*/*"],
+        "produces": ["application/json", "*/*"],
+        "tags": ["refund"],
+        "summary": "create refund",
+        "operationId": "createRefund",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/refund.createRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/__umi__.Response200"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/__umi__.Response400"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/refunds/{id}": {
+      "get": {
+        "consumes": ["application/json", "*/*"],
+        "produces": ["application/json", "*/*"],
+        "tags": ["refund"],
+        "summary": "get refund",
+        "operationId": "getRefund",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "refund id",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/__umi__.api.Refund"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/__umi__.Response400"
+            }
+          }
+        }
+      },
+      "put": {
+        "consumes": ["application/json", "*/*"],
+        "produces": ["application/json", "*/*"],
+        "tags": ["refund"],
+        "summary": "update refund",
+        "operationId": "updateRefund",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "refund id",
+            "name": "id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/refund.updateRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/__umi__.Response200"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/__umi__.Response400"
+            }
+          }
+        }
+      },
+      "delete": {
+        "consumes": ["application/json", "*/*"],
+        "produces": ["application/json", "*/*"],
+        "tags": ["refund"],
+        "summary": "delete refund",
+        "operationId": "deleteRefund",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "refund id",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/__umi__.Response200"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/__umi__.Response400"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/skus": {
+      "get": {
+        "consumes": ["application/json", "*/*"],
+        "produces": ["application/json", "*/*"],
+        "tags": ["sku"],
+        "summary": "search/list skus",
+        "operationId": "listSku",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "query",
+            "name": "query",
+            "in": "query"
+          },
+          {
+            "maximum": 500,
+            "type": "integer",
+            "default": 10,
+            "description": "page size",
+            "name": "pageSize",
+            "in": "query"
+          },
+          {
+            "type": "integer",
+            "default": 1,
+            "description": "current page number, start at 1(defualt)",
+            "name": "current",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "description": "column name",
+            "name": "sorter",
+            "in": "query"
+          },
+          {
+            "enum": ["asc", "desc"],
+            "type": "string",
+            "description": "asc(default)/desc",
+            "name": "order",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/__umi__.sku.listOutput"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/__umi__.Response400"
+            }
+          }
+        }
+      },
+      "post": {
+        "consumes": ["application/json", "*/*"],
+        "produces": ["application/json", "*/*"],
+        "tags": ["sku"],
+        "summary": "create sku",
+        "operationId": "createSku",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/sku.createRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/__umi__.Response200"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/__umi__.Response400"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/skus/{id}": {
+      "get": {
+        "consumes": ["application/json", "*/*"],
+        "produces": ["application/json", "*/*"],
+        "tags": ["sku"],
+        "summary": "get sku",
+        "operationId": "getSku",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "sku id",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/__umi__.api.Sku"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/__umi__.Response400"
+            }
+          }
+        }
+      },
+      "put": {
+        "consumes": ["application/json", "*/*"],
+        "produces": ["application/json", "*/*"],
+        "tags": ["sku"],
+        "summary": "update sku",
+        "operationId": "updateSku",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "sku id",
+            "name": "id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/sku.updateRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/__umi__.Response200"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/__umi__.Response400"
+            }
+          }
+        }
+      },
+      "delete": {
+        "consumes": ["application/json", "*/*"],
+        "produces": ["application/json", "*/*"],
+        "tags": ["sku"],
+        "summary": "delete sku",
+        "operationId": "deleteSku",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "sku id",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/__umi__.Response200"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/__umi__.Response400"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/spus": {
+      "get": {
+        "consumes": ["application/json", "*/*"],
+        "produces": ["application/json", "*/*"],
+        "tags": ["spu"],
+        "summary": "search/list spus",
+        "operationId": "listSpu",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "query",
+            "name": "query",
+            "in": "query"
+          },
+          {
+            "maximum": 500,
+            "type": "integer",
+            "default": 10,
+            "description": "page size",
+            "name": "pageSize",
+            "in": "query"
+          },
+          {
+            "type": "integer",
+            "default": 1,
+            "description": "current page number, start at 1(defualt)",
+            "name": "current",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "description": "column name",
+            "name": "sorter",
+            "in": "query"
+          },
+          {
+            "enum": ["asc", "desc"],
+            "type": "string",
+            "description": "asc(default)/desc",
+            "name": "order",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/__umi__.spu.listOutput"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/__umi__.Response400"
+            }
+          }
+        }
+      },
+      "post": {
+        "consumes": ["application/json", "*/*"],
+        "produces": ["application/json", "*/*"],
+        "tags": ["spu"],
+        "summary": "create spu",
+        "operationId": "createSpu",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/spu.createRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/__umi__.Response200"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/__umi__.Response400"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/spus/{id}": {
+      "get": {
+        "consumes": ["application/json", "*/*"],
+        "produces": ["application/json", "*/*"],
+        "tags": ["spu"],
+        "summary": "get spu",
+        "operationId": "getSpu",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "spu id",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/__umi__.api.Spu"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/__umi__.Response400"
+            }
+          }
+        }
+      },
+      "put": {
+        "consumes": ["application/json", "*/*"],
+        "produces": ["application/json", "*/*"],
+        "tags": ["spu"],
+        "summary": "update spu",
+        "operationId": "updateSpu",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "spu id",
+            "name": "id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/spu.updateRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/__umi__.Response200"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/__umi__.Response400"
+            }
+          }
+        }
+      },
+      "delete": {
+        "consumes": ["application/json", "*/*"],
+        "produces": ["application/json", "*/*"],
+        "tags": ["spu"],
+        "summary": "delete spu",
+        "operationId": "deleteSpu",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "spu id",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/__umi__.Response200"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/__umi__.Response400"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/students": {
+      "get": {
+        "consumes": ["application/json", "*/*"],
+        "produces": ["application/json", "*/*"],
+        "tags": ["student"],
+        "summary": "search/list students",
+        "operationId": "listStudent",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "query",
+            "name": "query",
+            "in": "query"
+          },
+          {
+            "maximum": 500,
+            "type": "integer",
+            "default": 10,
+            "description": "page size",
+            "name": "pageSize",
+            "in": "query"
+          },
+          {
+            "type": "integer",
+            "default": 1,
+            "description": "current page number, start at 1(defualt)",
+            "name": "current",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "description": "column name",
+            "name": "sorter",
+            "in": "query"
+          },
+          {
+            "enum": ["asc", "desc"],
+            "type": "string",
+            "description": "asc(default)/desc",
+            "name": "order",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/__umi__.student.listOutput"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/__umi__.Response400"
+            }
+          }
+        }
+      },
+      "post": {
+        "consumes": ["application/json", "*/*"],
+        "produces": ["application/json", "*/*"],
+        "tags": ["student"],
+        "summary": "create student",
+        "operationId": "createStudent",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/student.createRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/__umi__.Response200"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/__umi__.Response400"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/students/{id}": {
+      "get": {
+        "consumes": ["application/json", "*/*"],
+        "produces": ["application/json", "*/*"],
+        "tags": ["student"],
+        "summary": "get student",
+        "operationId": "getStudent",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "student id",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/__umi__.api.Student"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/__umi__.Response400"
+            }
+          }
+        }
+      },
+      "put": {
+        "consumes": ["application/json", "*/*"],
+        "produces": ["application/json", "*/*"],
+        "tags": ["student"],
+        "summary": "update student",
+        "operationId": "updateStudent",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "student id",
+            "name": "id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/student.updateRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/__umi__.Response200"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/__umi__.Response400"
+            }
+          }
+        }
+      },
+      "delete": {
+        "consumes": ["application/json", "*/*"],
+        "produces": ["application/json", "*/*"],
+        "tags": ["student"],
+        "summary": "delete student",
+        "operationId": "deleteStudent",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "student id",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/__umi__.Response200"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/__umi__.Response400"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/teachers": {
+      "get": {
+        "consumes": ["application/json", "*/*"],
+        "produces": ["application/json", "*/*"],
+        "tags": ["teacher"],
+        "summary": "search/list teachers",
+        "operationId": "listTeacher",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "query",
+            "name": "query",
+            "in": "query"
+          },
+          {
+            "maximum": 500,
+            "type": "integer",
+            "default": 10,
+            "description": "page size",
+            "name": "pageSize",
+            "in": "query"
+          },
+          {
+            "type": "integer",
+            "default": 1,
+            "description": "current page number, start at 1(defualt)",
+            "name": "current",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "description": "column name",
+            "name": "sorter",
+            "in": "query"
+          },
+          {
+            "enum": ["asc", "desc"],
+            "type": "string",
+            "description": "asc(default)/desc",
+            "name": "order",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/__umi__.teacher.listOutput"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/__umi__.Response400"
+            }
+          }
+        }
+      },
+      "post": {
+        "consumes": ["application/json", "*/*"],
+        "produces": ["application/json", "*/*"],
+        "tags": ["teacher"],
+        "summary": "create teacher",
+        "operationId": "createTeacher",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/teacher.createRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/__umi__.Response200"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/__umi__.Response400"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/teachers/{id}": {
+      "get": {
+        "consumes": ["application/json", "*/*"],
+        "produces": ["application/json", "*/*"],
+        "tags": ["teacher"],
+        "summary": "get teacher",
+        "operationId": "getTeacher",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "teacher id",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/__umi__.api.Teacher"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/__umi__.Response400"
+            }
+          }
+        }
+      },
+      "put": {
+        "consumes": ["application/json", "*/*"],
+        "produces": ["application/json", "*/*"],
+        "tags": ["teacher"],
+        "summary": "update teacher",
+        "operationId": "updateTeacher",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "teacher id",
+            "name": "id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/teacher.updateRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/__umi__.Response200"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/__umi__.Response400"
+            }
+          }
+        }
+      },
+      "delete": {
+        "consumes": ["application/json", "*/*"],
+        "produces": ["application/json", "*/*"],
+        "tags": ["teacher"],
+        "summary": "delete teacher",
+        "operationId": "deleteTeacher",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "teacher id",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/__umi__.Response200"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/__umi__.Response400"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/users": {
+      "get": {
+        "consumes": ["application/json", "*/*"],
+        "produces": ["application/json", "*/*"],
+        "tags": ["user"],
+        "summary": "search/list users",
+        "operationId": "listUser",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "query",
+            "name": "query",
+            "in": "query"
+          },
+          {
+            "maximum": 500,
+            "type": "integer",
+            "default": 10,
+            "description": "page size",
+            "name": "pageSize",
+            "in": "query"
+          },
+          {
+            "type": "integer",
+            "default": 1,
+            "description": "current page number, start at 1(defualt)",
+            "name": "current",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "description": "column name",
+            "name": "sorter",
+            "in": "query"
+          },
+          {
+            "enum": ["asc", "desc"],
+            "type": "string",
+            "description": "asc(default)/desc",
+            "name": "order",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/__umi__.user.listOutput"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/__umi__.Response400"
+            }
+          }
+        }
+      },
+      "post": {
+        "consumes": ["application/json", "*/*"],
+        "produces": ["application/json", "*/*"],
+        "tags": ["user"],
+        "summary": "create user",
+        "operationId": "createUser",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/user.createRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/__umi__.Response200"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/__umi__.Response400"
+            }
+          }
+        }
+      },
+      "delete": {
+        "consumes": ["application/json", "*/*"],
+        "produces": ["application/json", "*/*"],
+        "tags": ["user"],
+        "summary": "delete users",
+        "operationId": "deleteUsers",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "user id",
+            "name": "id",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/__umi__.Response200"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/__umi__.Response400"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/users/{id}": {
+      "get": {
+        "consumes": ["application/json", "*/*"],
+        "produces": ["application/json", "*/*"],
+        "tags": ["user"],
+        "summary": "get user",
+        "operationId": "getUser",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "user id",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/__umi__.api.User"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/__umi__.Response400"
+            }
+          }
+        }
+      },
+      "put": {
+        "consumes": ["application/json", "*/*"],
+        "produces": ["application/json", "*/*"],
+        "tags": ["user"],
+        "summary": "update user",
+        "operationId": "updateUser",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "user id",
+            "name": "id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/user.updateRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/__umi__.Response200"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/__umi__.Response400"
+            }
+          }
+        }
+      },
+      "delete": {
+        "consumes": ["application/json", "*/*"],
+        "produces": ["application/json", "*/*"],
+        "tags": ["user"],
+        "summary": "delete user",
+        "operationId": "deleteUser",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "user id",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/__umi__.Response200"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/__umi__.Response400"
+            }
+          }
+        }
+      }
+    },
+    "/version": {
+      "get": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "summary": "get the code version",
+        "operationId": "getCodeVersion",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/version.Info"
+            }
+          }
+        }
+      }
     }
-   }
   },
-  "/api/v1/account/logout": {
-   "post": {
-    "consumes": [
-     "application/json"
-    ],
-    "produces": [
-     "application/json"
-    ],
-    "tags": [
-     "account"
-    ],
-    "summary": "account logout",
-    "operationId": "accountLogout",
-    "responses": {
-     "200": {
-      "description": "OK"
-     }
-    }
-   }
-  },
-  "/api/v1/users": {
-   "get": {
-    "consumes": [
-     "application/json"
-    ],
-    "produces": [
-     "application/json"
-    ],
-    "tags": [
-     "user"
-    ],
-    "summary": "search/list users",
-    "operationId": "listUser",
-    "parameters": [
-     {
-      "type": "string",
-      "description": "query user",
-      "name": "query",
-      "in": "query"
-     },
-     {
-      "maximum": 500,
-      "type": "integer",
-      "default": 10,
-      "description": "page size",
-      "name": "pageSize",
-      "in": "query"
-     },
-     {
-      "type": "integer",
-      "default": 1,
-      "description": "current page number, start at 1(defualt)",
-      "name": "current",
-      "in": "query"
-     },
-     {
-      "type": "string",
-      "description": "column name",
-      "name": "sorter",
-      "in": "query"
-     },
-     {
-      "enum": [
-       "asc",
-       "desc"
+  "definitions": {
+    "__umi__.Response200": {
+      "required": ["success"],
+      "properties": {
+        "host": {
+          "type": "string"
+        },
+        "success": {
+          "type": "boolean"
+        },
+        "traceId": {
+          "type": "string"
+        }
+      }
+    },
+    "__umi__.Response400": {
+      "required": ["errorCode", "errorMessage", "success"],
+      "properties": {
+        "errorCode": {
+          "type": "string"
+        },
+        "errorMessage": {
+          "type": "string"
+        },
+        "success": {
+          "type": "boolean"
+        }
+      }
+    },
+    "__umi__.api.Course": {
+      "required": ["success"],
+      "properties": {
+        "data": {
+          "$ref": "#/definitions/api.Course"
+        },
+        "host": {
+          "type": "string"
+        },
+        "success": {
+          "type": "boolean"
+        },
+        "traceId": {
+          "type": "string"
+        }
+      }
+    },
+    "__umi__.api.Order": {
+      "required": ["success"],
+      "properties": {
+        "data": {
+          "$ref": "#/definitions/api.Order"
+        },
+        "host": {
+          "type": "string"
+        },
+        "success": {
+          "type": "boolean"
+        },
+        "traceId": {
+          "type": "string"
+        }
+      }
+    },
+    "__umi__.api.Org": {
+      "required": ["success"],
+      "properties": {
+        "data": {
+          "$ref": "#/definitions/api.Org"
+        },
+        "host": {
+          "type": "string"
+        },
+        "success": {
+          "type": "boolean"
+        },
+        "traceId": {
+          "type": "string"
+        }
+      }
+    },
+    "__umi__.api.Payment": {
+      "required": ["success"],
+      "properties": {
+        "data": {
+          "$ref": "#/definitions/api.Payment"
+        },
+        "host": {
+          "type": "string"
+        },
+        "success": {
+          "type": "boolean"
+        },
+        "traceId": {
+          "type": "string"
+        }
+      }
+    },
+    "__umi__.api.Refund": {
+      "required": ["success"],
+      "properties": {
+        "data": {
+          "$ref": "#/definitions/api.Refund"
+        },
+        "host": {
+          "type": "string"
+        },
+        "success": {
+          "type": "boolean"
+        },
+        "traceId": {
+          "type": "string"
+        }
+      }
+    },
+    "__umi__.api.Sku": {
+      "required": ["success"],
+      "properties": {
+        "data": {
+          "$ref": "#/definitions/api.Sku"
+        },
+        "host": {
+          "type": "string"
+        },
+        "success": {
+          "type": "boolean"
+        },
+        "traceId": {
+          "type": "string"
+        }
+      }
+    },
+    "__umi__.api.Spu": {
+      "required": ["success"],
+      "properties": {
+        "data": {
+          "$ref": "#/definitions/api.Spu"
+        },
+        "host": {
+          "type": "string"
+        },
+        "success": {
+          "type": "boolean"
+        },
+        "traceId": {
+          "type": "string"
+        }
+      }
+    },
+    "__umi__.api.Student": {
+      "required": ["success"],
+      "properties": {
+        "data": {
+          "$ref": "#/definitions/api.Student"
+        },
+        "host": {
+          "type": "string"
+        },
+        "success": {
+          "type": "boolean"
+        },
+        "traceId": {
+          "type": "string"
+        }
+      }
+    },
+    "__umi__.api.Teacher": {
+      "required": ["success"],
+      "properties": {
+        "data": {
+          "$ref": "#/definitions/api.Teacher"
+        },
+        "host": {
+          "type": "string"
+        },
+        "success": {
+          "type": "boolean"
+        },
+        "traceId": {
+          "type": "string"
+        }
+      }
+    },
+    "__umi__.api.User": {
+      "required": ["success"],
+      "properties": {
+        "data": {
+          "$ref": "#/definitions/api.User"
+        },
+        "host": {
+          "type": "string"
+        },
+        "success": {
+          "type": "boolean"
+        },
+        "traceId": {
+          "type": "string"
+        }
+      }
+    },
+    "__umi__.array.integer": {
+      "required": ["success"],
+      "properties": {
+        "data": {
+          "type": "array",
+          "items": {
+            "type": "integer"
+          }
+        },
+        "host": {
+          "type": "string"
+        },
+        "success": {
+          "type": "boolean"
+        },
+        "traceId": {
+          "type": "string"
+        }
+      }
+    },
+    "__umi__.auth.captchaResponse": {
+      "required": ["success"],
+      "properties": {
+        "data": {
+          "$ref": "#/definitions/auth.captchaResponse"
+        },
+        "host": {
+          "type": "string"
+        },
+        "success": {
+          "type": "boolean"
+        },
+        "traceId": {
+          "type": "string"
+        }
+      }
+    },
+    "__umi__.course.listCourseOutput": {
+      "required": ["success"],
+      "properties": {
+        "data": {
+          "$ref": "#/definitions/course.listCourseOutput"
+        },
+        "host": {
+          "type": "string"
+        },
+        "success": {
+          "type": "boolean"
+        },
+        "traceId": {
+          "type": "string"
+        }
+      }
+    },
+    "__umi__.file.uploadFileResponse": {
+      "required": ["success"],
+      "properties": {
+        "data": {
+          "$ref": "#/definitions/file.uploadFileResponse"
+        },
+        "host": {
+          "type": "string"
+        },
+        "success": {
+          "type": "boolean"
+        },
+        "traceId": {
+          "type": "string"
+        }
+      }
+    },
+    "__umi__.order.listOutput": {
+      "required": ["success"],
+      "properties": {
+        "data": {
+          "$ref": "#/definitions/order.listOutput"
+        },
+        "host": {
+          "type": "string"
+        },
+        "success": {
+          "type": "boolean"
+        },
+        "traceId": {
+          "type": "string"
+        }
+      }
+    },
+    "__umi__.org.listOutput": {
+      "required": ["success"],
+      "properties": {
+        "data": {
+          "$ref": "#/definitions/org.listOutput"
+        },
+        "host": {
+          "type": "string"
+        },
+        "success": {
+          "type": "boolean"
+        },
+        "traceId": {
+          "type": "string"
+        }
+      }
+    },
+    "__umi__.payment.listOutput": {
+      "required": ["success"],
+      "properties": {
+        "data": {
+          "$ref": "#/definitions/payment.listOutput"
+        },
+        "host": {
+          "type": "string"
+        },
+        "success": {
+          "type": "boolean"
+        },
+        "traceId": {
+          "type": "string"
+        }
+      }
+    },
+    "__umi__.refund.listOutput": {
+      "required": ["success"],
+      "properties": {
+        "data": {
+          "$ref": "#/definitions/refund.listOutput"
+        },
+        "host": {
+          "type": "string"
+        },
+        "success": {
+          "type": "boolean"
+        },
+        "traceId": {
+          "type": "string"
+        }
+      }
+    },
+    "__umi__.sku.listOutput": {
+      "required": ["success"],
+      "properties": {
+        "data": {
+          "$ref": "#/definitions/sku.listOutput"
+        },
+        "host": {
+          "type": "string"
+        },
+        "success": {
+          "type": "boolean"
+        },
+        "traceId": {
+          "type": "string"
+        }
+      }
+    },
+    "__umi__.spu.listOutput": {
+      "required": ["success"],
+      "properties": {
+        "data": {
+          "$ref": "#/definitions/spu.listOutput"
+        },
+        "host": {
+          "type": "string"
+        },
+        "success": {
+          "type": "boolean"
+        },
+        "traceId": {
+          "type": "string"
+        }
+      }
+    },
+    "__umi__.student.listOutput": {
+      "required": ["success"],
+      "properties": {
+        "data": {
+          "$ref": "#/definitions/student.listOutput"
+        },
+        "host": {
+          "type": "string"
+        },
+        "success": {
+          "type": "boolean"
+        },
+        "traceId": {
+          "type": "string"
+        }
+      }
+    },
+    "__umi__.teacher.listOutput": {
+      "required": ["success"],
+      "properties": {
+        "data": {
+          "$ref": "#/definitions/teacher.listOutput"
+        },
+        "host": {
+          "type": "string"
+        },
+        "success": {
+          "type": "boolean"
+        },
+        "traceId": {
+          "type": "string"
+        }
+      }
+    },
+    "__umi__.user.listOutput": {
+      "required": ["success"],
+      "properties": {
+        "data": {
+          "$ref": "#/definitions/user.listOutput"
+        },
+        "host": {
+          "type": "string"
+        },
+        "success": {
+          "type": "boolean"
+        },
+        "traceId": {
+          "type": "string"
+        }
+      }
+    },
+    "__umi__.webapp.AuthorizerResponse": {
+      "required": ["success"],
+      "properties": {
+        "data": {
+          "$ref": "#/definitions/webapp.AuthorizerResponse"
+        },
+        "host": {
+          "type": "string"
+        },
+        "success": {
+          "type": "boolean"
+        },
+        "traceId": {
+          "type": "string"
+        }
+      }
+    },
+    "api.Course": {
+      "required": [
+        "id",
+        "name",
+        "title",
+        "payment",
+        "address",
+        "teacherId",
+        "studentId",
+        "skuId",
+        "comment",
+        "status",
+        "creator",
+        "updatedAt",
+        "createdAt"
       ],
-      "type": "string",
-      "default": "asc",
-      "description": "asc(default)/desc",
-      "name": "order",
-      "in": "query"
-     }
-    ],
-    "responses": {
-     "200": {
-      "description": "OK",
-      "schema": {
-       "$ref": "#/definitions/__umi__.api.ListUserOutput"
+      "properties": {
+        "address": {
+          "description": "上课地址",
+          "type": "string"
+        },
+        "comment": {
+          "description": "课程备注, 课堂笔记",
+          "type": "string"
+        },
+        "createdAt": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "creator": {
+          "type": "string"
+        },
+        "id": {
+          "description": "课程id",
+          "type": "integer",
+          "format": "int64"
+        },
+        "name": {
+          "type": "string"
+        },
+        "payment": {
+          "description": "订单号",
+          "type": "string"
+        },
+        "skuId": {
+          "description": "课程id",
+          "type": "string"
+        },
+        "status": {
+          "description": "课程状态",
+          "type": "string"
+        },
+        "studentId": {
+          "description": "学生id",
+          "type": "string"
+        },
+        "teacherId": {
+          "description": "老师id",
+          "type": "string"
+        },
+        "title": {
+          "description": "课程名称",
+          "type": "string"
+        },
+        "updatedAt": {
+          "type": "integer",
+          "format": "int64"
+        }
       }
-     },
-     "400": {
-      "description": "Bad Request",
-      "schema": {
-       "$ref": "#/definitions/__umi__.Response400"
+    },
+    "api.Order": {
+      "required": ["id", "type", "start", "end"],
+      "properties": {
+        "end": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "id": {
+          "description": "user id",
+          "type": "integer",
+          "format": "int64"
+        },
+        "start": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "type": {
+          "description": "类型",
+          "type": "string"
+        }
       }
-     }
-    }
-   },
-   "put": {
-    "consumes": [
-     "application/json"
-    ],
-    "produces": [
-     "application/json"
-    ],
-    "tags": [
-     "user"
-    ],
-    "summary": "update user",
-    "operationId": "updateUser",
-    "parameters": [
-     {
-      "name": "body",
-      "in": "body",
-      "required": true,
-      "schema": {
-       "$ref": "#/definitions/api.UpdateUserInput"
+    },
+    "api.Org": {
+      "required": ["id", "name", "owner", "payAccount"],
+      "properties": {
+        "id": {
+          "description": "机构id",
+          "type": "integer",
+          "format": "int64"
+        },
+        "name": {
+          "description": "机构名称",
+          "type": "string"
+        },
+        "owner": {
+          "description": "机构负责人",
+          "type": "string"
+        },
+        "payAccount": {
+          "description": "支付方式",
+          "$ref": "#/definitions/api.PayAccount"
+        }
       }
-     }
-    ],
-    "responses": {
-     "200": {
-      "description": "OK",
-      "schema": {
-       "$ref": "#/definitions/__umi__.Response200"
+    },
+    "api.PayAccount": {
+      "required": ["id", "userID", "type", "accountNo", "attr1", "attr2"],
+      "properties": {
+        "accountNo": {
+          "description": "账号",
+          "type": "string"
+        },
+        "attr1": {
+          "description": "附加字段1",
+          "type": "string"
+        },
+        "attr2": {
+          "description": "附加字段2",
+          "type": "string"
+        },
+        "id": {
+          "description": "pay account id",
+          "type": "integer",
+          "format": "int64"
+        },
+        "type": {
+          "description": "付款类型",
+          "type": "string"
+        },
+        "userID": {
+          "description": "用户id",
+          "type": "integer",
+          "format": "int64"
+        }
       }
-     },
-     "400": {
-      "description": "Bad Request",
-      "schema": {
-       "$ref": "#/definitions/__umi__.Response400"
+    },
+    "api.Payment": {
+      "required": [
+        "id",
+        "name",
+        "openID",
+        "provider",
+        "amountTotal",
+        "amountCurrency",
+        "description",
+        "time_expire",
+        "attach",
+        "goods_tag",
+        "limit_pay",
+        "support_fapiao",
+        "detail",
+        "scene_info",
+        "settle_info",
+        "refund",
+        "status",
+        "updatedAt",
+        "createdAt"
+      ],
+      "properties": {
+        "amountCurrency": {
+          "type": "string"
+        },
+        "amountTotal": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "attach": {
+          "description": "附加数据",
+          "type": "string"
+        },
+        "createdAt": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "description": {
+          "description": "商品描述",
+          "type": "string"
+        },
+        "detail": {
+          "type": "string"
+        },
+        "goods_tag": {
+          "description": "商品标记，代金券或立减优惠功能的参数。",
+          "type": "string"
+        },
+        "id": {
+          "description": "id",
+          "type": "integer",
+          "format": "int64"
+        },
+        "limit_pay": {
+          "description": "指定支付方式",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "name": {
+          "description": "trade_no",
+          "type": "string"
+        },
+        "openID": {
+          "type": "string"
+        },
+        "provider": {
+          "type": "string"
+        },
+        "refund": {
+          "description": "退款单号",
+          "type": "string"
+        },
+        "scene_info": {
+          "type": "string"
+        },
+        "settle_info": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        },
+        "support_fapiao": {
+          "type": "boolean"
+        },
+        "time_expire": {
+          "description": "订单失效时间，格式为rfc3339格式",
+          "type": "integer",
+          "format": "int64"
+        },
+        "updatedAt": {
+          "type": "integer",
+          "format": "int64"
+        }
       }
-     }
-    }
-   },
-   "post": {
-    "consumes": [
-     "application/json"
-    ],
-    "produces": [
-     "application/json"
-    ],
-    "tags": [
-     "user"
-    ],
-    "summary": "create user",
-    "operationId": "createUser",
-    "parameters": [
-     {
-      "name": "body",
-      "in": "body",
-      "required": true,
-      "schema": {
-       "$ref": "#/definitions/api.CreateUserInput"
+    },
+    "api.Refund": {
+      "required": ["id", "name", "payment", "status", "creator", "updatedAt", "createdAt"],
+      "properties": {
+        "createdAt": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "creator": {
+          "type": "string"
+        },
+        "id": {
+          "description": "id",
+          "type": "integer",
+          "format": "int64"
+        },
+        "name": {
+          "type": "string"
+        },
+        "payment": {
+          "description": "订单号",
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        },
+        "updatedAt": {
+          "type": "integer",
+          "format": "int64"
+        }
       }
-     }
-    ],
-    "responses": {
-     "200": {
-      "description": "OK",
-      "schema": {
-       "$ref": "#/definitions/__umi__.api.User"
+    },
+    "api.Sku": {
+      "required": [
+        "id",
+        "spuId",
+        "name",
+        "title",
+        "description",
+        "address",
+        "teacher",
+        "price",
+        "comment",
+        "creator",
+        "updatedAt",
+        "createdAt"
+      ],
+      "properties": {
+        "address": {
+          "description": "上课地址",
+          "type": "string"
+        },
+        "comment": {
+          "description": "课程备注",
+          "type": "string"
+        },
+        "createdAt": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "creator": {
+          "type": "string"
+        },
+        "description": {
+          "description": "课程描述",
+          "type": "string"
+        },
+        "id": {
+          "description": "课程id",
+          "type": "integer",
+          "format": "int64"
+        },
+        "name": {
+          "description": "课程名称",
+          "type": "string"
+        },
+        "price": {
+          "description": "价格，单位: 分",
+          "type": "integer",
+          "format": "int64"
+        },
+        "spuId": {
+          "description": "商品id",
+          "type": "integer",
+          "format": "int64"
+        },
+        "teacher": {
+          "description": "老师id",
+          "type": "string"
+        },
+        "title": {
+          "description": "课程标题",
+          "type": "string"
+        },
+        "updatedAt": {
+          "type": "integer",
+          "format": "int64"
+        }
       }
-     },
-     "400": {
-      "description": "Bad Request",
-      "schema": {
-       "$ref": "#/definitions/__umi__.Response400"
+    },
+    "api.Spu": {
+      "required": [
+        "id",
+        "spuId",
+        "name",
+        "title",
+        "description",
+        "address",
+        "teacher",
+        "price",
+        "comment",
+        "creator",
+        "updatedAt",
+        "createdAt"
+      ],
+      "properties": {
+        "address": {
+          "description": "上课地址",
+          "type": "string"
+        },
+        "comment": {
+          "description": "课程备注",
+          "type": "string"
+        },
+        "createdAt": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "creator": {
+          "type": "string"
+        },
+        "description": {
+          "description": "课程描述",
+          "type": "string"
+        },
+        "id": {
+          "description": "课程id",
+          "type": "integer",
+          "format": "int64"
+        },
+        "name": {
+          "description": "课程名称",
+          "type": "string"
+        },
+        "price": {
+          "description": "价格，单位: 分",
+          "type": "integer",
+          "format": "int64"
+        },
+        "spuId": {
+          "description": "商品id",
+          "type": "integer",
+          "format": "int64"
+        },
+        "teacher": {
+          "description": "老师id",
+          "type": "string"
+        },
+        "title": {
+          "description": "课程标题",
+          "type": "string"
+        },
+        "updatedAt": {
+          "type": "integer",
+          "format": "int64"
+        }
       }
-     }
-    }
-   }
-  },
-  "/api/v1/users/{name}": {
-   "get": {
-    "consumes": [
-     "application/json"
-    ],
-    "produces": [
-     "application/json"
-    ],
-    "tags": [
-     "user"
-    ],
-    "summary": "get user",
-    "operationId": "getUser",
-    "parameters": [
-     {
-      "type": "string",
-      "name": "name",
-      "in": "path",
-      "required": true
-     }
-    ],
-    "responses": {
-     "200": {
-      "description": "OK",
-      "schema": {
-       "$ref": "#/definitions/__umi__.api.User"
+    },
+    "api.Student": {
+      "required": [
+        "id",
+        "name",
+        "displayName",
+        "parentName",
+        "idNum",
+        "creator",
+        "updatedAt",
+        "createdAt"
+      ],
+      "properties": {
+        "createdAt": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "creator": {
+          "type": "string"
+        },
+        "displayName": {
+          "description": "学生显示名称",
+          "type": "string"
+        },
+        "id": {
+          "description": "id",
+          "type": "integer",
+          "format": "int64"
+        },
+        "idNum": {
+          "description": "学生身份证",
+          "type": "string"
+        },
+        "name": {
+          "description": "学生账号名",
+          "type": "string"
+        },
+        "parentName": {
+          "description": "家长名称",
+          "type": "string"
+        },
+        "updatedAt": {
+          "type": "integer",
+          "format": "int64"
+        }
       }
-     },
-     "400": {
-      "description": "Bad Request",
-      "schema": {
-       "$ref": "#/definitions/__umi__.Response400"
+    },
+    "api.Teacher": {
+      "required": [
+        "id",
+        "name",
+        "idNumber",
+        "courseType",
+        "workingYears",
+        "address",
+        "courseFee",
+        "courseTime",
+        "maxStudents",
+        "percentage",
+        "type",
+        "org",
+        "creator",
+        "updatedAt",
+        "createdAt"
+      ],
+      "properties": {
+        "address": {
+          "description": "工作地点",
+          "type": "string"
+        },
+        "courseFee": {
+          "description": "课程收费， 单位分/小时",
+          "type": "integer",
+          "format": "int32"
+        },
+        "courseTime": {
+          "description": "课程时长",
+          "type": "integer",
+          "format": "int32"
+        },
+        "courseType": {
+          "description": "课程类型",
+          "type": "string"
+        },
+        "createdAt": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "creator": {
+          "type": "string"
+        },
+        "id": {
+          "description": "老师id",
+          "type": "integer",
+          "format": "int64"
+        },
+        "idNumber": {
+          "description": "身份证",
+          "type": "string"
+        },
+        "maxStudents": {
+          "description": "最多学生人数",
+          "type": "integer",
+          "format": "int32"
+        },
+        "name": {
+          "description": "关联 user.Name",
+          "type": "string"
+        },
+        "org": {
+          "description": "所属机构",
+          "type": "string"
+        },
+        "percentage": {
+          "description": "提成比例 1~100",
+          "type": "integer",
+          "format": "int32"
+        },
+        "type": {
+          "description": "自有，机构，加盟",
+          "type": "string"
+        },
+        "updatedAt": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "workingYears": {
+          "description": "工作年限",
+          "type": "string"
+        }
       }
-     }
-    }
-   },
-   "delete": {
-    "consumes": [
-     "application/json"
-    ],
-    "produces": [
-     "application/json"
-    ],
-    "tags": [
-     "user"
-    ],
-    "summary": "delete user",
-    "operationId": "deleteUser",
-    "parameters": [
-     {
-      "type": "string",
-      "name": "name",
-      "in": "path",
-      "required": true
-     }
-    ],
-    "responses": {
-     "200": {
-      "description": "OK",
-      "schema": {
-       "$ref": "#/definitions/__umi__.Response200"
+    },
+    "api.User": {
+      "required": [
+        "id",
+        "unionid",
+        "name",
+        "nickname",
+        "groups",
+        "sex",
+        "province",
+        "city",
+        "country",
+        "avatar",
+        "wOpenid",
+        "mOpenid",
+        "phone",
+        "accountNo",
+        "shareNo",
+        "introducer",
+        "creator",
+        "payAccount",
+        "updatedAt",
+        "createdAt"
+      ],
+      "properties": {
+        "accountNo": {
+          "description": "收款账号",
+          "type": "string"
+        },
+        "avatar": {
+          "type": "string"
+        },
+        "city": {
+          "description": "城市",
+          "type": "string"
+        },
+        "country": {
+          "type": "string"
+        },
+        "createdAt": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "creator": {
+          "type": "string"
+        },
+        "groups": {
+          "description": "所在分组",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "id": {
+          "description": "user id",
+          "type": "integer",
+          "format": "int64"
+        },
+        "introducer": {
+          "description": "介绍人, user.Name",
+          "type": "string"
+        },
+        "mOpenid": {
+          "description": "miniprogram openid",
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "nickname": {
+          "description": "别名",
+          "type": "string"
+        },
+        "payAccount": {
+          "description": "支付方式",
+          "$ref": "#/definitions/api.PayAccount"
+        },
+        "phone": {
+          "description": "手机号",
+          "type": "string"
+        },
+        "province": {
+          "description": "省份",
+          "type": "string"
+        },
+        "sex": {
+          "description": "1为男性，2为女性",
+          "type": "integer",
+          "format": "int32"
+        },
+        "shareNo": {
+          "description": "对外分享号",
+          "type": "string"
+        },
+        "unionid": {
+          "description": "app在微信里的 unionid 编号",
+          "type": "string"
+        },
+        "updatedAt": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "wOpenid": {
+          "description": "website openid",
+          "type": "string"
+        }
       }
-     },
-     "400": {
-      "description": "Bad Request",
-      "schema": {
-       "$ref": "#/definitions/__umi__.Response400"
+    },
+    "auth.LoginRequest": {
+      "required": [
+        "username",
+        "password",
+        "code",
+        "state",
+        "mobile",
+        "captcha",
+        "type",
+        "autoLogin"
+      ],
+      "properties": {
+        "autoLogin": {
+          "description": "自动登陆",
+          "type": "boolean"
+        },
+        "captcha": {
+          "description": "手机验证码",
+          "type": "string"
+        },
+        "code": {
+          "description": "oauth2 code, https://developers.weixin.qq.com/miniprogram/dev/framework/open-ability/login.html",
+          "type": "string"
+        },
+        "mobile": {
+          "description": "手机号，用于手机验证码登陆",
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "state": {
+          "description": "oauth2 state",
+          "type": "string"
+        },
+        "type": {
+          "description": "登陆类型, wechat, password, captcha",
+          "type": "string"
+        },
+        "username": {
+          "type": "string"
+        }
       }
-     }
-    }
-   }
-  },
-  "/version": {
-   "get": {
-    "consumes": [
-     "application/json"
-    ],
-    "produces": [
-     "application/json"
-    ],
-    "summary": "get the code version",
-    "operationId": "getCodeVersion",
-    "responses": {
-     "200": {
-      "description": "OK",
-      "schema": {
-       "$ref": "#/definitions/version.Info"
+    },
+    "auth.captchaRequest": {
+      "required": ["mobile"],
+      "properties": {
+        "mobile": {
+          "type": "string"
+        }
       }
-     }
-    }
-   }
-  }
- },
- "definitions": {
-  "__umi__.Response200": {
-   "required": [
-    "success"
-   ],
-   "properties": {
-    "host": {
-     "type": "string"
     },
-    "success": {
-     "type": "boolean"
+    "auth.captchaResponse": {
+      "required": ["fakeCaptcha"],
+      "properties": {
+        "fakeCaptcha": {
+          "type": "string"
+        }
+      }
     },
-    "traceId": {
-     "type": "string"
+    "course.listCourseOutput": {
+      "required": ["total", "list"],
+      "properties": {
+        "list": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/api.Course"
+          }
+        },
+        "total": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "course.updateInput": {
+      "required": ["id", "comment"],
+      "properties": {
+        "comment": {
+          "description": "课程备注, 课堂笔记",
+          "type": "string"
+        },
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        }
+      }
+    },
+    "file.uploadFileResponse": {
+      "required": ["filepaths"],
+      "properties": {
+        "filepaths": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "order.createRequest": {
+      "required": ["id", "name"],
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "order.listOutput": {
+      "required": ["list", "total"],
+      "properties": {
+        "list": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/api.Order"
+          }
+        },
+        "total": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "order.updateRequest": {},
+    "org.createRequest": {
+      "required": ["name"],
+      "properties": {
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "org.listOutput": {
+      "required": ["list", "total"],
+      "properties": {
+        "list": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/api.Org"
+          }
+        },
+        "total": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "org.updateRequest": {},
+    "payment.createRequest": {
+      "required": ["name"],
+      "properties": {
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "payment.listOutput": {
+      "required": ["list", "total"],
+      "properties": {
+        "list": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/api.Payment"
+          }
+        },
+        "total": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "payment.updateRequest": {},
+    "refund.createRequest": {
+      "required": ["name"],
+      "properties": {
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "refund.listOutput": {
+      "required": ["list", "total"],
+      "properties": {
+        "list": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/api.Refund"
+          }
+        },
+        "total": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "refund.updateRequest": {},
+    "sku.createRequest": {
+      "required": ["name"],
+      "properties": {
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "sku.listOutput": {
+      "required": ["list", "total"],
+      "properties": {
+        "list": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/api.Sku"
+          }
+        },
+        "total": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "sku.updateRequest": {},
+    "spu.createRequest": {
+      "required": ["name"],
+      "properties": {
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "spu.listOutput": {
+      "required": ["list", "total"],
+      "properties": {
+        "list": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/api.Spu"
+          }
+        },
+        "total": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "spu.updateRequest": {},
+    "student.createRequest": {
+      "required": ["name"],
+      "properties": {
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "student.listOutput": {
+      "required": ["list", "total"],
+      "properties": {
+        "list": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/api.Student"
+          }
+        },
+        "total": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "student.updateRequest": {},
+    "teacher.createRequest": {
+      "required": ["name"],
+      "properties": {
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "teacher.listOutput": {
+      "required": ["list", "total"],
+      "properties": {
+        "list": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/api.Teacher"
+          }
+        },
+        "total": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "teacher.updateRequest": {},
+    "user.createRequest": {
+      "required": ["name", "groups", "displayName", "openid"],
+      "properties": {
+        "displayName": {
+          "type": "string"
+        },
+        "groups": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "name": {
+          "type": "string"
+        },
+        "openid": {
+          "type": "string"
+        }
+      }
+    },
+    "user.listOutput": {
+      "required": ["list", "total"],
+      "properties": {
+        "list": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/api.User"
+          }
+        },
+        "total": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "user.updateRequest": {
+      "required": ["groups", "nickname"],
+      "properties": {
+        "groups": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "nickname": {
+          "type": "string"
+        }
+      }
+    },
+    "version.Info": {
+      "required": [
+        "major",
+        "minor",
+        "gitVersion",
+        "gitCommit",
+        "gitTreeState",
+        "buildDate",
+        "goVersion",
+        "compiler",
+        "platform"
+      ],
+      "properties": {
+        "buildDate": {
+          "type": "string"
+        },
+        "compiler": {
+          "type": "string"
+        },
+        "gitCommit": {
+          "type": "string"
+        },
+        "gitTreeState": {
+          "type": "string"
+        },
+        "gitVersion": {
+          "type": "string"
+        },
+        "goVersion": {
+          "type": "string"
+        },
+        "major": {
+          "type": "string"
+        },
+        "minor": {
+          "type": "string"
+        },
+        "platform": {
+          "type": "string"
+        }
+      }
+    },
+    "webapp.AuthorizerResponse": {
+      "required": ["scope", "state", "appid"],
+      "properties": {
+        "appid": {
+          "type": "string"
+        },
+        "scope": {
+          "type": "string"
+        },
+        "state": {
+          "type": "string"
+        }
+      }
     }
-   }
   },
-  "__umi__.Response400": {
-   "required": [
-    "errorCode",
-    "errorMessage",
-    "success"
-   ],
-   "properties": {
-    "errorCode": {
-     "type": "string"
+  "tags": [
+    {
+      "description": "authorization/authentication",
+      "name": "auth"
     },
-    "errorMessage": {
-     "type": "string"
+    {
+      "description": "course",
+      "name": "course"
     },
-    "success": {
-     "type": "boolean"
+    {
+      "description": "order",
+      "name": "order"
+    },
+    {
+      "description": "org",
+      "name": "org"
+    },
+    {
+      "description": "payment",
+      "name": "payment"
+    },
+    {
+      "description": "refund",
+      "name": "refund"
+    },
+    {
+      "description": "sku",
+      "name": "sku"
+    },
+    {
+      "description": "spu",
+      "name": "spu"
+    },
+    {
+      "description": "student",
+      "name": "student"
+    },
+    {
+      "description": "teacher",
+      "name": "teacher"
+    },
+    {
+      "description": "user",
+      "name": "user"
+    },
+    {
+      "description": "file",
+      "name": "file"
     }
-   }
-  },
-  "__umi__.api.ListUserOutput": {
-   "required": [
-    "success"
-   ],
-   "properties": {
-    "data": {
-     "$ref": "#/definitions/api.ListUserOutput"
-    },
-    "host": {
-     "type": "string"
-    },
-    "success": {
-     "type": "boolean"
-    },
-    "traceId": {
-     "type": "string"
-    }
-   }
-  },
-  "__umi__.api.User": {
-   "required": [
-    "success"
-   ],
-   "properties": {
-    "data": {
-     "$ref": "#/definitions/api.User"
-    },
-    "host": {
-     "type": "string"
-    },
-    "success": {
-     "type": "boolean"
-    },
-    "traceId": {
-     "type": "string"
-    }
-   }
-  },
-  "api.CaptchaInput": {
-   "required": [
-    "phone"
-   ],
-   "properties": {
-    "phone": {
-     "type": "string"
-    }
-   }
-  },
-  "api.CreateUserInput": {
-   "required": [
-    "name",
-    "avatar",
-    "email",
-    "title",
-    "group",
-    "tags",
-    "address",
-    "phone"
-   ],
-   "properties": {
-    "address": {
-     "type": "string"
-    },
-    "avatar": {
-     "type": "string"
-    },
-    "email": {
-     "type": "string"
-    },
-    "group": {
-     "type": "string"
-    },
-    "name": {
-     "type": "string"
-    },
-    "phone": {
-     "type": "string"
-    },
-    "tags": {
-     "type": "object",
-     "additionalProperties": {
-      "type": "string"
-     }
-    },
-    "title": {
-     "type": "string"
-    }
-   }
-  },
-  "api.ListUserOutput": {
-   "required": [
-    "total",
-    "list"
-   ],
-   "properties": {
-    "list": {
-     "type": "array",
-     "items": {
-      "$ref": "#/definitions/api.User"
-     }
-    },
-    "total": {
-     "type": "integer",
-     "format": "int64"
-    }
-   }
-  },
-  "api.LoginInput": {
-   "required": [
-    "username",
-    "password",
-    "autoLogin",
-    "type"
-   ],
-   "properties": {
-    "autoLogin": {
-     "type": "boolean"
-    },
-    "password": {
-     "type": "string"
-    },
-    "type": {
-     "type": "string"
-    },
-    "username": {
-     "type": "string"
-    }
-   }
-  },
-  "api.LoginOutput": {
-   "required": [
-    "type",
-    "currentAuthority"
-   ],
-   "properties": {
-    "currentAuthority": {
-     "type": "string"
-    },
-    "type": {
-     "type": "string"
-    }
-   }
-  },
-  "api.UpdateUserInput": {
-   "required": [
-    "name",
-    "avatar",
-    "email",
-    "title",
-    "group",
-    "tags",
-    "address",
-    "phone"
-   ],
-   "properties": {
-    "address": {
-     "type": "string"
-    },
-    "avatar": {
-     "type": "string"
-    },
-    "email": {
-     "type": "string"
-    },
-    "group": {
-     "type": "string"
-    },
-    "name": {
-     "type": "string"
-    },
-    "phone": {
-     "type": "string"
-    },
-    "tags": {
-     "type": "object",
-     "additionalProperties": {
-      "type": "string"
-     }
-    },
-    "title": {
-     "type": "string"
-    }
-   }
-  },
-  "api.User": {
-   "required": [
-    "id",
-    "name",
-    "avatar",
-    "email",
-    "title",
-    "group",
-    "tags",
-    "notifyCount",
-    "unreadCount",
-    "address",
-    "phone",
-    "createdAt",
-    "updatedAt"
-   ],
-   "properties": {
-    "address": {
-     "type": "string"
-    },
-    "avatar": {
-     "type": "string"
-    },
-    "createdAt": {
-     "type": "string",
-     "format": "date-time"
-    },
-    "email": {
-     "type": "string"
-    },
-    "group": {
-     "type": "string"
-    },
-    "id": {
-     "type": "integer",
-     "format": "int64"
-    },
-    "name": {
-     "type": "string"
-    },
-    "notifyCount": {
-     "type": "integer",
-     "format": "int32"
-    },
-    "phone": {
-     "type": "string"
-    },
-    "tags": {
-     "type": "object",
-     "additionalProperties": {
-      "type": "string"
-     }
-    },
-    "title": {
-     "type": "string"
-    },
-    "unreadCount": {
-     "type": "integer",
-     "format": "int32"
-    },
-    "updatedAt": {
-     "type": "string",
-     "format": "date-time"
-    }
-   }
-  },
-  "version.Info": {
-   "required": [
-    "major",
-    "minor",
-    "gitVersion",
-    "gitCommit",
-    "gitTreeState",
-    "buildDate",
-    "goVersion",
-    "compiler",
-    "platform"
-   ],
-   "properties": {
-    "buildDate": {
-     "type": "string"
-    },
-    "compiler": {
-     "type": "string"
-    },
-    "gitCommit": {
-     "type": "string"
-    },
-    "gitTreeState": {
-     "type": "string"
-    },
-    "gitVersion": {
-     "type": "string"
-    },
-    "goVersion": {
-     "type": "string"
-    },
-    "major": {
-     "type": "string"
-    },
-    "minor": {
-     "type": "string"
-    },
-    "platform": {
-     "type": "string"
-    }
-   }
-  }
- },
- "securityDefinitions": {
-  "BearerToken": {
-   "type": "apiKey",
-   "name": "authorization",
-   "in": "header"
-  }
- },
- "tags": [
-  {
-   "description": "account Api",
-   "name": "account"
-  },
-  {
-   "description": "user Api",
-   "name": "user"
-  }
- ]
+  ]
 }

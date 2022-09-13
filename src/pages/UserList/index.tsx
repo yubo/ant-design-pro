@@ -1,16 +1,16 @@
 import { PlusOutlined } from '@ant-design/icons';
-import { Button, message, Input, Drawer } from 'antd';
+import { Space, Modal, Button, message, Drawer } from 'antd';
 import React, { useState, useRef } from 'react';
-import { PageContainer, FooterToolbar } from '@ant-design/pro-layout';
+import { PageContainer } from '@ant-design/pro-layout';
 import type { ProColumns, ActionType } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
-import { ModalForm, ProFormText, ProFormTextArea } from '@ant-design/pro-form';
+import { ModalForm, ProFormText } from '@ant-design/pro-form';
 import type { ProDescriptionsItemProps } from '@ant-design/pro-descriptions';
 import ProDescriptions from '@ant-design/pro-descriptions';
 import type { FormValueType } from './components/UpdateForm';
 import UpdateForm from './components/UpdateForm';
 //import { rule, addRule, updateRule, removeRule } from '@/services/ant-design-pro/api';
-import { listUser, createUser, updateUser, deleteUser } from '@/services/ant-server/user';
+import { listUser, createUser, updateUser, deleteUsers } from '@/services/apiserver/user';
 import { listWrapper } from '@/services/util';
 
 /**
@@ -39,6 +39,7 @@ const handleAdd = async (fields: API.User) => {
  * @param fields
  */
 const handleUpdate = async (fields: FormValueType) => {
+  console.log(fields);
   const hide = message.loading('Configuring');
   try {
     await updateUser({
@@ -64,11 +65,11 @@ const handleUpdate = async (fields: FormValueType) => {
  * @param selectedRows
  */
 const handleRemove = async (selectedRows: API.User[]) => {
-  const hide = message.loading('正在删除');
   if (!selectedRows) return true;
+  const hide = message.loading('正在删除');
   try {
-    await deleteRule({
-      key: selectedRows.map((row) => row.key),
+    await deleteUsers({
+      id: selectedRows.map((row) => row.id),
     });
     hide();
     message.success('Deleted successfully and will refresh soon');
@@ -96,7 +97,7 @@ const TableList: React.FC = () => {
 
   const actionRef = useRef<ActionType>();
   const [currentRow, setCurrentRow] = useState<API.User>();
-  const [selectedRowsState, setSelectedRows] = useState<API.User[]>([]);
+  //const [selectedRowsState, setSelectedRows] = useState<API.User[]>([]);
 
   /**
    * @en-US International configuration
@@ -128,6 +129,13 @@ const TableList: React.FC = () => {
       width: 60,
       dataIndex: 'avatar',
       valueType: 'avatar',
+      hideInSearch: true,
+    },
+    {
+      title: 'id',
+      dataIndex: 'id',
+      valueType: 'textarea',
+      hideInTable: true,
       hideInSearch: true,
     },
     {
@@ -165,13 +173,13 @@ const TableList: React.FC = () => {
     },
     {
       title: '标签',
-      dataIndex: 'tags',
+      dataIndex: 'labels',
       hideInSearch: true,
       ellipsis: true,
       render: (_, record) => {
-        const { tags = {} }  = record;
-        return ""+Object.keys(tags).map(b=>`${b}=${tags[b]}`)
-      }
+        const { labels = {} } = record;
+        return '' + Object.keys(labels).map((k) => `${k}=${labels[k]}`);
+      },
     },
     {
       title: '更新时间',
@@ -215,7 +223,9 @@ const TableList: React.FC = () => {
             handleUpdateModalVisible(true);
             setCurrentRow(record);
           }}
-        > 修改
+        >
+          {' '}
+          修改
         </a>,
       ],
     },
@@ -238,40 +248,52 @@ const TableList: React.FC = () => {
               handleModalVisible(true);
             }}
           >
-            <PlusOutlined /> New
+            <PlusOutlined /> 新建
           </Button>,
         ]}
         request={listWrapper(listUser)}
         columns={columns}
         scroll={{ x: 1300 }}
-        rowSelection={{
-          onChange: (_, selectedRows) => {
-            setSelectedRows(selectedRows);
-          },
-        }}
-      />
-      {selectedRowsState?.length > 0 && (
-        <FooterToolbar
-          extra={
-            <div>
-              已1选择
-              <a style={{ fontWeight: 600 }}>{selectedRowsState.length}</a>{' '}---项&nbsp;&nbsp;
-            </div>
+        rowSelection={
+          {
+            //onChange: (_, selectedRows) => {
+            //  //setSelectedRows(selectedRows);
+            //},
           }
-        >
-          <Button
-            onClick={async () => {
-              await handleRemove(selectedRowsState);
-              setSelectedRows([]);
-              actionRef.current?.reloadAndRest?.();
-            }}
-          > 批量删除
-          </Button>
-          <Button type="primary"> Batch approval </Button>
-        </FooterToolbar>
-      )}
+        }
+        tableAlertRender={({ selectedRowKeys, onCleanSelected }) => (
+          <Space size={24}>
+            <span>
+              已选 {selectedRowKeys.length} 项
+              <a style={{ marginLeft: 8 }} onClick={onCleanSelected}>
+                取消选择
+              </a>
+            </span>
+          </Space>
+        )}
+        tableAlertOptionRender={({ selectedRowKeys, selectedRows }) => (
+          <Space size={16}>
+            <a
+              onClick={() =>
+                Modal.confirm({
+                  title: `确认要删除用户吗 (共 ${selectedRowKeys.length} 项)?`,
+                  onOk: async () => {
+                    const success = await handleRemove(selectedRows);
+                    if (success) {
+                      //setSelectedRows([]);
+                      actionRef.current?.reloadAndRest?.();
+                    }
+                  },
+                })
+              }
+            >
+              批量删除
+            </a>
+          </Space>
+        )}
+      />
       <ModalForm
-        title='New user'
+        title="新建用户"
         width="400px"
         visible={createModalVisible}
         onVisibleChange={handleModalVisible}
@@ -289,13 +311,12 @@ const TableList: React.FC = () => {
           rules={[
             {
               required: true,
-              message: 'Rule name is required',
+              message: '用户名称为必填项',
             },
           ]}
           width="md"
           name="name"
         />
-        <ProFormTextArea width="md" name="desc" />
       </ModalForm>
       <UpdateForm
         onSubmit={async (value) => {

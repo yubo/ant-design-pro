@@ -5,7 +5,8 @@ import type { RunTimeLayoutConfig } from 'umi';
 import { history, Link } from 'umi';
 import RightContent from '@/components/RightContent';
 import Footer from '@/components/Footer';
-import { currentUser as queryCurrentUser } from './services/ant-design-pro/api';
+//import { currentUser as queryCurrentUser } from './services/ant-design-pro/api';
+import { authInfo as queryCurrentUser } from './services/apiserver/auth';
 import { BookOutlined, LinkOutlined } from '@ant-design/icons';
 
 const isDev = process.env.NODE_ENV === 'development';
@@ -86,7 +87,7 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
       return (
         <>
           {children}
-          {!props.location?.pathname?.includes('/login') && (
+          {false && !props.location?.pathname?.includes('/login') && (
             <SettingDrawer
               enableDarkTheme
               settings={initialState?.settings}
