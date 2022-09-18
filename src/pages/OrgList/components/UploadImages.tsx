@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Upload } from 'antd';
+import { Upload, Modal } from 'antd';
 import type { UploadChangeParam } from 'antd/es/upload';
 import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
 import ImgCrop from 'antd-img-crop';
@@ -9,8 +9,19 @@ export type UploadImagesProps = {
   onChange: (images: string[]) => Promise<void>;
 };
 
+const getBase64 = (file: RcFile): Promise<string> =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result as string);
+    reader.onerror = (error) => reject(error);
+  });
+
 // 头像组件 方便以后独立，增加裁剪之类的功能
 const UploadImages: React.FC<UploadImagesProps> = (props) => {
+  const [previewOpen, setPreviewOpen] = useState(false);
+  const [previewImage, setPreviewImage] = useState('');
+  const [previewTitle, setPreviewTitle] = useState('');
   const [fileList, setFileList] = useState<UploadFile[]>(
     props.images.reduce((pre, cur) => {
       pre.push({
@@ -21,6 +32,19 @@ const UploadImages: React.FC<UploadImagesProps> = (props) => {
       return pre;
     }, []),
   );
+
+  const onCancel = () => setPreviewOpen(false);
+  const onPreview = async (file: UploadFile) => {
+    console.log('onPreview', file);
+    if (!file.url && !file.preview) {
+      file.preview = await getBase64(file.originFileObj as RcFile);
+    }
+
+    console.log('file', file.url || (file.preview as string));
+    setPreviewImage(file.url || (file.preview as string));
+    setPreviewOpen(true);
+    setPreviewTitle(file.name || file.url!.substring(file.url!.lastIndexOf('/') + 1));
+  };
 
   const onChange: UploadProps['onChange'] = (info: UploadChangeParam<UploadFile>) => {
     setFileList(info.fileList);
@@ -42,41 +66,31 @@ const UploadImages: React.FC<UploadImagesProps> = (props) => {
     }
   };
 
-  const onPreview = async (file: UploadFile) => {
-    let src = file.url as string;
-    if (!src) {
-      src = await new Promise((resolve) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file.originFileObj as RcFile);
-        reader.onload = () => resolve(reader.result as string);
-      });
-    }
-    const image = new Image();
-    image.src = src;
-    const imgWindow = window.open(src);
-    imgWindow?.document.write(image.outerHTML);
-  };
-
-  const onRemove = (file: UploadFile<T>) => {
-    console.log('onRemove', 'file', file);
-    return true;
-  };
-
   // https://ant.design/components/upload-cn/
   return (
-    <ImgCrop>
-      <Upload
-        name="file"
-        action="/api/v1/files"
-        listType="picture-card"
-        fileList={fileList}
-        onChange={onChange}
-        onPreview={onPreview}
-        onRemove={onRemove}
+    <>
+      <ImgCrop>
+        <Upload
+          name="file"
+          action="/api/v1/files"
+          listType="picture-card"
+          fileList={fileList}
+          onChange={onChange}
+          onPreview={onPreview}
+        >
+          {fileList.length < 5 && '+ Upload'}
+        </Upload>
+      </ImgCrop>
+      <Modal
+        visible={previewOpen}
+        title={previewTitle}
+        footer={null}
+        onCancel={onCancel}
+        width={600}
       >
-        {fileList.length < 5 && '+ Upload'}
-      </Upload>
-    </ImgCrop>
+        <img alt="example" style={{ width: '100%' }} src={previewImage} />
+      </Modal>
+    </>
   );
 };
 
