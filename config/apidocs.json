@@ -680,6 +680,35 @@
             }
           }
         }
+      },
+      "delete": {
+        "consumes": ["application/json", "*/*"],
+        "produces": ["application/json", "*/*"],
+        "tags": ["org"],
+        "summary": "delete orgs",
+        "operationId": "deleteOrgs",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "org id",
+            "name": "id",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/__umi__.Response200"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/__umi__.Response400"
+            }
+          }
+        }
       }
     },
     "/api/v1/orgs/{id}": {
@@ -2691,19 +2720,48 @@
       }
     },
     "api.Org": {
-      "required": ["id", "name", "owner", "payAccount"],
+      "required": [
+        "id",
+        "name",
+        "owner",
+        "ownerId",
+        "native",
+        "address",
+        "ownerId",
+        "images",
+        "payAccount"
+      ],
       "properties": {
+        "address": {
+          "description": "机构地址",
+          "type": "string"
+        },
         "id": {
           "description": "机构id",
           "type": "integer",
           "format": "int64"
         },
+        "images": {
+          "description": "机构简介图片",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
         "name": {
           "description": "机构名称",
           "type": "string"
         },
+        "native": {
+          "description": "是否直营店",
+          "type": "boolean"
+        },
         "owner": {
           "description": "机构负责人",
+          "type": "string"
+        },
+        "ownerId": {
+          "description": "机构简介",
           "type": "string"
         },
         "payAccount": {
@@ -3147,9 +3205,11 @@
         "nickname",
         "groups",
         "sex",
-        "province",
-        "city",
-        "country",
+        "isRoot",
+        "isAdmin",
+        "isOrgAdmin",
+        "isTeacher",
+        "address",
         "avatar",
         "wOpenid",
         "mOpenid",
@@ -3167,14 +3227,10 @@
           "description": "收款账号",
           "type": "string"
         },
+        "address": {
+          "type": "string"
+        },
         "avatar": {
-          "type": "string"
-        },
-        "city": {
-          "description": "城市",
-          "type": "string"
-        },
-        "country": {
           "type": "string"
         },
         "createdAt": {
@@ -3200,6 +3256,22 @@
           "description": "介绍人, user.Name",
           "type": "string"
         },
+        "isAdmin": {
+          "description": "管理员",
+          "type": "boolean"
+        },
+        "isOrgAdmin": {
+          "description": "机构管理员",
+          "type": "boolean"
+        },
+        "isRoot": {
+          "description": "超级管理员",
+          "type": "boolean"
+        },
+        "isTeacher": {
+          "description": "教师",
+          "type": "boolean"
+        },
         "mOpenid": {
           "description": "miniprogram openid",
           "type": "string"
@@ -3217,10 +3289,6 @@
         },
         "phone": {
           "description": "手机号",
-          "type": "string"
-        },
-        "province": {
-          "description": "省份",
           "type": "string"
         },
         "sex": {
@@ -3396,7 +3464,51 @@
         }
       }
     },
-    "org.updateRequest": {},
+    "org.updateRequest": {
+      "required": [
+        "name",
+        "owner",
+        "ownerId",
+        "native",
+        "address",
+        "ownerId",
+        "images",
+        "payAccount"
+      ],
+      "properties": {
+        "address": {
+          "description": "机构地址",
+          "type": "string"
+        },
+        "images": {
+          "description": "机构简介图片",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "name": {
+          "description": "机构名称",
+          "type": "string"
+        },
+        "native": {
+          "description": "是否直营店",
+          "type": "boolean"
+        },
+        "owner": {
+          "description": "机构负责人",
+          "type": "string"
+        },
+        "ownerId": {
+          "description": "机构简介",
+          "type": "string"
+        },
+        "payAccount": {
+          "description": "支付方式",
+          "$ref": "#/definitions/api.PayAccount"
+        }
+      }
+    },
     "payment.createRequest": {
       "required": ["name"],
       "properties": {
@@ -3542,21 +3654,9 @@
     },
     "teacher.updateRequest": {},
     "user.createRequest": {
-      "required": ["name", "groups", "displayName", "openid"],
+      "required": ["name"],
       "properties": {
-        "displayName": {
-          "type": "string"
-        },
-        "groups": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
         "name": {
-          "type": "string"
-        },
-        "openid": {
           "type": "string"
         }
       }
@@ -3577,15 +3677,32 @@
       }
     },
     "user.updateRequest": {
-      "required": ["groups", "nickname"],
+      "required": ["groups", "address", "phone", "avatar", "nickname", "isRoot", "isAdmin"],
       "properties": {
+        "address": {
+          "description": "家庭住址",
+          "type": "string"
+        },
+        "avatar": {
+          "type": "string"
+        },
         "groups": {
           "type": "array",
           "items": {
             "type": "string"
           }
         },
+        "isAdmin": {
+          "type": "boolean"
+        },
+        "isRoot": {
+          "type": "boolean"
+        },
         "nickname": {
+          "type": "string"
+        },
+        "phone": {
+          "description": "手机号",
           "type": "string"
         }
       }

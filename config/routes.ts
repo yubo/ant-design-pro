@@ -21,6 +21,7 @@ export default [
   },
   { name: '查询表格', icon: 'table', path: '/list', component: './TableList' },
   { name: '用户列表', icon: 'table', path: '/users', component: './UserList' },
+  { name: '机构列表', icon: 'table', path: '/orgs', component: './OrgList' },
   { path: '/', redirect: '/welcome' },
   { component: './404' },
 ];

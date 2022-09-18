@@ -34,6 +34,21 @@ export async function createOrg(body: API.createRequest, options?: { [key: strin
   });
 }
 
+/** delete orgs DELETE /api/v1/orgs */
+export async function deleteOrgs(
+  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
+  params: API.deleteOrgsParams,
+  options?: { [key: string]: any },
+) {
+  return request<API.Response200>('/api/v1/orgs', {
+    method: 'DELETE',
+    params: {
+      ...params,
+    },
+    ...(options || {}),
+  });
+}
+
 /** get org GET /api/v1/orgs/${param0} */
 export async function getOrg(
   // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)

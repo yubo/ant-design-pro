@@ -85,10 +85,7 @@ declare namespace API {
   };
 
   type createRequest = {
-    displayName: string;
-    groups: string[];
     name: string;
-    openid: string;
   };
 
   type deleteCourseParams = {
@@ -109,6 +106,11 @@ declare namespace API {
   type deleteOrgParams = {
     /** org id */
     id: number;
+  };
+
+  type deleteOrgsParams = {
+    /** org id */
+    id?: string;
   };
 
   type deletePaymentParams = {
@@ -451,12 +453,20 @@ declare namespace API {
   type Org = Org;
 
   type Org = {
+    /** 机构地址 */
+    address: string;
     /** 机构id */
     id: number;
+    /** 机构简介图片 */
+    images: string[];
     /** 机构名称 */
     name: string;
+    /** 是否直营店 */
+    native: boolean;
     /** 机构负责人 */
     owner: string;
+    /** 机构简介 */
+    ownerId: string;
     payAccount: PayAccount;
   };
 
@@ -668,7 +678,21 @@ declare namespace API {
 
   type updateRequest = Record<string, any>;
 
-  type updateRequest = Record<string, any>;
+  type updateRequest = {
+    /** 机构地址 */
+    address: string;
+    /** 机构简介图片 */
+    images: string[];
+    /** 机构名称 */
+    name: string;
+    /** 是否直营店 */
+    native: boolean;
+    /** 机构负责人 */
+    owner: string;
+    /** 机构简介 */
+    ownerId: string;
+    payAccount: PayAccount;
+  };
 
   type updateRequest = Record<string, any>;
 
@@ -683,8 +707,15 @@ declare namespace API {
   type updateRequest = Record<string, any>;
 
   type updateRequest = {
+    /** 家庭住址 */
+    address: string;
+    avatar: string;
     groups: string[];
+    isAdmin: boolean;
+    isRoot: boolean;
     nickname: string;
+    /** 手机号 */
+    phone: string;
   };
 
   type updateSkuParams = {
@@ -723,10 +754,8 @@ declare namespace API {
   type User = {
     /** 收款账号 */
     accountNo: string;
+    address: string;
     avatar: string;
-    /** 城市 */
-    city: string;
-    country: string;
     createdAt: number;
     creator: string;
     /** 所在分组 */
@@ -735,6 +764,14 @@ declare namespace API {
     id: number;
     /** 介绍人, user.Name */
     introducer: string;
+    /** 管理员 */
+    isAdmin: boolean;
+    /** 机构管理员 */
+    isOrgAdmin: boolean;
+    /** 超级管理员 */
+    isRoot: boolean;
+    /** 教师 */
+    isTeacher: boolean;
     /** miniprogram openid */
     mOpenid: string;
     name: string;
@@ -743,8 +780,6 @@ declare namespace API {
     payAccount: PayAccount;
     /** 手机号 */
     phone: string;
-    /** 省份 */
-    province: string;
     /** 1为男性，2为女性 */
     sex: number;
     /** 对外分享号 */

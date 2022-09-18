@@ -93,6 +93,14 @@ export default {
       groups = ['system:masters', 'system:authenticated'];
       return;
     }
+    if (password === 'teacher' && username === 'teacher') {
+      res.send({
+        success: true,
+        type,
+      });
+      groups = ['teacher'];
+      return;
+    }
     if (password === 'user' && username === 'user') {
       res.send({
         success: true,

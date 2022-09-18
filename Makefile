@@ -28,7 +28,7 @@ api:
 	curl -Ss -o config/apidocs.json http://localhost:8080/apidocs.json && \
 	npm run openapi && \
 	rm -f ./tmp/*.mock.ts && \
-	rm -f ./mock/auth*.mock.ts ./tmp/
+	rm -f ./mock/auth*.mock.ts
 
 .PHONY: install
 install:
@@ -36,4 +36,5 @@ install:
 
 .PHONY: clean
 clean:
+	rm -rf ./src/.umi
 	rm -f ./mock/*.mock.ts

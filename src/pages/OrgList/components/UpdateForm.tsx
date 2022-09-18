@@ -1,6 +1,13 @@
 import React from 'react';
-import { ProFormSwitch, ProForm, ModalForm, ProFormText, ProFormDigit } from '@ant-design/pro-form';
-import AvatarView from './AvatarView';
+import {
+  ProFormSwitch,
+  ProForm,
+  ModalForm,
+  ProFormText,
+  ProFormTextArea,
+  ProFormDigit,
+} from '@ant-design/pro-form';
+import UploadImages from './UploadImages';
 import { useAccess } from 'umi';
 
 export type FormValueType = {
@@ -10,24 +17,25 @@ export type FormValueType = {
   type?: string;
   time?: string;
   frequency?: string;
-} & Partial<API.User>;
+} & Partial<API.Org>;
 
 export type UpdateFormProps = {
   onCancel: (flag?: boolean, formVals?: FormValueType) => void;
   onSubmit: (values: FormValueType) => Promise<void>;
   updateModalVisible: boolean;
-  values: Partial<API.User>;
-  avatar: string;
-  updateAvatar: (avatar: string) => Promise<void>;
+  values: Partial<API.Org>;
+  images: string[];
+  updateImages: (images: string[]) => Promise<void>;
 };
 
 const UpdateForm: React.FC<UpdateFormProps> = (props) => {
   const access = useAccess();
 
+  // 强制重新渲染 modalForm
   return (
     props.updateModalVisible && (
       <ModalForm
-        title={'修改用户'}
+        title={'编辑'}
         autoFocusFirstInput
         modalProps={{
           onCancel: props.onCancel,
@@ -38,17 +46,17 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
         layout={'horizontal'}
       >
         <ProForm.Group>
-          <ProFormText name="name" label="用户名称" width="md" readonly />
+          <ProFormText name="name" label="机构名称" width="md" readonly />
           <ProFormDigit name="id" label="id" readonly />
         </ProForm.Group>
-        <ProFormSwitch name="isRoot" label="超级管理员" readonly={!access.canRoot} />
-        <ProFormSwitch name="isAdmin" label="管理员" readonly={!access.canRoot} />
+        <ProFormSwitch name="native" label="直营" readonly={!access.canRoot} />
+        <ProFormText name="owner" width="md" label="管理员" />
         <ProFormText name="address" width="md" label="地址" />
-        <ProFormText name="phone" width="md" label="phone" />
+        <ProFormTextArea name="description" width="md" label="描述" />
 
         <div>
-          <div>头像</div>
-          <AvatarView avatar={props.avatar || ''} onChange={props.updateAvatar} />
+          <div>图片</div>
+          <UploadImages images={props.images || []} onChange={props.updateImages} />
         </div>
       </ModalForm>
     )

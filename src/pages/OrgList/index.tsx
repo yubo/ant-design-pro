@@ -1,5 +1,5 @@
 import { PlusOutlined } from '@ant-design/icons';
-import { Space, Modal, Button, message, Drawer } from 'antd';
+import { Space, List, Image, Modal, Button, message, Drawer } from 'antd';
 import React, { useState, useRef } from 'react';
 import { PageContainer } from '@ant-design/pro-layout';
 import type { ProColumns, ActionType } from '@ant-design/pro-table';
@@ -10,7 +10,7 @@ import ProDescriptions from '@ant-design/pro-descriptions';
 import type { FormValueType } from './components/UpdateForm';
 import UpdateForm from './components/UpdateForm';
 //import { rule, addRule, updateRule, removeRule } from '@/services/ant-design-pro/api';
-import { listUser, createUser, updateUser, deleteUsers } from '@/services/apiserver/user';
+import { listOrg, createOrg, updateOrg, deleteOrgs } from '@/services/apiserver/org';
 import { listQueryWithColumns } from '@/services/util';
 import { useAccess } from 'umi';
 import moment from 'moment';
@@ -20,10 +20,10 @@ import moment from 'moment';
  * @zh-CN 添加节点
  * @param fields
  */
-const handleAdd = async (fields: API.User) => {
+const handleAdd = async (fields: API.Org) => {
   const hide = message.loading('正在添加');
   try {
-    await createUser({ ...fields });
+    await createOrg({ ...fields });
     hide();
     message.success('Added successfully');
     return true;
@@ -42,10 +42,10 @@ const handleAdd = async (fields: API.User) => {
  */
 const handleUpdate = async (fields: FormValueType) => {
   const { id, ...body } = fields;
-  console.log('update user', 'id', id, 'body', body);
+  console.log('update org', 'id', id, 'body', body);
   const hide = message.loading('Configuring');
   try {
-    await updateUser({ id }, body);
+    await updateOrg({ id }, body);
     hide();
 
     message.success('Configuration is successful');
@@ -63,11 +63,11 @@ const handleUpdate = async (fields: FormValueType) => {
  *
  * @param selectedRows
  */
-const handleRemove = async (selectedRows: API.User[]) => {
+const handleRemove = async (selectedRows: API.Org[]) => {
   if (!selectedRows) return true;
   const hide = message.loading('正在删除');
   try {
-    await deleteUsers({
+    await deleteOrgs({
       id: selectedRows.map((row) => row.id),
     });
     hide();
@@ -95,9 +95,9 @@ const TableList: React.FC = () => {
   const [showDetail, setShowDetail] = useState<boolean>(false);
 
   const actionRef = useRef<ActionType>();
-  const [currentRow, setCurrentRow] = useState<API.User>();
-  const [currentAvatar, setCurrentAvatar] = useState<string>('');
-  //const [selectedRowsState, setSelectedRows] = useState<API.User[]>([]);
+  const [currentRow, setCurrentRow] = useState<API.Org>();
+  const [currentImages, setCurrentImages] = useState<string[]>([]);
+  //const [selectedRowsState, setSelectedRows] = useState<API.Org[]>([]);
   const access = useAccess();
 
   const fmtDate = (ts) => {
@@ -109,7 +109,7 @@ const TableList: React.FC = () => {
    * @zh-CN 国际化配置
    * */
   // https://procomponents.ant.design/components/schema/#valuetype
-  const columns: ProColumns<API.User>[] = [
+  const columns: ProColumns<API.Org>[] = [
     {
       width: 60,
       title: 'id',
@@ -120,17 +120,17 @@ const TableList: React.FC = () => {
       query: ['id={id}'],
     },
     {
-      title: '用户名',
+      title: '机构名',
       dataIndex: 'name',
       sorter: true,
       editable: false,
       query: ['name=~{name}'],
-      //tip: 'The user name is the unique key',
+      //tip: 'The org name is the unique key',
       render: (dom, entity) => (
         <a
           onClick={() => {
             setCurrentRow(entity);
-            setCurrentAvatar(entity.avatar);
+            setCurrentImages(entity.images);
             setShowDetail(true);
           }}
         >
@@ -139,36 +139,49 @@ const TableList: React.FC = () => {
       ),
     },
     {
-      title: '头像',
-      width: 60,
-      dataIndex: 'avatar',
-      valueType: 'avatar',
+      title: '类型',
+      dataIndex: 'native',
       hideInSearch: true,
+      render: (_, entity) => <div> {entity.native ? '直营' : '加盟'}</div>,
     },
     {
-      title: '昵称',
-      dataIndex: 'nickname',
-      valueType: 'nickname',
-      query: ['nickname=~{nickname}'],
-    },
-    {
-      title: '角色',
-      hideInSearch: true,
-      render: (_, entity) => (
-        <div> {(entity.isRoot && '超级管理员') || (entity.isAdmin && '管理员') || '-'}</div>
-      ),
-    },
-    {
-      title: '手机号',
-      dataIndex: 'phone',
+      title: '管理员',
+      dataIndex: 'owner',
       valueType: 'textarea',
-      query: ['phone=~{phone}'],
+      query: ['owner=~{owner}'],
     },
     {
       title: '地址',
       dataIndex: 'address',
       valueType: 'textarea',
       query: ['address=~{address}'],
+    },
+    {
+      title: '描述',
+      dataIndex: 'description',
+      valueType: 'textarea',
+      query: ['description=~{description}'],
+    },
+    {
+      title: '图片',
+      render: (_, entity) => (
+        <List
+          dataSource={entity.images}
+          renderItem={(item) => (
+            <List.Item>
+              <Image width={104} src={item} />
+            </List.Item>
+          )}
+        />
+      ),
+      hideInSearch: true,
+      hideInTable: true,
+    },
+    {
+      title: '创建者',
+      dataIndex: 'creator',
+      valueType: 'textarea',
+      hideInSearch: true,
     },
     {
       title: '更新时间',
@@ -210,9 +223,9 @@ const TableList: React.FC = () => {
         <a
           key="edit"
           onClick={() => {
-            handleUpdateModalVisible(true);
             setCurrentRow(record);
-            setCurrentAvatar(record.avatar);
+            setCurrentImages(record.images);
+            handleUpdateModalVisible(true);
           }}
         >
           修改
@@ -221,7 +234,7 @@ const TableList: React.FC = () => {
           key="remove"
           onClick={() =>
             Modal.confirm({
-              title: `确认要删除用户 ${record.name} (${record.id})吗?`,
+              title: `确认要删除机构 ${record.name} (${record.id})吗?`,
               onOk: async () => {
                 const success = await handleRemove([record]);
                 if (success) {
@@ -239,7 +252,7 @@ const TableList: React.FC = () => {
 
   return (
     <PageContainer>
-      <ProTable<API.User, API.PageParams>
+      <ProTable<API.Org, API.PageParams>
         //headerTitle='Enquiry form'
         actionRef={actionRef}
         rowKey="id"
@@ -257,7 +270,7 @@ const TableList: React.FC = () => {
             <PlusOutlined /> 新建
           </Button>,
         ]}
-        request={listQueryWithColumns(listUser, columns)}
+        request={listQueryWithColumns(listOrg, columns)}
         columns={columns}
         scroll={{ x: 1300 }}
         rowSelection={
@@ -282,7 +295,7 @@ const TableList: React.FC = () => {
             <a
               onClick={() =>
                 Modal.confirm({
-                  title: `确认要删除用户吗 (共 ${selectedRowKeys.length} 项)?`,
+                  title: `确认要删除机构吗 (共 ${selectedRowKeys.length} 项)?`,
                   onOk: async () => {
                     const success = await handleRemove(selectedRows);
                     if (success) {
@@ -299,12 +312,12 @@ const TableList: React.FC = () => {
         )}
       />
       <ModalForm
-        title="新建用户"
+        title="新建机构"
         width="400px"
         visible={createModalVisible}
         onVisibleChange={handleModalVisible}
         onFinish={async (value) => {
-          const success = await handleAdd(value as API.User);
+          const success = await handleAdd(value as API.Org);
           if (success) {
             handleModalVisible(false);
             if (actionRef.current) {
@@ -317,7 +330,7 @@ const TableList: React.FC = () => {
           rules={[
             {
               required: true,
-              message: '用户名称为必填项',
+              message: '机构名称为必填项',
             },
           ]}
           width="md"
@@ -346,15 +359,14 @@ const TableList: React.FC = () => {
         }}
         updateModalVisible={updateModalVisible}
         values={currentRow || {}}
-        avatar={currentAvatar}
-        updateAvatar={async (avatar) => {
+        images={currentImages}
+        updateImages={async (images) => {
           const success = await handleUpdate({
             id: currentRow.id,
-            avatar: avatar,
+            images: images,
           });
           if (success) {
-            console.log('set current avatar', avatar);
-            setCurrentAvatar(avatar);
+            setCurrentImages(images);
           }
         }}
       />
@@ -369,7 +381,7 @@ const TableList: React.FC = () => {
         closable={false}
       >
         {currentRow?.name && (
-          <ProDescriptions<API.User>
+          <ProDescriptions<API.Org>
             column={2}
             title={currentRow?.name}
             request={async () => ({
@@ -378,7 +390,7 @@ const TableList: React.FC = () => {
             params={{
               id: currentRow?.name,
             }}
-            columns={columns as ProDescriptionsItemProps<API.User>[]}
+            columns={columns as ProDescriptionsItemProps<API.Org>[]}
           />
         )}
       </Drawer>

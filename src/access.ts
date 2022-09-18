@@ -4,8 +4,9 @@
 export default function access(initialState: { currentUser?: API.CurrentUser | undefined }) {
   const { currentUser } = initialState || {};
   return {
-    canSystemAdmin: currentUser && currentUser.groups.includes('system:masters'),
-    canTeacher: currentUser && currentUser.groups.includes('teacher'),
-    canAdmin: currentUser && currentUser.groups.includes('admin'),
+    canRoot: currentUser && currentUser.isRoot,
+    canAdmin: currentUser && (currentUser.isAdmin || currentUser.isRoot),
+    canOrgAdmin: currentUser && currentUser.isOrgAdmin,
+    canTeacher: currentUser && currentUser.isTeacher,
   };
 }
