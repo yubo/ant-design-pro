@@ -34,6 +34,21 @@ export async function createPayment(body: API.createRequest, options?: { [key: s
   });
 }
 
+/** delete payments DELETE /api/v1/payments */
+export async function deletePayments(
+  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
+  params: API.deletePaymentsParams,
+  options?: { [key: string]: any },
+) {
+  return request<API.Response200>('/api/v1/payments', {
+    method: 'DELETE',
+    params: {
+      ...params,
+    },
+    ...(options || {}),
+  });
+}
+
 /** get payment GET /api/v1/payments/${param0} */
 export async function getPayment(
   // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)

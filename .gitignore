@@ -42,3 +42,5 @@ build
 tmp/
 
 *.mock.ts
+
+*.tar.gz

@@ -8,7 +8,7 @@ export async function listCourse(
   params: API.listCourseParams,
   options?: { [key: string]: any },
 ) {
-  return request<API.listCourseOutput>('/api/v1/courses', {
+  return request<API.listOutput>('/api/v1/courses', {
     method: 'GET',
     params: {
       // pageSize has a default value: 10
@@ -16,6 +16,33 @@ export async function listCourse(
       // current has a default value: 1
       current: '1',
 
+      ...params,
+    },
+    ...(options || {}),
+  });
+}
+
+/** create course acl(admin) POST /api/v1/courses */
+export async function createCourse(body: API.createRequest, options?: { [key: string]: any }) {
+  return request<API.Response200>('/api/v1/courses', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
+/** delete courses acl(root) DELETE /api/v1/courses */
+export async function deleteCourses(
+  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
+  params: API.deleteCoursesParams,
+  options?: { [key: string]: any },
+) {
+  return request<API.Response200>('/api/v1/courses', {
+    method: 'DELETE',
+    params: {
       ...params,
     },
     ...(options || {}),
@@ -36,11 +63,11 @@ export async function getCourse(
   });
 }
 
-/** update course PUT /api/v1/courses/${param0} */
+/** update course acl(admin) PUT /api/v1/courses/${param0} */
 export async function updateCourse(
   // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
   params: API.updateCourseParams,
-  body: API.updateInput,
+  body: API.updateRequest,
   options?: { [key: string]: any },
 ) {
   const { id: param0, ...queryParams } = params;
@@ -55,7 +82,7 @@ export async function updateCourse(
   });
 }
 
-/** delete course DELETE /api/v1/courses/${param0} */
+/** delete course acl(root) DELETE /api/v1/courses/${param0} */
 export async function deleteCourse(
   // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
   params: API.deleteCourseParams,

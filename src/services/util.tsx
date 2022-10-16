@@ -1,9 +1,20 @@
-export function listQueryWithColumns(listFn, columns) {
-  return listWrapper(listFn, genQueryhandle(columns));
+import { listUser } from '@/services/apiserver/user';
+import { listOrg } from '@/services/apiserver/org';
+import { listCourse } from '@/services/apiserver/course';
+import { listTeacher } from '@/services/apiserver/teacher';
+import { listSpu } from '@/services/apiserver/spu';
+
+export function listQueryWithColumns(listFn, columns, qs = []) {
+  return listWrapper(listFn, genQueryhandle(columns, qs));
 }
 
-export function genQueryhandle(cols) {
+export function genQueryhandle(cols, initialValues = []) {
   return (params) => {
+    const def = [];
+    initialValues.forEach((e) => {
+      def.push(e);
+    });
+
     const qs = cols
       .reduce((pre, cur) => {
         if (cur.query) {
@@ -18,10 +29,10 @@ export function genQueryhandle(cols) {
           delete params[m[1]];
         }
         return pre;
-      }, []);
+      }, def);
 
     if (qs) {
-      params['query'] = '' + qs;
+      params.query = '' + qs;
     }
 
     return params;
@@ -35,8 +46,8 @@ export function listWrapper(listFn, fn = (p) => p) {
   return async (params, sort) => {
     // { key: descend } -> { sorter: key, order: desc}
     Object.keys(sort).forEach((key) => {
-      params['sorter'] = key;
-      params['order'] = sort[key].replace(/end$/, '');
+      params.sorter = key;
+      params.order = sort[key].replace(/end$/, '');
     });
 
     return listFn(fn(params)).then((r) => {
@@ -48,4 +59,99 @@ export function listWrapper(listFn, fn = (p) => p) {
       };
     });
   };
+}
+
+export async function selectUserRequest({ keyWords }) {
+  return await listUser({ query: keyWords ? 'name=~' + keyWords : '' }).then((r) => {
+    const list = r.data?.list || [];
+
+    return list.reduce((pre, cur) => {
+      pre.push({
+        value: cur.id,
+        label: `${cur.name} - ${cur.nickname}`,
+      });
+      return pre;
+    }, []);
+  });
+}
+
+export async function selectOrgRequest({ keyWords, ownerId }) {
+  const query = [];
+  if (keyWords) {
+    query.push('name=~' + keyWords);
+  }
+
+  if (ownerId) {
+    query.push('owner_id=' + ownerId);
+  }
+
+  return await listOrg({ query: '' + query }).then((r) => {
+    const list = r.data?.list || [];
+
+    return list.reduce((pre, cur) => {
+      pre.push({
+        value: cur.id,
+        label: cur.name,
+      });
+      return pre;
+    }, []);
+  });
+}
+
+export async function selectCourseRequest({ keyWords }) {
+  return await listCourse({ query: keyWords ? 'name=~' + keyWords : '' }).then((r) => {
+    const list = r.data?.list || [];
+
+    return list.reduce((pre, cur) => {
+      pre.push({
+        value: cur.id,
+        label: cur.name,
+      });
+      return pre;
+    }, []);
+  });
+}
+
+export async function selectTeacherRequest({ keyWords, orgId }) {
+  const query = [];
+  if (keyWords) {
+    query.push('name=~' + keyWords);
+  }
+  if (orgId) {
+    query.push('org_id=' + orgId);
+  }
+  return await listTeacher({ query: '' + query }).then((r) => {
+    const list = r.data?.list || [];
+
+    return list.reduce((pre, cur) => {
+      pre.push({
+        value: cur.id,
+        label: `${cur.name} (${cur.orgName})`,
+      });
+      return pre;
+    }, []);
+  });
+}
+
+export async function selectSpuRequest({ keyWords, ownerId }) {
+  const query = [];
+  if (keyWords) {
+    query.push('name=~' + keyWords);
+  }
+
+  if (ownerId) {
+    query.push('owner_id=' + ownerId);
+  }
+
+  return await listSpu({ query: '' + query }).then((r) => {
+    const list = r.data?.list || [];
+
+    return list.reduce((pre, cur) => {
+      pre.push({
+        value: cur.id,
+        label: `${cur.name} (${cur?.org?.name})`,
+      });
+      return pre;
+    }, []);
+  });
 }

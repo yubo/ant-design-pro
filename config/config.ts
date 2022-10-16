@@ -1,4 +1,6 @@
-// https://umijs.org/config/
+/**
+ * https://umijs.org/config/
+ */
 import { defineConfig } from 'umi';
 import { join } from 'path';
 import defaultSettings from './defaultSettings';

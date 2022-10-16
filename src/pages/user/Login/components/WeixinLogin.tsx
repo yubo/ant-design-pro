@@ -2,7 +2,6 @@ import React from 'react';
 import { getAuthorizeInfo } from '@/services/apiserver/auth';
 
 const WeixinLogin: React.FC = () => {
-  const logInfo = getAuthorizeInfo();
   const loadScript = new Promise(function (resolve, reject) {
     const s = document.createElement('script');
     s.src = 'https://res.wx.qq.com/connect/zh_CN/htmledition/js/wxLogin.js';
@@ -11,7 +10,7 @@ const WeixinLogin: React.FC = () => {
     document.head.appendChild(s);
   });
 
-  Promise.all([logInfo, loadScript]).then((values) => {
+  Promise.all([getAuthorizeInfo(), loadScript]).then((values) => {
     const [{ data }] = values;
     new window.WxLogin({
       self_redirect: false,
@@ -30,7 +29,7 @@ const WeixinLogin: React.FC = () => {
     }
   });
 
-  return <div id="wx_login_container"></div>;
+  return <div id="wx_login_container" />;
 };
 
 export default WeixinLogin;

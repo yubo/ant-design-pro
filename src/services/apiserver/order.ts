@@ -34,6 +34,21 @@ export async function createOrder(body: API.createRequest, options?: { [key: str
   });
 }
 
+/** delete orders DELETE /api/v1/orders */
+export async function deleteOrders(
+  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
+  params: API.deleteOrdersParams,
+  options?: { [key: string]: any },
+) {
+  return request<API.Response200>('/api/v1/orders', {
+    method: 'DELETE',
+    params: {
+      ...params,
+    },
+    ...(options || {}),
+  });
+}
+
 /** get order GET /api/v1/orders/${param0} */
 export async function getOrder(
   // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)

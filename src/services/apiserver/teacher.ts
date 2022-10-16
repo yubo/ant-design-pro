@@ -34,6 +34,21 @@ export async function createTeacher(body: API.createRequest, options?: { [key: s
   });
 }
 
+/** delete teachers DELETE /api/v1/teachers */
+export async function deleteTeachers(
+  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
+  params: API.deleteTeachersParams,
+  options?: { [key: string]: any },
+) {
+  return request<API.Response200>('/api/v1/teachers', {
+    method: 'DELETE',
+    params: {
+      ...params,
+    },
+    ...(options || {}),
+  });
+}
+
 /** get teacher GET /api/v1/teachers/${param0} */
 export async function getTeacher(
   // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)

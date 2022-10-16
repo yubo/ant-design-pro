@@ -34,6 +34,21 @@ export async function createSku(body: API.createRequest, options?: { [key: strin
   });
 }
 
+/** delete skus DELETE /api/v1/skus */
+export async function deleteSkus(
+  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
+  params: API.deleteSkusParams,
+  options?: { [key: string]: any },
+) {
+  return request<API.Response200>('/api/v1/skus', {
+    method: 'DELETE',
+    params: {
+      ...params,
+    },
+    ...(options || {}),
+  });
+}
+
 /** get sku GET /api/v1/skus/${param0} */
 export async function getSku(
   // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)

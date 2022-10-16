@@ -22,7 +22,7 @@ export async function listUser(
   });
 }
 
-/** create user POST /api/v1/users */
+/** create user acl(admin) POST /api/v1/users */
 export async function createUser(body: API.createRequest, options?: { [key: string]: any }) {
   return request<API.Response200>('/api/v1/users', {
     method: 'POST',
@@ -34,7 +34,7 @@ export async function createUser(body: API.createRequest, options?: { [key: stri
   });
 }
 
-/** delete users DELETE /api/v1/users */
+/** delete users acl(admin) DELETE /api/v1/users */
 export async function deleteUsers(
   // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
   params: API.deleteUsersParams,
@@ -63,7 +63,7 @@ export async function getUser(
   });
 }
 
-/** update user PUT /api/v1/users/${param0} */
+/** update user acl(admin) PUT /api/v1/users/${param0} */
 export async function updateUser(
   // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
   params: API.updateUserParams,
@@ -82,7 +82,7 @@ export async function updateUser(
   });
 }
 
-/** delete user DELETE /api/v1/users/${param0} */
+/** delete user acl(admin) DELETE /api/v1/users/${param0} */
 export async function deleteUser(
   // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
   params: API.deleteUserParams,

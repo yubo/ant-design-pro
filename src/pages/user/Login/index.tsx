@@ -12,8 +12,6 @@ import React, { useState } from 'react';
 import { ProFormCaptcha, ProFormCheckbox, ProFormText, LoginForm } from '@ant-design/pro-form';
 import { history, useModel } from 'umi';
 import Footer from '@/components/Footer';
-//import { login } from '@/services/ant-design-pro/api';
-//import { getFakeCaptcha } from '@/services/ant-design-pro/login';
 import styles from './index.less';
 import WeixinLogin from './components/WeixinLogin';
 import { authLogin, authCaptcha } from '@/services/apiserver/auth';
@@ -32,8 +30,14 @@ const LoginMessage: React.FC<{
 );
 
 const Login: React.FC = () => {
+  const settings = {
+    defaultAuthType: 'password',
+    enablePassword: true,
+    enableWeixin: true,
+    enablePhone: false,
+  };
   const [userLoginState, setUserLoginState] = useState<API.LoginResult>({});
-  const [type, setType] = useState<string>('wechat');
+  const [type, setType] = useState<string>(settings.defaultAuthType);
   const { initialState, setInitialState } = useModel('@@initialState');
 
   const fetchUserInfo = async () => {
@@ -64,7 +68,7 @@ const Login: React.FC = () => {
         state: string;
       };
       if (!code) return;
-      const msg = await authLogin({ code, state, type: 'wechat' });
+      const msg = await authLogin({ code, state, type });
 
       if (msg.success) {
         const defaultLoginSuccessMessage = '登录成功！';
@@ -111,6 +115,28 @@ const Login: React.FC = () => {
 
   callbackCheck();
 
+  const actions = [];
+  if (settings.enableWeixin) {
+    actions.push(
+      <WechatOutlined
+        key="WechatOutlined"
+        className={type === 'weixin' ? styles.selected : styles.icon}
+        onClick={() => {
+          setType('weixin');
+        }}
+      />,
+    );
+  }
+  if (settings.enableAlipay) {
+    actions.push(<AlipayCircleOutlined key="AlipayCircleOutlined" className={styles.icon} />);
+  }
+  if (settings.enableTaobao) {
+    actions.push(<TaobaoCircleOutlined key="TaobaoCircleOutlined" className={styles.icon} />);
+  }
+  if (settings.enableWeibo) {
+    actions.push(<WeiboCircleOutlined key="WeiboCircleOutlined" className={styles.icon} />);
+  }
+
   return (
     <div className={styles.container}>
       <div className={styles.content}>
@@ -118,35 +144,21 @@ const Login: React.FC = () => {
           logo={<img alt="logo" src="/logo.svg" />}
           title="Ant Design"
           subTitle={'Ant Design 是西湖区最具影响力的 Web 设计规范'}
-          initialValues={{
-            autoLogin: true,
-          }}
-          actions={[
-            '其他登录方式 :',
-            <AlipayCircleOutlined key="AlipayCircleOutlined" className={styles.icon} />,
-            <WechatOutlined
-              key="WechatOutlined"
-              className={styles.icon}
-              onClick={() => {
-                setType('wechat');
-              }}
-            />,
-            <TaobaoCircleOutlined key="TaobaoCircleOutlined" className={styles.icon} />,
-            <WeiboCircleOutlined key="WeiboCircleOutlined" className={styles.icon} />,
-          ]}
+          initialValues={{ autoLogin: true }}
+          actions={actions.length > 0 ? ['其他登录方式'].concat(actions) : []}
           onFinish={async (values) => {
             await handleSubmit(values as API.LoginParams);
           }}
         >
           <Tabs activeKey={type} onChange={setType}>
-            <Tabs.TabPane key="account" tab={'账户密码登录'} />
-            <Tabs.TabPane key="mobile" tab={'手机号登录'} />
+            {settings.enablePassword && <Tabs.TabPane key="password" tab={'账户密码登录'} />}
+            {settings.enablePhone && <Tabs.TabPane key="phone" tab={'手机号登录'} />}
           </Tabs>
 
-          {status === 'error' && loginType === 'account' && (
+          {status === 'error' && loginType === 'password' && (
             <LoginMessage content={'错误的用户名和密码(admin/ant.design)'} />
           )}
-          {type === 'account' && (
+          {type === 'password' && (
             <>
               <ProFormText
                 name="username"
@@ -179,15 +191,15 @@ const Login: React.FC = () => {
             </>
           )}
 
-          {status === 'error' && loginType === 'mobile' && <LoginMessage content="验证码错误" />}
-          {type === 'mobile' && (
+          {status === 'error' && loginType === 'phone' && <LoginMessage content="验证码错误" />}
+          {type === 'phone' && (
             <>
               <ProFormText
                 fieldProps={{
                   size: 'large',
                   prefix: <MobileOutlined className={styles.prefixIcon} />,
                 }}
-                name="mobile"
+                name="phone"
                 placeholder={'请输入手机号！'}
                 rules={[
                   {
@@ -238,28 +250,18 @@ const Login: React.FC = () => {
             </>
           )}
 
-          {status === 'error' && loginType === 'wechat' && <LoginMessage content="微信登陆失败" />}
-          {type === 'wechat' && (
+          {status === 'error' && loginType === 'weixin' && <LoginMessage content="微信登陆失败" />}
+          {type === 'weixin' && (
             <>
               <WeixinLogin />
             </>
           )}
 
-          <div
-            style={{
-              marginBottom: 24,
-            }}
-          >
+          <div style={{ marginBottom: 24 }}>
             <ProFormCheckbox noStyle name="autoLogin">
               自动登录
             </ProFormCheckbox>
-            <a
-              style={{
-                float: 'right',
-              }}
-            >
-              忘记密码 ?
-            </a>
+            <a style={{ float: 'right' }}>忘记密码 ?</a>
           </div>
         </LoginForm>
       </div>

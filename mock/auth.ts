@@ -15,10 +15,7 @@ const { ANT_DESIGN_PRO_ONLY_DO_NOT_USE_IN_YOUR_PRODUCTION } = process.env;
  * current user groups， if is '', user need login
  * 如果是 pro 的预览，默认是有权限的
  */
-let groups =
-  ANT_DESIGN_PRO_ONLY_DO_NOT_USE_IN_YOUR_PRODUCTION === 'site'
-    ? ['system:masters', 'system:authenticated']
-    : ['system:unauthenticated'];
+let groups = ANT_DESIGN_PRO_ONLY_DO_NOT_USE_IN_YOUR_PRODUCTION === 'site' ? ['admin'] : [];
 
 const getGroups = () => {
   return groups;

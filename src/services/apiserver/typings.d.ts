@@ -15,7 +15,7 @@ declare namespace API {
   };
 
   type captchaRequest = {
-    mobile: string;
+    phone: string;
   };
 
   type captchaResponse = captchaResponse;
@@ -24,34 +24,40 @@ declare namespace API {
     fakeCaptcha: string;
   };
 
+  type City = {
+    data?: City[];
+    host?: string;
+    success: boolean;
+    traceId?: string;
+  };
+
+  type City = {
+    id: string;
+    name: string;
+    province: string;
+  };
+
   type Course = Course;
 
   type Course = {
-    /** 上课地址 */
-    address: string;
-    /** 课程备注, 课堂笔记 */
-    comment: string;
     createdAt: number;
     creator: string;
+    /** 课程描述 */
+    description: string;
     /** 课程id */
     id: number;
-    name: string;
-    /** 订单号 */
-    payment: string;
-    /** 课程id */
-    skuId: string;
-    /** 课程状态 */
-    status: string;
-    /** 学生id */
-    studentId: string;
-    /** 老师id */
-    teacherId: string;
+    /** 机构简介图片 */
+    images: string[];
     /** 课程名称 */
-    title: string;
+    name: string;
     updatedAt: number;
   };
 
   type createRequest = {
+    name: string;
+  };
+
+  type createRequest = {
     id: number;
     name: string;
   };
@@ -74,6 +80,8 @@ declare namespace API {
 
   type createRequest = {
     name: string;
+    orgId: number;
+    teacherId: number;
   };
 
   type createRequest = {
@@ -81,7 +89,12 @@ declare namespace API {
   };
 
   type createRequest = {
+    /** 老师名称 */
     name: string;
+    /** 所属机构Id */
+    orgId: number;
+    /** 用户Id */
+    userId: number;
   };
 
   type createRequest = {
@@ -89,8 +102,13 @@ declare namespace API {
   };
 
   type deleteCourseParams = {
-    /** resource name */
+    /** course id */
     id: number;
+  };
+
+  type deleteCoursesParams = {
+    /** course id */
+    id?: string;
   };
 
   type deleteFileParams = {
@@ -98,9 +116,19 @@ declare namespace API {
     filepath?: string;
   };
 
+  type deleteNoticeParams = {
+    /** notice id */
+    id: number;
+  };
+
   type deleteOrderParams = {
     /** order id */
     id: number;
+  };
+
+  type deleteOrdersParams = {
+    /** order id */
+    id?: string;
   };
 
   type deleteOrgParams = {
@@ -118,9 +146,19 @@ declare namespace API {
     id: number;
   };
 
+  type deletePaymentsParams = {
+    /** payment id */
+    id?: string;
+  };
+
   type deleteRefundParams = {
     /** refund id */
     id: number;
+  };
+
+  type deleteRefundsParams = {
+    /** refund id */
+    id?: string;
   };
 
   type deleteSkuParams = {
@@ -128,9 +166,19 @@ declare namespace API {
     id: number;
   };
 
+  type deleteSkusParams = {
+    /** sku id */
+    id?: string;
+  };
+
   type deleteSpuParams = {
     /** spu id */
     id: number;
+  };
+
+  type deleteSpusParams = {
+    /** spu id */
+    id?: string;
   };
 
   type deleteStudentParams = {
@@ -141,6 +189,11 @@ declare namespace API {
   type deleteTeacherParams = {
     /** teacher id */
     id: number;
+  };
+
+  type deleteTeachersParams = {
+    /** user id */
+    id?: string;
   };
 
   type deleteUserParams = {
@@ -154,7 +207,7 @@ declare namespace API {
   };
 
   type getCourseParams = {
-    /** resource name */
+    /** course id */
     id: number;
   };
 
@@ -222,15 +275,26 @@ declare namespace API {
     traceId?: string;
   };
 
-  type listCourseOutput = listCourseOutput;
-
-  type listCourseOutput = {
-    list: Course[];
-    total: number;
+  type listCityParams = {
+    /** province */
+    province: string;
   };
 
   type listCourseParams = {
     /** query */
+    query?: string;
+    /** page size */
+    pageSize?: number;
+    /** current page number, start at 1(defualt) */
+    current?: number;
+    /** column name */
+    sorter?: string;
+    /** asc(default)/desc */
+    order?: 'asc' | 'desc';
+  };
+
+  type listNoticeParams = {
+    /** query selector */
     query?: string;
     /** page size */
     pageSize?: number;
@@ -285,6 +349,20 @@ declare namespace API {
   type listOutput = listOutput;
 
   type listOutput = listOutput;
+
+  type listOutput = listOutput;
+
+  type listOutput = listOutput;
+
+  type listOutput = {
+    list: Course[];
+    total: number;
+  };
+
+  type listOutput = {
+    list: Notice[];
+    total: number;
+  };
 
   type listOutput = {
     list: Order[];
@@ -429,25 +507,51 @@ declare namespace API {
     captcha: string;
     /** oauth2 code, https://developers.weixin.qq.com/miniprogram/dev/framework/open-ability/login.html */
     code: string;
-    /** 手机号，用于手机验证码登陆 */
-    mobile: string;
     password: string;
+    /** 手机号，用于手机验证码登陆 */
+    phone: string;
     /** oauth2 state */
     state: string;
-    /** 登陆类型, wechat, password, captcha */
+    /** 登陆类型, weixin, password, phone */
     type: string;
     username: string;
+  };
+
+  type Notice = {
+    avatar: string;
+    datetime: number;
+    description: string;
+    extra: string;
+    /** id */
+    id: number;
+    key: string;
+    read: boolean;
+    status: string;
+    title: string;
+    type: string;
+    userName: string;
   };
 
   type Order = Order;
 
   type Order = {
-    end: number;
-    /** user id */
+    /** 课程备注, 课堂笔记 */
+    comment: string;
+    createdAt: number;
+    creator: string;
+    /** 课程id */
     id: number;
-    start: number;
-    /** 类型 */
-    type: string;
+    /** 订单号 */
+    payment: string;
+    sku: Sku;
+    /** 课程id */
+    skuId: number;
+    /** 课程状态 */
+    status: string;
+    student: Student;
+    /** 学生id */
+    studentId: string;
+    updatedAt: number;
   };
 
   type Org = Org;
@@ -455,6 +559,10 @@ declare namespace API {
   type Org = {
     /** 机构地址 */
     address: string;
+    createdAt: number;
+    creator: string;
+    /** 机构简介 */
+    description: string;
     /** 机构id */
     id: number;
     /** 机构简介图片 */
@@ -465,9 +573,10 @@ declare namespace API {
     native: boolean;
     /** 机构负责人 */
     owner: string;
-    /** 机构简介 */
-    ownerId: string;
+    /** 机构负责人id */
+    ownerId: number;
     payAccount: PayAccount;
+    updatedAt: number;
   };
 
   type PayAccount = {
@@ -482,7 +591,7 @@ declare namespace API {
     /** 付款类型 */
     type: string;
     /** 用户id */
-    userID: number;
+    userId: number;
   };
 
   type Payment = Payment;
@@ -504,7 +613,7 @@ declare namespace API {
     limit_pay: string[];
     /** trade_no */
     name: string;
-    openID: string;
+    openid: string;
     provider: string;
     /** 退款单号 */
     refund: string;
@@ -515,6 +624,18 @@ declare namespace API {
     /** 订单失效时间，格式为rfc3339格式 */
     time_expire: number;
     updatedAt: number;
+  };
+
+  type Province = {
+    data?: Province[];
+    host?: string;
+    success: boolean;
+    traceId?: string;
+  };
+
+  type Province = {
+    id: string;
+    name: string;
   };
 
   type Refund = Refund;
@@ -546,52 +667,54 @@ declare namespace API {
   type Sku = Sku;
 
   type Sku = {
-    /** 上课地址 */
-    address: string;
-    /** 课程备注 */
-    comment: string;
+    /** available */
+    available: boolean;
+    /** 课程数量 */
+    count: number;
+    /** course id */
+    courseId: number;
+    /** course name */
+    courseName: string;
     createdAt: number;
     creator: string;
-    /** 课程描述 */
-    description: string;
     /** 课程id */
     id: number;
-    /** 课程名称 */
+    /** 课程标题 */
     name: string;
-    /** 价格，单位: 分 */
+    /** 每节课价格，单位: 分 */
     price: number;
+    /** 每节课折扣价格，单位: 分 */
+    salePrice: number;
     /** 商品id */
     spuId: number;
-    /** 老师id */
-    teacher: string;
-    /** 课程标题 */
-    title: string;
     updatedAt: number;
   };
 
   type Spu = Spu;
 
   type Spu = {
-    /** 上课地址 */
-    address: string;
-    /** 课程备注 */
-    comment: string;
+    /** available */
+    available: boolean;
     createdAt: number;
     creator: string;
-    /** 课程描述 */
+    /** 商品描述 */
     description: string;
-    /** 课程id */
+    /** spu id */
     id: number;
-    /** 课程名称 */
+    /** 简介图片 */
+    images: string[];
+    /** max line price */
+    maxLinePrice: number;
+    /** min sale Price */
+    minSalePrice: number;
+    /** 商品标题 */
     name: string;
-    /** 价格，单位: 分 */
-    price: number;
-    /** 商品id */
-    spuId: number;
-    /** 老师id */
-    teacher: string;
-    /** 课程标题 */
-    title: string;
+    org: Org;
+    /** OrgId */
+    orgId: number;
+    teacher: Teacher;
+    /** teacher id */
+    teacherId: number;
     updatedAt: number;
   };
 
@@ -616,43 +739,43 @@ declare namespace API {
   type Teacher = Teacher;
 
   type Teacher = {
-    /** 工作地点 */
+    /** 工作地点, 同机构地点 */
     address: string;
     /** 课程收费， 单位分/小时 */
     courseFee: number;
     /** 课程时长 */
     courseTime: number;
-    /** 课程类型 */
-    courseType: string;
     createdAt: number;
     creator: string;
+    /** 简介 */
+    description: string;
     /** 老师id */
     id: number;
     /** 身份证 */
     idNumber: string;
+    /** 图片简介 */
+    images: string[];
     /** 最多学生人数 */
     maxStudents: number;
-    /** 关联 user.Name */
+    /** 老师名称 */
     name: string;
+    /** 所属机构Id */
+    orgId: number;
     /** 所属机构 */
-    org: string;
+    orgName: string;
     /** 提成比例 1~100 */
     percentage: number;
-    /** 自有，机构，加盟 */
-    type: string;
     updatedAt: number;
+    /** 用户Id */
+    userId: number;
+    /** 用户名 */
+    userName: string;
     /** 工作年限 */
-    workingYears: string;
+    workingYears: number;
   };
 
   type updateCourseParams = {
-    /** resource name */
-    id: number;
-  };
-
-  type updateInput = {
-    /** 课程备注, 课堂笔记 */
-    comment: string;
+    /** course id */
     id: number;
   };
 
@@ -676,11 +799,20 @@ declare namespace API {
     id: number;
   };
 
+  type updateRequest = {
+    /** 课程描述 */
+    description: string;
+    /** 简介图片 */
+    images: string[];
+  };
+
   type updateRequest = Record<string, any>;
 
   type updateRequest = {
     /** 机构地址 */
     address: string;
+    /** 机构简介 */
+    description: string;
     /** 机构简介图片 */
     images: string[];
     /** 机构名称 */
@@ -689,8 +821,6 @@ declare namespace API {
     native: boolean;
     /** 机构负责人 */
     owner: string;
-    /** 机构简介 */
-    ownerId: string;
     payAccount: PayAccount;
   };
 
@@ -700,22 +830,62 @@ declare namespace API {
 
   type updateRequest = Record<string, any>;
 
-  type updateRequest = Record<string, any>;
+  type updateRequest = {
+    /** available */
+    available: boolean;
+    /** 商品描述 */
+    description: string;
+    /** 简介图片 */
+    images: string[];
+    /** 商品标题 */
+    name: string;
+  };
 
   type updateRequest = Record<string, any>;
 
-  type updateRequest = Record<string, any>;
+  type updateRequest = {
+    /** 工作地点 */
+    address: string;
+    /** 课程收费， 单位分/小时 */
+    courseFee: number;
+    /** 课程时长 */
+    courseTime: number;
+    /** 简介 */
+    description: string;
+    /** 身份证 */
+    idNumber: string;
+    /** 图片简介 */
+    images: string[];
+    /** 最多学生人数 */
+    maxStudents: number;
+    /** 老师名称 */
+    name: string;
+    /** 所属机构Id */
+    orgId: number;
+    /** 提成比例 1~100 */
+    percentage: number;
+    /** 工作年限 */
+    workingYears: number;
+  };
 
   type updateRequest = {
     /** 家庭住址 */
     address: string;
     avatar: string;
-    groups: string[];
+    city: string;
+    country: string;
+    /** email */
+    email: string;
     isAdmin: boolean;
+    isOrgAdmin: boolean;
     isRoot: boolean;
+    isTeacher: boolean;
     nickname: string;
     /** 手机号 */
     phone: string;
+    /** profile */
+    profile: string;
+    province: string;
   };
 
   type updateSkuParams = {
@@ -756,8 +926,11 @@ declare namespace API {
     accountNo: string;
     address: string;
     avatar: string;
+    city: string;
+    country: string;
     createdAt: number;
     creator: string;
+    email: string;
     /** 所在分组 */
     groups: string[];
     /** user id */
@@ -780,6 +953,8 @@ declare namespace API {
     payAccount: PayAccount;
     /** 手机号 */
     phone: string;
+    profile: string;
+    province: string;
     /** 1为男性，2为女性 */
     sex: number;
     /** 对外分享号 */

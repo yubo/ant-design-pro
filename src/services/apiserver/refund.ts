@@ -34,6 +34,21 @@ export async function createRefund(body: API.createRequest, options?: { [key: st
   });
 }
 
+/** delete refunds DELETE /api/v1/refunds */
+export async function deleteRefunds(
+  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
+  params: API.deleteRefundsParams,
+  options?: { [key: string]: any },
+) {
+  return request<API.Response200>('/api/v1/refunds', {
+    method: 'DELETE',
+    params: {
+      ...params,
+    },
+    ...(options || {}),
+  });
+}
+
 /** get refund GET /api/v1/refunds/${param0} */
 export async function getRefund(
   // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)

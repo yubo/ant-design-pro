@@ -5,6 +5,8 @@
 import * as auth from './auth';
 import * as course from './course';
 import * as file from './file';
+import * as geographic from './geographic';
+import * as notice from './notice';
 import * as order from './order';
 import * as org from './org';
 import * as payment from './payment';
@@ -19,6 +21,8 @@ export default {
   auth,
   course,
   file,
+  geographic,
+  notice,
   order,
   org,
   payment,

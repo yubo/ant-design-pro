@@ -34,6 +34,21 @@ export async function createSpu(body: API.createRequest, options?: { [key: strin
   });
 }
 
+/** delete spu DELETE /api/v1/spus */
+export async function deleteSpus(
+  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
+  params: API.deleteSpusParams,
+  options?: { [key: string]: any },
+) {
+  return request<API.Response200>('/api/v1/spus', {
+    method: 'DELETE',
+    params: {
+      ...params,
+    },
+    ...(options || {}),
+  });
+}
+
 /** get spu GET /api/v1/spus/${param0} */
 export async function getSpu(
   // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)

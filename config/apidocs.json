@@ -8,7 +8,7 @@
       "url": "http://fuxingzhumeng.com",
       "email": "yubo@yubo.org"
     },
-    "version": "v0.1.0-4+3c8cb07a125991-dirty-dirty"
+    "version": "v0.1.0-6+9177a6da2e694c-dirty-dirty"
   },
   "paths": {
     "/api/v1/auth/authorize": {
@@ -238,7 +238,67 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/__umi__.course.listCourseOutput"
+              "$ref": "#/definitions/__umi__.course.listOutput"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/__umi__.Response400"
+            }
+          }
+        }
+      },
+      "post": {
+        "consumes": ["application/json", "*/*"],
+        "produces": ["application/json", "*/*"],
+        "tags": ["course"],
+        "summary": "create course acl(admin)",
+        "operationId": "createCourse",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/course.createRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/__umi__.Response200"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/__umi__.Response400"
+            }
+          }
+        }
+      },
+      "delete": {
+        "consumes": ["application/json", "*/*"],
+        "produces": ["application/json", "*/*"],
+        "tags": ["course"],
+        "summary": "delete courses acl(root)",
+        "operationId": "deleteCourses",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "course id",
+            "name": "id",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/__umi__.Response200"
             }
           },
           "400": {
@@ -260,7 +320,7 @@
         "parameters": [
           {
             "type": "integer",
-            "description": "resource name",
+            "description": "course id",
             "name": "id",
             "in": "path",
             "required": true
@@ -285,12 +345,12 @@
         "consumes": ["application/json", "*/*"],
         "produces": ["application/json", "*/*"],
         "tags": ["course"],
-        "summary": "update course",
+        "summary": "update course acl(admin)",
         "operationId": "updateCourse",
         "parameters": [
           {
             "type": "integer",
-            "description": "resource name",
+            "description": "course id",
             "name": "id",
             "in": "path",
             "required": true
@@ -300,7 +360,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/course.updateInput"
+              "$ref": "#/definitions/course.updateRequest"
             }
           }
         ],
@@ -323,12 +383,12 @@
         "consumes": ["application/json", "*/*"],
         "produces": ["application/json", "*/*"],
         "tags": ["course"],
-        "summary": "delete course",
+        "summary": "delete course acl(root)",
         "operationId": "deleteCourse",
         "parameters": [
           {
             "type": "integer",
-            "description": "resource name",
+            "description": "course id",
             "name": "id",
             "in": "path",
             "required": true
@@ -384,6 +444,148 @@
             "description": "file path",
             "name": "filepath",
             "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/__umi__.Response200"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/__umi__.Response400"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/geographic/city/{province}": {
+      "get": {
+        "consumes": ["application/json", "*/*"],
+        "produces": ["application/json", "*/*"],
+        "tags": ["geographic"],
+        "operationId": "listCity",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "province",
+            "name": "province",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/__umi__.array.geographic.City"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/__umi__.Response400"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/geographic/province": {
+      "get": {
+        "consumes": ["application/json", "*/*"],
+        "produces": ["application/json", "*/*"],
+        "tags": ["geographic"],
+        "operationId": "listProvince",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/__umi__.array.geographic.Province"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/__umi__.Response400"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/notices": {
+      "get": {
+        "consumes": ["application/json", "*/*"],
+        "produces": ["application/json", "*/*"],
+        "tags": ["notice"],
+        "summary": " acl(read)",
+        "operationId": "listNotice",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "query selector",
+            "name": "query",
+            "in": "query"
+          },
+          {
+            "maximum": 500,
+            "type": "integer",
+            "default": 10,
+            "description": "page size",
+            "name": "pageSize",
+            "in": "query"
+          },
+          {
+            "type": "integer",
+            "default": 1,
+            "description": "current page number, start at 1(defualt)",
+            "name": "current",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "description": "column name",
+            "name": "sorter",
+            "in": "query"
+          },
+          {
+            "enum": ["asc", "desc"],
+            "type": "string",
+            "description": "asc(default)/desc",
+            "name": "order",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/__umi__.notice.listOutput"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/__umi__.Response400"
+            }
+          }
+        }
+      },
+      "delete": {
+        "consumes": ["application/json", "*/*"],
+        "produces": ["application/json", "*/*"],
+        "tags": ["notice"],
+        "summary": "delete notice",
+        "operationId": "deleteNotice",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "notice id",
+            "name": "id",
+            "in": "path",
+            "required": true
           }
         ],
         "responses": {
@@ -474,6 +676,35 @@
             "schema": {
               "$ref": "#/definitions/order.createRequest"
             }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/__umi__.Response200"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/__umi__.Response400"
+            }
+          }
+        }
+      },
+      "delete": {
+        "consumes": ["application/json", "*/*"],
+        "produces": ["application/json", "*/*"],
+        "tags": ["order"],
+        "summary": "delete orders",
+        "operationId": "deleteOrders",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "order id",
+            "name": "id",
+            "in": "query"
           }
         ],
         "responses": {
@@ -654,7 +885,7 @@
         "consumes": ["application/json", "*/*"],
         "produces": ["application/json", "*/*"],
         "tags": ["org"],
-        "summary": "create org",
+        "summary": "create org acl(admin)",
         "operationId": "createOrg",
         "parameters": [
           {
@@ -685,7 +916,7 @@
         "consumes": ["application/json", "*/*"],
         "produces": ["application/json", "*/*"],
         "tags": ["org"],
-        "summary": "delete orgs",
+        "summary": "delete orgs acl(root)",
         "operationId": "deleteOrgs",
         "parameters": [
           {
@@ -746,7 +977,7 @@
         "consumes": ["application/json", "*/*"],
         "produces": ["application/json", "*/*"],
         "tags": ["org"],
-        "summary": "update org",
+        "summary": "update org acl(orgAdmin)",
         "operationId": "updateOrg",
         "parameters": [
           {
@@ -784,7 +1015,7 @@
         "consumes": ["application/json", "*/*"],
         "produces": ["application/json", "*/*"],
         "tags": ["org"],
-        "summary": "delete org",
+        "summary": "delete org acl(root)",
         "operationId": "deleteOrg",
         "parameters": [
           {
@@ -883,6 +1114,35 @@
             "schema": {
               "$ref": "#/definitions/payment.createRequest"
             }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/__umi__.Response200"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/__umi__.Response400"
+            }
+          }
+        }
+      },
+      "delete": {
+        "consumes": ["application/json", "*/*"],
+        "produces": ["application/json", "*/*"],
+        "tags": ["payment"],
+        "summary": "delete payments",
+        "operationId": "deletePayments",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "payment id",
+            "name": "id",
+            "in": "query"
           }
         ],
         "responses": {
@@ -1089,6 +1349,35 @@
             }
           }
         }
+      },
+      "delete": {
+        "consumes": ["application/json", "*/*"],
+        "produces": ["application/json", "*/*"],
+        "tags": ["refund"],
+        "summary": "delete refunds",
+        "operationId": "deleteRefunds",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "refund id",
+            "name": "id",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/__umi__.Response200"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/__umi__.Response400"
+            }
+          }
+        }
       }
     },
     "/api/v1/refunds/{id}": {
@@ -1279,6 +1568,35 @@
             }
           }
         }
+      },
+      "delete": {
+        "consumes": ["application/json", "*/*"],
+        "produces": ["application/json", "*/*"],
+        "tags": ["sku"],
+        "summary": "delete skus",
+        "operationId": "deleteSkus",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "sku id",
+            "name": "id",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/__umi__.Response200"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/__umi__.Response400"
+            }
+          }
+        }
       }
     },
     "/api/v1/skus/{id}": {
@@ -1453,6 +1771,35 @@
             "schema": {
               "$ref": "#/definitions/spu.createRequest"
             }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/__umi__.Response200"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/__umi__.Response400"
+            }
+          }
+        }
+      },
+      "delete": {
+        "consumes": ["application/json", "*/*"],
+        "produces": ["application/json", "*/*"],
+        "tags": ["spu"],
+        "summary": "delete spu",
+        "operationId": "deleteSpus",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "spu id",
+            "name": "id",
+            "in": "query"
           }
         ],
         "responses": {
@@ -1849,6 +2196,35 @@
             }
           }
         }
+      },
+      "delete": {
+        "consumes": ["application/json", "*/*"],
+        "produces": ["application/json", "*/*"],
+        "tags": ["teacher"],
+        "summary": "delete teachers",
+        "operationId": "deleteTeachers",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "user id",
+            "name": "id",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/__umi__.Response200"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/__umi__.Response400"
+            }
+          }
+        }
       }
     },
     "/api/v1/teachers/{id}": {
@@ -2013,7 +2389,7 @@
         "consumes": ["application/json", "*/*"],
         "produces": ["application/json", "*/*"],
         "tags": ["user"],
-        "summary": "create user",
+        "summary": "create user acl(admin)",
         "operationId": "createUser",
         "parameters": [
           {
@@ -2044,7 +2420,7 @@
         "consumes": ["application/json", "*/*"],
         "produces": ["application/json", "*/*"],
         "tags": ["user"],
-        "summary": "delete users",
+        "summary": "delete users acl(admin)",
         "operationId": "deleteUsers",
         "parameters": [
           {
@@ -2105,7 +2481,7 @@
         "consumes": ["application/json", "*/*"],
         "produces": ["application/json", "*/*"],
         "tags": ["user"],
-        "summary": "update user",
+        "summary": "update user acl(admin)",
         "operationId": "updateUser",
         "parameters": [
           {
@@ -2143,7 +2519,7 @@
         "consumes": ["application/json", "*/*"],
         "produces": ["application/json", "*/*"],
         "tags": ["user"],
-        "summary": "delete user",
+        "summary": "delete user acl(admin)",
         "operationId": "deleteUser",
         "parameters": [
           {
@@ -2386,6 +2762,46 @@
         }
       }
     },
+    "__umi__.array.geographic.City": {
+      "required": ["success"],
+      "properties": {
+        "data": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/geographic.City"
+          }
+        },
+        "host": {
+          "type": "string"
+        },
+        "success": {
+          "type": "boolean"
+        },
+        "traceId": {
+          "type": "string"
+        }
+      }
+    },
+    "__umi__.array.geographic.Province": {
+      "required": ["success"],
+      "properties": {
+        "data": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/geographic.Province"
+          }
+        },
+        "host": {
+          "type": "string"
+        },
+        "success": {
+          "type": "boolean"
+        },
+        "traceId": {
+          "type": "string"
+        }
+      }
+    },
     "__umi__.array.integer": {
       "required": ["success"],
       "properties": {
@@ -2423,11 +2839,11 @@
         }
       }
     },
-    "__umi__.course.listCourseOutput": {
+    "__umi__.course.listOutput": {
       "required": ["success"],
       "properties": {
         "data": {
-          "$ref": "#/definitions/course.listCourseOutput"
+          "$ref": "#/definitions/course.listOutput"
         },
         "host": {
           "type": "string"
@@ -2445,6 +2861,23 @@
       "properties": {
         "data": {
           "$ref": "#/definitions/file.uploadFileResponse"
+        },
+        "host": {
+          "type": "string"
+        },
+        "success": {
+          "type": "boolean"
+        },
+        "traceId": {
+          "type": "string"
+        }
+      }
+    },
+    "__umi__.notice.listOutput": {
+      "required": ["success"],
+      "properties": {
+        "data": {
+          "$ref": "#/definitions/notice.listOutput"
         },
         "host": {
           "type": "string"
@@ -2628,15 +3061,102 @@
       }
     },
     "api.Course": {
+      "required": ["id", "name", "description", "images", "creator", "updatedAt", "createdAt"],
+      "properties": {
+        "createdAt": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "creator": {
+          "type": "string"
+        },
+        "description": {
+          "description": "课程描述",
+          "type": "string"
+        },
+        "id": {
+          "description": "课程id",
+          "type": "integer",
+          "format": "int64"
+        },
+        "images": {
+          "description": "机构简介图片",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "name": {
+          "description": "课程名称",
+          "type": "string"
+        },
+        "updatedAt": {
+          "type": "integer",
+          "format": "int64"
+        }
+      }
+    },
+    "api.Notice": {
       "required": [
         "id",
-        "name",
+        "userName",
+        "extra",
+        "key",
+        "read",
+        "avatar",
         "title",
+        "status",
+        "description",
+        "type",
+        "datetime"
+      ],
+      "properties": {
+        "avatar": {
+          "type": "string"
+        },
+        "datetime": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "description": {
+          "type": "string"
+        },
+        "extra": {
+          "type": "string"
+        },
+        "id": {
+          "description": "id",
+          "type": "integer",
+          "format": "int64"
+        },
+        "key": {
+          "type": "string"
+        },
+        "read": {
+          "type": "boolean"
+        },
+        "status": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        },
+        "userName": {
+          "type": "string"
+        }
+      }
+    },
+    "api.Order": {
+      "required": [
+        "id",
         "payment",
-        "address",
-        "teacherId",
-        "studentId",
         "skuId",
+        "sku",
+        "studentId",
+        "student",
         "comment",
         "status",
         "creator",
@@ -2644,10 +3164,6 @@
         "createdAt"
       ],
       "properties": {
-        "address": {
-          "description": "上课地址",
-          "type": "string"
-        },
         "comment": {
           "description": "课程备注, 课堂笔记",
           "type": "string"
@@ -2664,58 +3180,34 @@
           "type": "integer",
           "format": "int64"
         },
-        "name": {
-          "type": "string"
-        },
         "payment": {
           "description": "订单号",
           "type": "string"
         },
+        "sku": {
+          "description": "购买的课程镜像",
+          "$ref": "#/definitions/api.Sku"
+        },
         "skuId": {
           "description": "课程id",
-          "type": "string"
+          "type": "integer",
+          "format": "int64"
         },
         "status": {
           "description": "课程状态",
           "type": "string"
         },
+        "student": {
+          "description": "学生id",
+          "$ref": "#/definitions/api.Student"
+        },
         "studentId": {
           "description": "学生id",
-          "type": "string"
-        },
-        "teacherId": {
-          "description": "老师id",
-          "type": "string"
-        },
-        "title": {
-          "description": "课程名称",
           "type": "string"
         },
         "updatedAt": {
           "type": "integer",
           "format": "int64"
-        }
-      }
-    },
-    "api.Order": {
-      "required": ["id", "type", "start", "end"],
-      "properties": {
-        "end": {
-          "type": "integer",
-          "format": "int64"
-        },
-        "id": {
-          "description": "user id",
-          "type": "integer",
-          "format": "int64"
-        },
-        "start": {
-          "type": "integer",
-          "format": "int64"
-        },
-        "type": {
-          "description": "类型",
-          "type": "string"
         }
       }
     },
@@ -2727,13 +3219,27 @@
         "ownerId",
         "native",
         "address",
-        "ownerId",
+        "description",
         "images",
-        "payAccount"
+        "payAccount",
+        "creator",
+        "updatedAt",
+        "createdAt"
       ],
       "properties": {
         "address": {
           "description": "机构地址",
+          "type": "string"
+        },
+        "createdAt": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "creator": {
+          "type": "string"
+        },
+        "description": {
+          "description": "机构简介",
           "type": "string"
         },
         "id": {
@@ -2761,17 +3267,22 @@
           "type": "string"
         },
         "ownerId": {
-          "description": "机构简介",
-          "type": "string"
+          "description": "机构负责人id",
+          "type": "integer",
+          "format": "int64"
         },
         "payAccount": {
           "description": "支付方式",
           "$ref": "#/definitions/api.PayAccount"
+        },
+        "updatedAt": {
+          "type": "integer",
+          "format": "int64"
         }
       }
     },
     "api.PayAccount": {
-      "required": ["id", "userID", "type", "accountNo", "attr1", "attr2"],
+      "required": ["id", "userId", "type", "accountNo", "attr1", "attr2"],
       "properties": {
         "accountNo": {
           "description": "账号",
@@ -2794,7 +3305,7 @@
           "description": "付款类型",
           "type": "string"
         },
-        "userID": {
+        "userId": {
           "description": "用户id",
           "type": "integer",
           "format": "int64"
@@ -2805,7 +3316,7 @@
       "required": [
         "id",
         "name",
-        "openID",
+        "openid",
         "provider",
         "amountTotal",
         "amountCurrency",
@@ -2866,7 +3377,7 @@
           "description": "trade_no",
           "type": "string"
         },
-        "openID": {
+        "openid": {
           "type": "string"
         },
         "provider": {
@@ -2935,23 +3446,33 @@
         "id",
         "spuId",
         "name",
-        "title",
-        "description",
-        "address",
-        "teacher",
+        "count",
+        "available",
+        "courseId",
+        "courseName",
         "price",
-        "comment",
+        "salePrice",
         "creator",
         "updatedAt",
         "createdAt"
       ],
       "properties": {
-        "address": {
-          "description": "上课地址",
-          "type": "string"
+        "available": {
+          "description": "available",
+          "type": "boolean"
         },
-        "comment": {
-          "description": "课程备注",
+        "count": {
+          "description": "课程数量",
+          "type": "integer",
+          "format": "int32"
+        },
+        "courseId": {
+          "description": "course id",
+          "type": "integer",
+          "format": "int64"
+        },
+        "courseName": {
+          "description": "course name",
           "type": "string"
         },
         "createdAt": {
@@ -2961,36 +3482,29 @@
         "creator": {
           "type": "string"
         },
-        "description": {
-          "description": "课程描述",
-          "type": "string"
-        },
         "id": {
           "description": "课程id",
           "type": "integer",
           "format": "int64"
         },
         "name": {
-          "description": "课程名称",
+          "description": "课程标题",
           "type": "string"
         },
         "price": {
-          "description": "价格，单位: 分",
+          "description": "每节课价格，单位: 分",
           "type": "integer",
-          "format": "int64"
+          "format": "int32"
+        },
+        "salePrice": {
+          "description": "每节课折扣价格，单位: 分",
+          "type": "integer",
+          "format": "int32"
         },
         "spuId": {
           "description": "商品id",
           "type": "integer",
           "format": "int64"
-        },
-        "teacher": {
-          "description": "老师id",
-          "type": "string"
-        },
-        "title": {
-          "description": "课程标题",
-          "type": "string"
         },
         "updatedAt": {
           "type": "integer",
@@ -3001,26 +3515,24 @@
     "api.Spu": {
       "required": [
         "id",
-        "spuId",
         "name",
-        "title",
         "description",
-        "address",
+        "available",
+        "maxLinePrice",
+        "minSalePrice",
+        "images",
+        "orgId",
+        "org",
+        "teacherId",
         "teacher",
-        "price",
-        "comment",
         "creator",
         "updatedAt",
         "createdAt"
       ],
       "properties": {
-        "address": {
-          "description": "上课地址",
-          "type": "string"
-        },
-        "comment": {
-          "description": "课程备注",
-          "type": "string"
+        "available": {
+          "description": "available",
+          "type": "boolean"
         },
         "createdAt": {
           "type": "integer",
@@ -3030,35 +3542,52 @@
           "type": "string"
         },
         "description": {
-          "description": "课程描述",
+          "description": "商品描述",
           "type": "string"
         },
         "id": {
-          "description": "课程id",
+          "description": "spu id",
           "type": "integer",
           "format": "int64"
+        },
+        "images": {
+          "description": "简介图片",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "maxLinePrice": {
+          "description": "max line price",
+          "type": "integer",
+          "format": "int32"
+        },
+        "minSalePrice": {
+          "description": "min sale Price",
+          "type": "integer",
+          "format": "int32"
         },
         "name": {
-          "description": "课程名称",
+          "description": "商品标题",
           "type": "string"
         },
-        "price": {
-          "description": "价格，单位: 分",
-          "type": "integer",
-          "format": "int64"
+        "org": {
+          "description": "org",
+          "$ref": "#/definitions/api.Org"
         },
-        "spuId": {
-          "description": "商品id",
+        "orgId": {
+          "description": "OrgId",
           "type": "integer",
           "format": "int64"
         },
         "teacher": {
-          "description": "老师id",
-          "type": "string"
+          "description": "teacher",
+          "$ref": "#/definitions/api.Teacher"
         },
-        "title": {
-          "description": "课程标题",
-          "type": "string"
+        "teacherId": {
+          "description": "teacher id",
+          "type": "integer",
+          "format": "int64"
         },
         "updatedAt": {
           "type": "integer",
@@ -3116,23 +3645,26 @@
       "required": [
         "id",
         "name",
-        "idNumber",
-        "courseType",
-        "workingYears",
+        "userId",
+        "userName",
+        "orgId",
+        "orgName",
         "address",
+        "description",
+        "images",
+        "idNumber",
+        "workingYears",
         "courseFee",
         "courseTime",
         "maxStudents",
         "percentage",
-        "type",
-        "org",
         "creator",
         "updatedAt",
         "createdAt"
       ],
       "properties": {
         "address": {
-          "description": "工作地点",
+          "description": "工作地点, 同机构地点",
           "type": "string"
         },
         "courseFee": {
@@ -3145,15 +3677,15 @@
           "type": "integer",
           "format": "int32"
         },
-        "courseType": {
-          "description": "课程类型",
-          "type": "string"
-        },
         "createdAt": {
           "type": "integer",
           "format": "int64"
         },
         "creator": {
+          "type": "string"
+        },
+        "description": {
+          "description": "简介",
           "type": "string"
         },
         "id": {
@@ -3165,16 +3697,28 @@
           "description": "身份证",
           "type": "string"
         },
+        "images": {
+          "description": "图片简介",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
         "maxStudents": {
           "description": "最多学生人数",
           "type": "integer",
           "format": "int32"
         },
         "name": {
-          "description": "关联 user.Name",
+          "description": "老师名称",
           "type": "string"
         },
-        "org": {
+        "orgId": {
+          "description": "所属机构Id",
+          "type": "integer",
+          "format": "int64"
+        },
+        "orgName": {
           "description": "所属机构",
           "type": "string"
         },
@@ -3183,25 +3727,31 @@
           "type": "integer",
           "format": "int32"
         },
-        "type": {
-          "description": "自有，机构，加盟",
-          "type": "string"
-        },
         "updatedAt": {
           "type": "integer",
           "format": "int64"
         },
+        "userId": {
+          "description": "用户Id",
+          "type": "integer",
+          "format": "int64"
+        },
+        "userName": {
+          "description": "用户名",
+          "type": "string"
+        },
         "workingYears": {
           "description": "工作年限",
-          "type": "string"
+          "type": "integer",
+          "format": "int32"
         }
       }
     },
     "api.User": {
       "required": [
         "id",
-        "unionid",
         "name",
+        "unionid",
         "nickname",
         "groups",
         "sex",
@@ -3213,12 +3763,17 @@
         "avatar",
         "wOpenid",
         "mOpenid",
+        "email",
+        "profile",
         "phone",
         "accountNo",
         "shareNo",
         "introducer",
         "creator",
         "payAccount",
+        "country",
+        "province",
+        "city",
         "updatedAt",
         "createdAt"
       ],
@@ -3233,11 +3788,20 @@
         "avatar": {
           "type": "string"
         },
+        "city": {
+          "type": "string"
+        },
+        "country": {
+          "type": "string"
+        },
         "createdAt": {
           "type": "integer",
           "format": "int64"
         },
         "creator": {
+          "type": "string"
+        },
+        "email": {
           "type": "string"
         },
         "groups": {
@@ -3291,6 +3855,12 @@
           "description": "手机号",
           "type": "string"
         },
+        "profile": {
+          "type": "string"
+        },
+        "province": {
+          "type": "string"
+        },
         "sex": {
           "description": "1为男性，2为女性",
           "type": "integer",
@@ -3316,14 +3886,14 @@
     },
     "auth.LoginRequest": {
       "required": [
+        "type",
+        "autoLogin",
         "username",
         "password",
-        "code",
-        "state",
-        "mobile",
+        "phone",
         "captcha",
-        "type",
-        "autoLogin"
+        "code",
+        "state"
       ],
       "properties": {
         "autoLogin": {
@@ -3338,11 +3908,11 @@
           "description": "oauth2 code, https://developers.weixin.qq.com/miniprogram/dev/framework/open-ability/login.html",
           "type": "string"
         },
-        "mobile": {
-          "description": "手机号，用于手机验证码登陆",
+        "password": {
           "type": "string"
         },
-        "password": {
+        "phone": {
+          "description": "手机号，用于手机验证码登陆",
           "type": "string"
         },
         "state": {
@@ -3350,7 +3920,7 @@
           "type": "string"
         },
         "type": {
-          "description": "登陆类型, wechat, password, captcha",
+          "description": "登陆类型, weixin, password, phone",
           "type": "string"
         },
         "username": {
@@ -3359,9 +3929,9 @@
       }
     },
     "auth.captchaRequest": {
-      "required": ["mobile"],
+      "required": ["phone"],
       "properties": {
-        "mobile": {
+        "phone": {
           "type": "string"
         }
       }
@@ -3374,8 +3944,16 @@
         }
       }
     },
-    "course.listCourseOutput": {
-      "required": ["total", "list"],
+    "course.createRequest": {
+      "required": ["name"],
+      "properties": {
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "course.listOutput": {
+      "required": ["list", "total"],
       "properties": {
         "list": {
           "type": "array",
@@ -3389,16 +3967,19 @@
         }
       }
     },
-    "course.updateInput": {
-      "required": ["id", "comment"],
+    "course.updateRequest": {
+      "required": ["description", "images"],
       "properties": {
-        "comment": {
-          "description": "课程备注, 课堂笔记",
+        "description": {
+          "description": "课程描述",
           "type": "string"
         },
-        "id": {
-          "type": "integer",
-          "format": "int64"
+        "images": {
+          "description": "简介图片",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         }
       }
     },
@@ -3410,6 +3991,46 @@
           "items": {
             "type": "string"
           }
+        }
+      }
+    },
+    "geographic.City": {
+      "required": ["id", "name", "province"],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "province": {
+          "type": "string"
+        }
+      }
+    },
+    "geographic.Province": {
+      "required": ["id", "name"],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "notice.listOutput": {
+      "required": ["list", "total"],
+      "properties": {
+        "list": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/api.Notice"
+          }
+        },
+        "total": {
+          "type": "integer",
+          "format": "int32"
         }
       }
     },
@@ -3465,19 +4086,14 @@
       }
     },
     "org.updateRequest": {
-      "required": [
-        "name",
-        "owner",
-        "ownerId",
-        "native",
-        "address",
-        "ownerId",
-        "images",
-        "payAccount"
-      ],
+      "required": ["name", "owner", "native", "address", "description", "images", "payAccount"],
       "properties": {
         "address": {
           "description": "机构地址",
+          "type": "string"
+        },
+        "description": {
+          "description": "机构简介",
           "type": "string"
         },
         "images": {
@@ -3497,10 +4113,6 @@
         },
         "owner": {
           "description": "机构负责人",
-          "type": "string"
-        },
-        "ownerId": {
-          "description": "机构简介",
           "type": "string"
         },
         "payAccount": {
@@ -3582,10 +4194,18 @@
     },
     "sku.updateRequest": {},
     "spu.createRequest": {
-      "required": ["name"],
+      "required": ["name", "teacherId", "orgId"],
       "properties": {
         "name": {
           "type": "string"
+        },
+        "orgId": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "teacherId": {
+          "type": "integer",
+          "format": "int64"
         }
       }
     },
@@ -3604,7 +4224,30 @@
         }
       }
     },
-    "spu.updateRequest": {},
+    "spu.updateRequest": {
+      "required": ["name", "description", "available", "images"],
+      "properties": {
+        "available": {
+          "description": "available",
+          "type": "boolean"
+        },
+        "description": {
+          "description": "商品描述",
+          "type": "string"
+        },
+        "images": {
+          "description": "简介图片",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "name": {
+          "description": "商品标题",
+          "type": "string"
+        }
+      }
+    },
     "student.createRequest": {
       "required": ["name"],
       "properties": {
@@ -3630,10 +4273,21 @@
     },
     "student.updateRequest": {},
     "teacher.createRequest": {
-      "required": ["name"],
+      "required": ["name", "userId", "orgId"],
       "properties": {
         "name": {
+          "description": "老师名称",
           "type": "string"
+        },
+        "orgId": {
+          "description": "所属机构Id",
+          "type": "integer",
+          "format": "int64"
+        },
+        "userId": {
+          "description": "用户Id",
+          "type": "integer",
+          "format": "int64"
         }
       }
     },
@@ -3652,7 +4306,76 @@
         }
       }
     },
-    "teacher.updateRequest": {},
+    "teacher.updateRequest": {
+      "required": [
+        "name",
+        "orgId",
+        "description",
+        "images",
+        "idNumber",
+        "workingYears",
+        "address",
+        "courseFee",
+        "courseTime",
+        "maxStudents",
+        "percentage"
+      ],
+      "properties": {
+        "address": {
+          "description": "工作地点",
+          "type": "string"
+        },
+        "courseFee": {
+          "description": "课程收费， 单位分/小时",
+          "type": "integer",
+          "format": "int32"
+        },
+        "courseTime": {
+          "description": "课程时长",
+          "type": "integer",
+          "format": "int32"
+        },
+        "description": {
+          "description": "简介",
+          "type": "string"
+        },
+        "idNumber": {
+          "description": "身份证",
+          "type": "string"
+        },
+        "images": {
+          "description": "图片简介",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "maxStudents": {
+          "description": "最多学生人数",
+          "type": "integer",
+          "format": "int32"
+        },
+        "name": {
+          "description": "老师名称",
+          "type": "string"
+        },
+        "orgId": {
+          "description": "所属机构Id",
+          "type": "integer",
+          "format": "int64"
+        },
+        "percentage": {
+          "description": "提成比例 1~100",
+          "type": "integer",
+          "format": "int32"
+        },
+        "workingYears": {
+          "description": "工作年限",
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
     "user.createRequest": {
       "required": ["name"],
       "properties": {
@@ -3677,7 +4400,21 @@
       }
     },
     "user.updateRequest": {
-      "required": ["groups", "address", "phone", "avatar", "nickname", "isRoot", "isAdmin"],
+      "required": [
+        "address",
+        "email",
+        "profile",
+        "phone",
+        "avatar",
+        "nickname",
+        "isRoot",
+        "isAdmin",
+        "isOrgAdmin",
+        "isTeacher",
+        "country",
+        "province",
+        "city"
+      ],
       "properties": {
         "address": {
           "description": "家庭住址",
@@ -3686,16 +4423,26 @@
         "avatar": {
           "type": "string"
         },
-        "groups": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
+        "city": {
+          "type": "string"
+        },
+        "country": {
+          "type": "string"
+        },
+        "email": {
+          "description": "email",
+          "type": "string"
         },
         "isAdmin": {
           "type": "boolean"
         },
+        "isOrgAdmin": {
+          "type": "boolean"
+        },
         "isRoot": {
+          "type": "boolean"
+        },
+        "isTeacher": {
           "type": "boolean"
         },
         "nickname": {
@@ -3703,6 +4450,13 @@
         },
         "phone": {
           "description": "手机号",
+          "type": "string"
+        },
+        "profile": {
+          "description": "profile",
+          "type": "string"
+        },
+        "province": {
           "type": "string"
         }
       }
@@ -3812,6 +4566,14 @@
     {
       "description": "file",
       "name": "file"
+    },
+    {
+      "description": "notice",
+      "name": "notice"
+    },
+    {
+      "description": "geographic",
+      "name": "geographic"
     }
   ]
 }
