@@ -17,7 +17,7 @@ const WeixinLogin: React.FC = () => {
       id: 'wx_login_container',
       appid: data.appid, //微信开放平台网站应用appid
       scope: data.scope,
-      redirect_uri: encodeURI(location.origin + '/user/login'), //设置扫码成功后回调页面
+      redirect_uri: encodeURI(location.origin + '/fe/user/login'), //设置扫码成功后回调页面
       state: data.state,
       style: 'black',
     });

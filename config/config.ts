@@ -8,6 +8,8 @@ import proxy from './proxy';
 import routes from './routes';
 const { REACT_APP_ENV } = process.env;
 export default defineConfig({
+  base: '/fe/',
+  publicPath: '/fe/',
   hash: true,
   antd: {},
   dva: {
@@ -38,7 +40,7 @@ export default defineConfig({
   ignoreMomentLocale: true,
   proxy: proxy[REACT_APP_ENV || 'dev'],
   manifest: {
-    basePath: '/',
+    basePath: '/fe/',
   },
   // Fast Refresh 热更新
   fastRefresh: {},

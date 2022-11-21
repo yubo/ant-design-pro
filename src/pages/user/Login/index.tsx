@@ -8,7 +8,7 @@ import {
   WeiboCircleOutlined,
 } from '@ant-design/icons';
 import { Alert, message, Tabs } from 'antd';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ProFormCaptcha, ProFormCheckbox, ProFormText, LoginForm } from '@ant-design/pro-form';
 import { history, useModel } from 'umi';
 import Footer from '@/components/Footer';
@@ -59,6 +59,7 @@ const Login: React.FC = () => {
   };
 
   // 检查 callback 回调状态
+
   const callbackCheck = async () => {
     try {
       if (!history) return;
@@ -68,7 +69,7 @@ const Login: React.FC = () => {
         state: string;
       };
       if (!code) return;
-      const msg = await authLogin({ code, state, type });
+      const msg = await authLogin({ code, state, type: 'weixin' });
 
       if (msg.success) {
         const defaultLoginSuccessMessage = '登录成功！';
@@ -83,6 +84,11 @@ const Login: React.FC = () => {
       message.error(defaultLoginFailureMessage);
     }
   };
+
+  useEffect(() => {
+    callbackCheck();
+  }, []);
+
 
   const handleSubmit = async (values: API.LoginParams) => {
     try {
@@ -113,8 +119,6 @@ const Login: React.FC = () => {
 
   const { status, type: loginType } = userLoginState;
 
-  callbackCheck();
-
   const actions = [];
   if (settings.enableWeixin) {
     actions.push(
@@ -122,6 +126,7 @@ const Login: React.FC = () => {
         key="WechatOutlined"
         className={type === 'weixin' ? styles.selected : styles.icon}
         onClick={() => {
+          console.log('set weixing')
           setType('weixin');
         }}
       />,
