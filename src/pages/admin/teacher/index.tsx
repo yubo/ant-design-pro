@@ -258,6 +258,10 @@ const TableList: React.FC = () => {
         //headerTitle='Enquiry form'
         actionRef={actionRef}
         rowKey="id"
+        pagination={{
+          pageSize: 10,
+          showSizeChanger: true,
+        }}
         search={{
           labelWidth: 120,
         }}

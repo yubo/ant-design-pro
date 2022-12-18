@@ -85,7 +85,7 @@ const TableList: React.FC = () => {
   // 课程
   const [showDetail, setShowDetail] = useState<boolean>(false);
 
-  const [currentSpu, setCurrentSpu] = useState<API.Spu>(false);
+  const [currentSpu, setCurrentSpu] = useState<API.Spu>();
 
   const actionRef = useRef<ActionType>();
   const [currentRow, setCurrentRow] = useState<API.Sku>();
@@ -240,6 +240,10 @@ const TableList: React.FC = () => {
         //headerTitle='Enquiry form'
         actionRef={actionRef}
         rowKey="id"
+        pagination={{
+          pageSize: 10,
+          showSizeChanger: true,
+        }}
         search={false}
         toolBarRender={() => [
           <Button
@@ -252,7 +256,7 @@ const TableList: React.FC = () => {
             <PlusOutlined /> 新建
           </Button>,
         ]}
-        request={listQueryWithColumns(listSku, columns, [`spu_id=${currentSpu?.id}`])}
+        request={currentSpu ? listQueryWithColumns(listSku, columns, [`spu_id=${currentSpu?.id}`]) : null}
         columns={columns}
         scroll={{ x: 1300 }}
         rowSelection={
