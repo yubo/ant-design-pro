@@ -143,9 +143,16 @@ const errorHandler = (error) => {
       });
     }
 
-    notification.error({
-      message: `请求错误`,
-      description: errorText,
+    response.json().then((resp) => {
+      notification.error({
+        message: 'http status '+resp.code,
+        description: resp.message,
+      });
+    }).catch(e => {
+      notification.error({
+        message: `请求错误`,
+        description: errorText,
+      });
     });
   } else if (!response) {
     notification.error({

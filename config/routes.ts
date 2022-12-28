@@ -34,6 +34,7 @@ export default [
       { path: '/admin/teacher', name: '老师列表', icon: 'table', component: './admin/teacher' },
       { path: '/admin/user', name: '用户列表', icon: 'table', access: 'canAdmin', component: './admin/user' },
       { path: '/admin/course', name: '课程列表', icon: 'table', component: './admin/course' },
+      { path: '/admin/holiday', name: '假期列表', icon: 'table', component: './admin/holiday' },
     ],
   },
   {

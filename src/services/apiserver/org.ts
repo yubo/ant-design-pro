@@ -34,7 +34,7 @@ export async function createOrg(body: API.createRequest, options?: { [key: strin
   });
 }
 
-/** delete orgs acl(root) DELETE /api/v1/orgs */
+/** delete orgs acl(admin) DELETE /api/v1/orgs */
 export async function deleteOrgs(
   // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
   params: API.deleteOrgsParams,
@@ -82,7 +82,7 @@ export async function updateOrg(
   });
 }
 
-/** delete org acl(root) DELETE /api/v1/orgs/${param0} */
+/** delete org acl(admin) DELETE /api/v1/orgs/${param0} */
 export async function deleteOrg(
   // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
   params: API.deleteOrgParams,

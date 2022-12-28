@@ -58,6 +58,11 @@ declare namespace API {
   };
 
   type createRequest = {
+    dateRange: string[];
+    name: string;
+  };
+
+  type createRequest = {
     id: number;
     name: string;
   };
@@ -75,7 +80,11 @@ declare namespace API {
   };
 
   type createRequest = {
+    /** course id */
+    courseId: number;
     name: string;
+    /** 商品id */
+    spuId: number;
   };
 
   type createRequest = {
@@ -85,7 +94,10 @@ declare namespace API {
   };
 
   type createRequest = {
+    /** default */
+    isDefault: number;
     name: string;
+    phone: string;
   };
 
   type createRequest = {
@@ -114,6 +126,16 @@ declare namespace API {
   type deleteFileParams = {
     /** file path */
     filepath?: string;
+  };
+
+  type deleteHolidayParams = {
+    /** holiday id */
+    id: number;
+  };
+
+  type deleteHolidaysParams = {
+    /** spu id */
+    id?: string;
   };
 
   type deleteNoticeParams = {
@@ -206,8 +228,24 @@ declare namespace API {
     id?: string;
   };
 
+  type fetchSettleDetailRequest = Good;
+
+  type fetchSettleDetailResponse = fetchSettleDetailResponse;
+
+  type fetchSettleDetailResponse = Good;
+
   type getCourseParams = {
     /** course id */
+    id: number;
+  };
+
+  type getGoodParams = {
+    /** good id */
+    id: number;
+  };
+
+  type getHolidayParams = {
+    /** holiday id */
     id: number;
   };
 
@@ -229,6 +267,12 @@ declare namespace API {
   type getRefundParams = {
     /** refund id */
     id: number;
+  };
+
+  type getScheduleDataParams = {
+    skuId?: number;
+    /** staring of a week [start, end) */
+    date?: number;
   };
 
   type getSkuParams = {
@@ -256,6 +300,46 @@ declare namespace API {
     id: number;
   };
 
+  type Good = Good;
+
+  type Good = {
+    available: boolean;
+    description: string;
+    images: string[];
+    maxLinePrice: number;
+    minSalePrice: number;
+    org: Org;
+    orgId: number;
+    skuList: Sku[];
+    spuId: number;
+    teacher: Teacher;
+    title: string;
+    video: string;
+  };
+
+  type Good = GoodRequest;
+
+  type GoodRequest = {
+    checked: boolean;
+    quantity: number;
+    skuId: number;
+    spuId: number;
+  };
+
+  type Holiday = Holiday;
+
+  type Holiday = {
+    createdAt: number;
+    creator: string;
+    /** date format: 2006-01-02 */
+    date: string;
+    /** user id */
+    id: number;
+    /** 节日名称 */
+    name: string;
+    updatedAt: number;
+  };
+
   type Info = {
     buildDate: string;
     compiler: string;
@@ -281,6 +365,32 @@ declare namespace API {
   };
 
   type listCourseParams = {
+    /** query */
+    query?: string;
+    /** page size */
+    pageSize?: number;
+    /** current page number, start at 1(defualt) */
+    current?: number;
+    /** column name */
+    sorter?: string;
+    /** asc(default)/desc */
+    order?: 'asc' | 'desc';
+  };
+
+  type listGoodParams = {
+    /** query */
+    query?: string;
+    /** page size */
+    pageSize?: number;
+    /** current page number, start at 1(defualt) */
+    current?: number;
+    /** column name */
+    sorter?: string;
+    /** asc(default)/desc */
+    order?: 'asc' | 'desc';
+  };
+
+  type listHolidayParams = {
     /** query */
     query?: string;
     /** page size */
@@ -354,8 +464,22 @@ declare namespace API {
 
   type listOutput = listOutput;
 
+  type listOutput = listOutput;
+
+  type listOutput = listOutput;
+
   type listOutput = {
     list: Course[];
+    total: number;
+  };
+
+  type listOutput = {
+    list: Good[];
+    total: number;
+  };
+
+  type listOutput = {
+    list: Holiday[];
     total: number;
   };
 
@@ -664,6 +788,42 @@ declare namespace API {
     success: boolean;
   };
 
+  type Schedule = {
+    checked: boolean;
+  };
+
+  type ScheduleCourse = {
+    start: number;
+    stop: number;
+  };
+
+  type ScheduleDay = {
+    bookedCourse: ScheduleCourse[];
+    course: ScheduleCourse[];
+    date: number;
+  };
+
+  type scheduleResponse = scheduleResponse;
+
+  type scheduleResponse = {
+    date: ScheduleDay[];
+  };
+
+  type ScheduleSchema = {
+    /** 上午几节课 */
+    amNum: number;
+    /** 上午开课时间 */
+    amStart: number;
+    /** 每节课市场(包括课间休息) */
+    courseDuration: number;
+    /** 下午几节课 */
+    pmNum: number;
+    /** 下午开课时间 */
+    pmStart: number;
+    /** 每周工作日 */
+    workDays: number[];
+  };
+
   type Sku = Sku;
 
   type Sku = {
@@ -712,6 +872,9 @@ declare namespace API {
     org: Org;
     /** OrgId */
     orgId: number;
+    /** 机构负责人id */
+    ownerId: number;
+    skuTotal: number;
     teacher: Teacher;
     /** teacher id */
     teacherId: number;
@@ -729,18 +892,45 @@ declare namespace API {
     id: number;
     /** 学生身份证 */
     idNum: string;
+    /** is default */
+    isDefault: number;
     /** 学生账号名 */
     name: string;
-    /** 家长名称 */
-    parentName: string;
+    /** 家长 */
+    owner: string;
+    phone: string;
+    updatedAt: number;
+  };
+
+  type Student = {
+    checked: boolean;
+    createdAt: number;
+    creator: string;
+    /** 学生显示名称 */
+    displayName: string;
+    /** id */
+    id: number;
+    /** 学生身份证 */
+    idNum: string;
+    /** is default */
+    isDefault: number;
+    /** 学生账号名 */
+    name: string;
+    /** 家长 */
+    owner: string;
+    phone: string;
     updatedAt: number;
   };
 
   type Teacher = Teacher;
 
   type Teacher = {
-    /** 工作地点, 同机构地点 */
-    address: string;
+    /** 上午几节课 */
+    amNum: number;
+    /** 上午开课时间 */
+    amStart: string;
+    /** 每节课市场(包括课间休息) */
+    courseDuration: number;
     /** 课程收费， 单位分/小时 */
     courseFee: number;
     /** 课程时长 */
@@ -763,13 +953,24 @@ declare namespace API {
     orgId: number;
     /** 所属机构 */
     orgName: string;
+    /** 机构负责人 */
+    owner: string;
+    /** 机构负责人id */
+    ownerId: number;
     /** 提成比例 1~100 */
     percentage: number;
+    /** 下午几节课 */
+    pmNum: number;
+    /** 下午开课时间 */
+    pmStart: string;
+    scheduleSchema: ScheduleSchema;
     updatedAt: number;
     /** 用户Id */
     userId: number;
     /** 用户名 */
     userName: string;
+    /** 每周工作日 */
+    workDays: string[];
     /** 工作年限 */
     workingYears: number;
   };
@@ -819,8 +1020,8 @@ declare namespace API {
     name: string;
     /** 是否直营店 */
     native: boolean;
-    /** 机构负责人 */
-    owner: string;
+    /** 机构负责人id */
+    ownerId: number;
     payAccount: PayAccount;
   };
 
@@ -828,7 +1029,16 @@ declare namespace API {
 
   type updateRequest = Record<string, any>;
 
-  type updateRequest = Record<string, any>;
+  type updateRequest = {
+    /** available */
+    available: boolean;
+    /** 课程数量 */
+    count: number;
+    /** 每节课价格，单位: 分 */
+    price: number;
+    /** 每节课折扣价格，单位: 分 */
+    salePrice: number;
+  };
 
   type updateRequest = {
     /** available */
@@ -841,11 +1051,18 @@ declare namespace API {
     name: string;
   };
 
-  type updateRequest = Record<string, any>;
+  type updateRequest = {
+    id: number;
+    name: string;
+  };
 
   type updateRequest = {
-    /** 工作地点 */
-    address: string;
+    /** 上午几节课 */
+    amNum: number;
+    /** 上午开课时间 */
+    amStart: string;
+    /** 每节课市场(包括课间休息) */
+    courseDuration: number;
     /** 课程收费， 单位分/小时 */
     courseFee: number;
     /** 课程时长 */
@@ -860,10 +1077,14 @@ declare namespace API {
     maxStudents: number;
     /** 老师名称 */
     name: string;
-    /** 所属机构Id */
-    orgId: number;
     /** 提成比例 1~100 */
     percentage: number;
+    /** 下午几节课 */
+    pmNum: number;
+    /** 下午开课时间 */
+    pmStart: string;
+    /** 每周工作日 */
+    workDays: string[];
     /** 工作年限 */
     workingYears: number;
   };

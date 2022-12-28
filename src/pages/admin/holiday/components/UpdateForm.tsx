@@ -1,13 +1,15 @@
 import React from 'react';
 import {
+  ProFormSwitch,
   ProForm,
-  ProFormSelect,
   ModalForm,
   ProFormText,
+  ProFormSelect,
   ProFormTextArea,
 } from '@ant-design/pro-form';
 import UploadImages from '@/components/UploadImages/UploadImages';
-import { selectOrgRequest } from '@/services/util';
+import { selectUserRequest } from '@/services/util';
+import { useAccess } from 'umi';
 
 export type FormValueType = {
   id: number;
@@ -16,76 +18,57 @@ export type FormValueType = {
   type?: string;
   time?: string;
   frequency?: string;
-} & Partial<API.Teacher>;
+} & Partial<API.Holiday>;
 
 export type UpdateFormProps = {
   onCancel: (flag?: boolean, formVals?: FormValueType) => void;
   onSubmit: (values: FormValueType) => Promise<void>;
   updateModalVisible: boolean;
-  values: Partial<API.Teacher>;
+  values: Partial<API.Holiday>;
   images: string[];
   updateImages: (images: string[]) => Promise<void>;
 };
 
 const UpdateForm: React.FC<UpdateFormProps> = (props) => {
+  const access = useAccess();
 
-  const valueEnum = {
-    0: '周日',
-    1: '周一',
-    2: '周二',
-    3: '周三',
-    4: '周四',
-    5: '周五',
-    6: '周六',
-  }
+  // 强制重新渲染 modalForm
   return (
     <ModalForm
-      title={`编辑老师信息`}
+      title={'编辑'}
       autoFocusFirstInput
       modalProps={{
         onCancel: props.onCancel,
-        destroyOnClose: true,
       }}
       visible={props.updateModalVisible}
       onFinish={props.onSubmit}
       initialValues={props.values}
       layout={'horizontal'}
-      preserve={false}
-      labelCol={{span:4}}
-      wrapperCol={{span:14}}
     >
-        <ProFormText name="name" label="老师名称" width="md" readonly />
+      <ProForm.Group>
+        <ProFormText name="name" label="机构名称" width="md" readonly />
         <ProFormText name="id" label="id" readonly />
+      </ProForm.Group>
+      <ProFormSwitch name="native" label="直营" readonly={!access.canAdmin} />
 
       <ProFormSelect
-        name="orgId"
-        label="机构"
+        name="ownerId"
+        label="管理员"
         showSearch
-        readonly
+        readonly={!access.canAdmin}
         debounceTime={300}
-        request={selectOrgRequest}
-        valueEnum={{ [props.values.orgId]: props.values.orgName }}
+        request={selectUserRequest}
+        valueEnum={{ [props.values.ownerId]: props.values.owner }}
         width="md"
       />
 
+      <ProFormText name="address" width="md" label="地址" />
       <ProFormTextArea name="description" width="md" label="描述" />
-
-      <ProFormTextArea valueType="checkbox" valueEnum={valueEnum} name="workDays" width="md" label="每周工作日" />
-      <ProFormTextArea valueType="digit" name="courseDuration" width="md" label="一节课时长(分钟)" tooltip="包括课间休息时间"  />
-
-      <ProFormTextArea valueType="digit" name="amNum" width="md" label="上午课时" />
-      <ProFormTextArea valueType="time" name="amStart" width="md" label="上午开课时间" />
-
-      <ProFormTextArea valueType="digit" name="pmNum" width="md" label="下午课时" />
-      <ProFormTextArea valueType="time" name="pmStart" width="md" label="下午开课时间" />
 
       <div>
         <div>图片</div>
         <UploadImages images={props.images || []} onChange={props.updateImages} />
       </div>
-
-
-
     </ModalForm>
   );
 };

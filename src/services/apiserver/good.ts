@@ -2,13 +2,13 @@
 /* eslint-disable */
 import { request } from 'umi';
 
-/** 此处后端没有提供注释 GET /api/v1/notices */
-export async function listNotice(
+/** search/list goods GET /api/v1/goods */
+export async function listGood(
   // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
-  params: API.listNoticeParams,
+  params: API.listGoodParams,
   options?: { [key: string]: any },
 ) {
-  return request<API.listOutput>('/api/v1/notices', {
+  return request<API.listOutput>('/api/v1/goods', {
     method: 'GET',
     params: {
       // pageSize has a default value: 10
@@ -22,15 +22,15 @@ export async function listNotice(
   });
 }
 
-/** delete notice DELETE /api/v1/notices */
-export async function deleteNotice(
+/** get good GET /api/v1/goods/${param0} */
+export async function getGood(
   // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
-  params: API.deleteNoticeParams,
+  params: API.getGoodParams,
   options?: { [key: string]: any },
 ) {
   const { id: param0, ...queryParams } = params;
-  return request<API.Response200>('/api/v1/notices', {
-    method: 'DELETE',
+  return request<API.Good>(`/api/v1/goods/${param0}`, {
+    method: 'GET',
     params: { ...queryParams },
     ...(options || {}),
   });
