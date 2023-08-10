@@ -4,35 +4,15 @@ import React, { useState, useRef } from 'react';
 import { PageContainer } from '@ant-design/pro-layout';
 import type { ProColumns, ActionType } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
-import { ModalForm, ProFormText } from '@ant-design/pro-form';
 import type { ProDescriptionsItemProps } from '@ant-design/pro-descriptions';
 import ProDescriptions from '@ant-design/pro-descriptions';
 import type { FormValueType } from './components/UpdateForm';
 import UpdateForm from './components/UpdateForm';
 //import { rule, addRule, updateRule, removeRule } from '@/services/ant-design-pro/api';
-import { listUser, createUser, updateUser, deleteUsers } from '@/services/apiserver/user';
+import { listUser, updateUser, deleteUsers } from '@/services/apiserver/user';
 import { listQueryWithColumns } from '@/services/util';
 import { useAccess } from 'umi';
 import moment from 'moment';
-
-/**
- * @en-US Add node
- * @zh-CN 添加节点
- * @param fields
- */
-const handleAdd = async (fields: API.User) => {
-  const hide = message.loading('正在添加');
-  try {
-    await createUser({ ...fields });
-    hide();
-    message.success('Added successfully');
-    return true;
-  } catch (error) {
-    hide();
-    message.error('Adding failed, please try again!');
-    return false;
-  }
-};
 
 /**
  * @en-US Update node
@@ -82,11 +62,6 @@ const handleRemove = async (selectedRows: API.User[]) => {
 
 const TableList: React.FC = () => {
   /**
-   * @en-US Pop-up window of new window
-   * @zh-CN 新建窗口的弹窗
-   *  */
-  const [createModalVisible, handleModalVisible] = useState<boolean>(false);
-  /**
    * @en-US The pop-up window of the distribution update window
    * @zh-CN 分布更新窗口的弹窗
    * */
@@ -115,8 +90,8 @@ const TableList: React.FC = () => {
       title: 'id',
       dataIndex: 'id',
       valueType: 'textarea',
-      hideInSearch: true,
-      hideInTable: true,
+      //hideInSearch: true,
+      //hideInTable: true,
       query: ['id={id}'],
     },
     {
@@ -166,9 +141,16 @@ const TableList: React.FC = () => {
     },
     {
       title: '地址',
-      dataIndex: 'address',
-      valueType: 'textarea',
-      query: ['address=~{address}'],
+      hideInSearch: true,
+      render: (_, entity) => {
+        let addr = entity?.province?.label ? entity.province.label : '';
+        addr += entity?.city?.label ? ' '+entity.city.label : '';
+        addr += entity?.district?.label ? ' '+entity.district.label : '';
+        addr += entity?.street?.label ? ' '+entity.street.label : '';
+        addr += entity?.community?.label ? ' '+entity.community.label : '';
+        addr += entity?.address ? ' '+entity.address : '';
+        return addr
+      },
     },
     {
       title: '更新时间',
@@ -302,32 +284,6 @@ const TableList: React.FC = () => {
           </Space>
         )}
       />
-      <ModalForm
-        title="新建用户"
-        width="400px"
-        visible={createModalVisible}
-        onVisibleChange={handleModalVisible}
-        onFinish={async (value) => {
-          const success = await handleAdd(value as API.User);
-          if (success) {
-            handleModalVisible(false);
-            if (actionRef.current) {
-              actionRef.current.reload();
-            }
-          }
-        }}
-      >
-        <ProFormText
-          rules={[
-            {
-              required: true,
-              message: '用户名称为必填项',
-            },
-          ]}
-          width="md"
-          name="name"
-        />
-      </ModalForm>
       <UpdateForm
         onSubmit={async (value) => {
           const success = await handleUpdate({

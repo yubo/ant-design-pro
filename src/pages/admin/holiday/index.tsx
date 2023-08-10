@@ -1,5 +1,5 @@
 import { PlusOutlined } from '@ant-design/icons';
-import { Space, List, Image, Modal, Button, message, Drawer } from 'antd';
+import { Space, Modal, Button, message, Drawer } from 'antd';
 import React, { useState, useRef } from 'react';
 import { PageContainer } from '@ant-design/pro-layout';
 import type { ProColumns, ActionType } from '@ant-design/pro-table';
@@ -7,9 +7,9 @@ import ProTable from '@ant-design/pro-table';
 import { ModalForm, ProFormText } from '@ant-design/pro-form';
 import type { ProDescriptionsItemProps } from '@ant-design/pro-descriptions';
 import ProDescriptions from '@ant-design/pro-descriptions';
-import { listHoliday, createHoliday, updateHoliday, deleteHolidays } from '@/services/apiserver/holiday';
+import { listHoliday, createHoliday, deleteHolidays } from '@/services/apiserver/holiday';
 import { listQueryWithColumns } from '@/services/util';
-import { useModel, useAccess } from 'umi';
+import { useAccess } from 'umi';
 import moment from 'moment';
 
 /**
@@ -30,7 +30,6 @@ const handleAdd = async (fields: API.Holiday) => {
     return false;
   }
 };
-
 
 /**
  *  Delete node
@@ -65,19 +64,12 @@ const TableList: React.FC = () => {
    * @en-US The pop-up window of the distribution update window
    * @zh-CN 分布更新窗口的弹窗
    * */
-  const [updateModalVisible, handleUpdateModalVisible] = useState<boolean>(false);
-
   const [showDetail, setShowDetail] = useState<boolean>(false);
 
   const actionRef = useRef<ActionType>();
   const [currentRow, setCurrentRow] = useState<API.Holiday>();
-  const [currentImages, setCurrentImages] = useState<string[]>([]);
   //const [selectedRowsState, setSelectedRows] = useState<API.Holiday[]>([]);
   const access = useAccess();
-
-  const { initialState } = useModel('@@initialState');
-  const { currentUser } = initialState || {};
-  const ownerId = access.canAdmin ? undefined : currentUser.id;
 
   const fmtDate = (ts) => {
     return ts ? moment.unix(ts).format('YYYY-MM-DD HH:mm:ss') : '-';
@@ -135,7 +127,6 @@ const TableList: React.FC = () => {
       dataIndex: 'option',
       valueType: 'option',
       render: (_, record) => {
-        const disabled = access.canAdmin ? false : currentUser.id != record.ownerId;
         return [
           <a
             key="remove"
@@ -243,11 +234,18 @@ const TableList: React.FC = () => {
         }}
       >
         <ProFormText
-          rules={[ { required: true, message: '节假日名称为必填项' } ]}
-          width="md" name="name" label="假日名称"/>
+          rules={[{ required: true, message: '节假日名称为必填项' }]}
+          width="md"
+          name="name"
+          label="假日名称"
+        />
         <ProFormText
-          rules={[ { required: true, message: '节假日日期为必填项' } ]}
-          width="md" valueType="dateRange" name="dateRange" label="日期范围" />
+          rules={[{ required: true, message: '节假日日期为必填项' }]}
+          width="md"
+          valueType="dateRange"
+          name="dateRange"
+          label="日期范围"
+        />
       </ModalForm>
 
       <Drawer

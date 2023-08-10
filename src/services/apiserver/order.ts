@@ -2,7 +2,7 @@
 /* eslint-disable */
 import { request } from 'umi';
 
-/** search/list orders GET /api/v1/orders */
+/** search/list orders acl(login) GET /api/v1/orders */
 export async function listOrder(
   // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
   params: API.listOrderParams,
@@ -22,7 +22,7 @@ export async function listOrder(
   });
 }
 
-/** create order POST /api/v1/orders */
+/** create order acl(forbidden) POST /api/v1/orders */
 export async function createOrder(body: API.createRequest, options?: { [key: string]: any }) {
   return request<API.Response200>('/api/v1/orders', {
     method: 'POST',
@@ -34,7 +34,7 @@ export async function createOrder(body: API.createRequest, options?: { [key: str
   });
 }
 
-/** delete orders DELETE /api/v1/orders */
+/** delete orders acl(forbidden) DELETE /api/v1/orders */
 export async function deleteOrders(
   // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
   params: API.deleteOrdersParams,
@@ -49,7 +49,7 @@ export async function deleteOrders(
   });
 }
 
-/** get order GET /api/v1/orders/${param0} */
+/** get order acl(login) GET /api/v1/orders/${param0} */
 export async function getOrder(
   // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
   params: API.getOrderParams,
@@ -63,7 +63,7 @@ export async function getOrder(
   });
 }
 
-/** update order PUT /api/v1/orders/${param0} */
+/** update order acl(forbidden) PUT /api/v1/orders/${param0} */
 export async function updateOrder(
   // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
   params: API.updateOrderParams,
@@ -82,7 +82,7 @@ export async function updateOrder(
   });
 }
 
-/** delete order DELETE /api/v1/orders/${param0} */
+/** delete order acl(forbidden) DELETE /api/v1/orders/${param0} */
 export async function deleteOrder(
   // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
   params: API.deleteOrderParams,

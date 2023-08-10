@@ -1,11 +1,5 @@
 import React from 'react';
-import {
-  ProForm,
-  ProFormSelect,
-  ModalForm,
-  ProFormText,
-  ProFormTextArea,
-} from '@ant-design/pro-form';
+import { ProFormSelect, ModalForm, ProFormText, ProFormTextArea } from '@ant-design/pro-form';
 import UploadImages from '@/components/UploadImages/UploadImages';
 import { selectOrgRequest } from '@/services/util';
 
@@ -28,7 +22,6 @@ export type UpdateFormProps = {
 };
 
 const UpdateForm: React.FC<UpdateFormProps> = (props) => {
-
   const valueEnum = {
     0: '周日',
     1: '周一',
@@ -37,7 +30,7 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
     4: '周四',
     5: '周五',
     6: '周六',
-  }
+  };
   return (
     <ModalForm
       title={`编辑老师信息`}
@@ -51,11 +44,11 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
       initialValues={props.values}
       layout={'horizontal'}
       preserve={false}
-      labelCol={{span:4}}
-      wrapperCol={{span:14}}
+      labelCol={{ span: 4 }}
+      wrapperCol={{ span: 14 }}
     >
-        <ProFormText name="name" label="老师名称" width="md" readonly />
-        <ProFormText name="id" label="id" readonly />
+      <ProFormText name="name" label="老师名称" width="md" readonly />
+      <ProFormText name="id" label="id" readonly />
 
       <ProFormSelect
         name="orgId"
@@ -70,8 +63,20 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
 
       <ProFormTextArea name="description" width="md" label="描述" />
 
-      <ProFormTextArea valueType="checkbox" valueEnum={valueEnum} name="workDays" width="md" label="每周工作日" />
-      <ProFormTextArea valueType="digit" name="courseDuration" width="md" label="一节课时长(分钟)" tooltip="包括课间休息时间"  />
+      <ProFormTextArea
+        valueType="checkbox"
+        valueEnum={valueEnum}
+        name="workDays"
+        width="md"
+        label="每周工作日"
+      />
+      <ProFormTextArea
+        valueType="digit"
+        name="courseDuration"
+        width="md"
+        label="一节课时长(分钟)"
+        tooltip="包括课间休息时间"
+      />
 
       <ProFormTextArea valueType="digit" name="amNum" width="md" label="上午课时" />
       <ProFormTextArea valueType="time" name="amStart" width="md" label="上午开课时间" />
@@ -83,9 +88,6 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
         <div>图片</div>
         <UploadImages images={props.images || []} onChange={props.updateImages} />
       </div>
-
-
-
     </ModalForm>
   );
 };

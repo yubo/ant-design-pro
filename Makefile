@@ -1,12 +1,11 @@
-# mock
-.PHONY: start
-start:
-	npm run start
-
-# non mock
-.PHONY: dev
-dev:
+.PHONY: run
+run:
 	npm run start:dev
+
+# mock
+.PHONY: mock
+mock:
+	npm run start
 
 
 .PHONY: build
@@ -30,11 +29,19 @@ api:
 	rm -f ./tmp/*.mock.ts && \
 	rm -f ./mock/auth*.mock.ts
 
-.PHONY: install
-install:
+.PHONY: setup
+setup:
 	yarn install
 
 .PHONY: clean
 clean:
 	rm -rf ./src/.umi
 	rm -f ./mock/*.mock.ts
+
+.PHONY: push
+push:
+	./misc/push.sh
+
+.PHONY: install
+install:
+	./misc/install.sh

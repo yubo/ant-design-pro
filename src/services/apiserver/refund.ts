@@ -2,7 +2,7 @@
 /* eslint-disable */
 import { request } from 'umi';
 
-/** search/list refunds GET /api/v1/refunds */
+/** search/list refunds acl(login) GET /api/v1/refunds */
 export async function listRefund(
   // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
   params: API.listRefundParams,
@@ -22,7 +22,7 @@ export async function listRefund(
   });
 }
 
-/** create refund POST /api/v1/refunds */
+/** create refund acl(login) POST /api/v1/refunds */
 export async function createRefund(body: API.createRequest, options?: { [key: string]: any }) {
   return request<API.Response200>('/api/v1/refunds', {
     method: 'POST',
@@ -34,7 +34,7 @@ export async function createRefund(body: API.createRequest, options?: { [key: st
   });
 }
 
-/** delete refunds DELETE /api/v1/refunds */
+/** delete refunds acl(forbidden) DELETE /api/v1/refunds */
 export async function deleteRefunds(
   // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
   params: API.deleteRefundsParams,
@@ -49,7 +49,7 @@ export async function deleteRefunds(
   });
 }
 
-/** get refund GET /api/v1/refunds/${param0} */
+/** get refund acl(login) GET /api/v1/refunds/${param0} */
 export async function getRefund(
   // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
   params: API.getRefundParams,
@@ -63,7 +63,7 @@ export async function getRefund(
   });
 }
 
-/** update refund PUT /api/v1/refunds/${param0} */
+/** update refund acl(forbidden) PUT /api/v1/refunds/${param0} */
 export async function updateRefund(
   // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
   params: API.updateRefundParams,
@@ -82,7 +82,7 @@ export async function updateRefund(
   });
 }
 
-/** delete refund DELETE /api/v1/refunds/${param0} */
+/** delete refund acl(forbidden) DELETE /api/v1/refunds/${param0} */
 export async function deleteRefund(
   // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
   params: API.deleteRefundParams,

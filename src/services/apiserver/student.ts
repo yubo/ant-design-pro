@@ -24,7 +24,7 @@ export async function listStudent(
 
 /** create student POST /api/v1/students */
 export async function createStudent(body: API.createRequest, options?: { [key: string]: any }) {
-  return request<API.Response200>('/api/v1/students', {
+  return request<API.Student>('/api/v1/students', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

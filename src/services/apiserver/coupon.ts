@@ -2,13 +2,13 @@
 /* eslint-disable */
 import { request } from 'umi';
 
-/** search/list users GET /api/v1/users */
-export async function listUser(
+/** search/list coupons GET /api/v1/coupons */
+export async function listCoupon(
   // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
-  params: API.listUserParams,
+  params: API.listCouponParams,
   options?: { [key: string]: any },
 ) {
-  return request<API.listOutput>('/api/v1/users', {
+  return request<API.listOutput>('/api/v1/coupons', {
     method: 'GET',
     params: {
       // pageSize has a default value: 10
@@ -22,28 +22,9 @@ export async function listUser(
   });
 }
 
-/** 更新自己的信息 acl(login) PUT /api/v1/users */
-export async function updateSelf(
-  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
-  params: API.updateSelfParams,
-  body: API.updateSelfRequest,
-  options?: { [key: string]: any },
-) {
-  const { id: param0, ...queryParams } = params;
-  return request<API.Response200>('/api/v1/users', {
-    method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    params: { ...queryParams },
-    data: body,
-    ...(options || {}),
-  });
-}
-
-/** create user acl(admin) POST /api/v1/users */
-export async function create(body: API.createRequest, options?: { [key: string]: any }) {
-  return request<API.Response200>('/api/v1/users', {
+/** create coupon POST /api/v1/coupons */
+export async function createCoupon(body: API.createRequest, options?: { [key: string]: any }) {
+  return request<API.Response200>('/api/v1/coupons', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -53,13 +34,13 @@ export async function create(body: API.createRequest, options?: { [key: string]:
   });
 }
 
-/** delete users acl(admin) DELETE /api/v1/users */
-export async function deleteUsers(
+/** delete coupons DELETE /api/v1/coupons */
+export async function deleteCoupons(
   // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
-  params: API.deleteUsersParams,
+  params: API.deleteCouponsParams,
   options?: { [key: string]: any },
 ) {
-  return request<API.Response200>('/api/v1/users', {
+  return request<API.Response200>('/api/v1/coupons', {
     method: 'DELETE',
     params: {
       ...params,
@@ -68,29 +49,29 @@ export async function deleteUsers(
   });
 }
 
-/** get user GET /api/v1/users/${param0} */
-export async function getUser(
+/** get coupon GET /api/v1/coupons/${param0} */
+export async function getCoupon(
   // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
-  params: API.getUserParams,
+  params: API.getCouponParams,
   options?: { [key: string]: any },
 ) {
   const { id: param0, ...queryParams } = params;
-  return request<API.User>(`/api/v1/users/${param0}`, {
+  return request<API.Coupon>(`/api/v1/coupons/${param0}`, {
     method: 'GET',
     params: { ...queryParams },
     ...(options || {}),
   });
 }
 
-/** update user acl(admin) PUT /api/v1/users/${param0} */
-export async function updateUser(
+/** update coupon PUT /api/v1/coupons/${param0} */
+export async function updateCoupon(
   // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
-  params: API.updateUserParams,
+  params: API.updateCouponParams,
   body: API.updateRequest,
   options?: { [key: string]: any },
 ) {
   const { id: param0, ...queryParams } = params;
-  return request<API.Response200>(`/api/v1/users/${param0}`, {
+  return request<API.Response200>(`/api/v1/coupons/${param0}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
@@ -101,14 +82,14 @@ export async function updateUser(
   });
 }
 
-/** delete user acl(admin) DELETE /api/v1/users/${param0} */
-export async function deleteUser(
+/** delete coupon DELETE /api/v1/coupons/${param0} */
+export async function deleteCoupon(
   // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
-  params: API.deleteUserParams,
+  params: API.deleteCouponParams,
   options?: { [key: string]: any },
 ) {
   const { id: param0, ...queryParams } = params;
-  return request<API.Response200>(`/api/v1/users/${param0}`, {
+  return request<API.Response200>(`/api/v1/coupons/${param0}`, {
     method: 'DELETE',
     params: { ...queryParams },
     ...(options || {}),

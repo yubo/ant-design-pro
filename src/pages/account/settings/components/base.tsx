@@ -67,7 +67,7 @@ const BaseView: React.FC = () => {
               />
               <ProFormText
                 width="md"
-                name="name"
+                name="nickname"
                 label="昵称"
                 rules={[
                   {

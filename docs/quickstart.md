@@ -13,6 +13,7 @@
 - imgae update
   - https://dream2023.github.io/antd-image-cropper/
   - https://github.com/nanxiaobei/antd-img-crop
+- 关联菜单 ProFormDependency
 
 ## References
 

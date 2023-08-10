@@ -2,7 +2,7 @@ import { listUser } from '@/services/apiserver/user';
 import { listOrg } from '@/services/apiserver/org';
 import { listCourse } from '@/services/apiserver/course';
 import { listTeacher } from '@/services/apiserver/teacher';
-import { listSpu } from '@/services/apiserver/spu';
+import { listSku } from '@/services/apiserver/sku';
 
 export function listQueryWithColumns(listFn, columns, qs = []) {
   return listWrapper(listFn, genQueryhandle(columns, qs));
@@ -75,6 +75,20 @@ export async function selectUserRequest({ keyWords }) {
   });
 }
 
+export async function selectUserRequestById({ keyWords }) {
+  return await listUser({ query: keyWords ? 'id=~' + keyWords : '' }).then((r) => {
+    const list = r.data?.list || [];
+
+    return list.reduce((pre, cur) => {
+      pre.push({
+        value: cur.id,
+        label: `${cur.name} - ${cur.nickname}`,
+      });
+      return pre;
+    }, []);
+  });
+}
+
 export async function selectOrgRequest({ keyWords, ownerId }) {
   const query = [];
   if (keyWords) {
@@ -133,7 +147,8 @@ export async function selectTeacherRequest({ keyWords, orgId }) {
   });
 }
 
-export async function selectSpuRequest({ keyWords, ownerId }) {
+
+export async function selectSkuRequest({ keyWords, ownerId }) {
   const query = [];
   if (keyWords) {
     query.push('name=~' + keyWords);
@@ -143,7 +158,7 @@ export async function selectSpuRequest({ keyWords, ownerId }) {
     query.push('owner_id=' + ownerId);
   }
 
-  return await listSpu({ query: '' + query }).then((r) => {
+  return await listSku({ query: '' + query }).then((r) => {
     const list = r.data?.list || [];
 
     return list.reduce((pre, cur) => {

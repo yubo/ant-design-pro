@@ -143,17 +143,20 @@ const errorHandler = (error) => {
       });
     }
 
-    response.json().then((resp) => {
-      notification.error({
-        message: 'http status '+resp.code,
-        description: resp.message,
+    response
+      .json()
+      .then((resp) => {
+        notification.error({
+          message: 'http status ' + resp.code,
+          description: resp.message,
+        });
+      })
+      .catch(() => {
+        notification.error({
+          message: `请求错误`,
+          description: errorText,
+        });
       });
-    }).catch(e => {
-      notification.error({
-        message: `请求错误`,
-        description: errorText,
-      });
-    });
   } else if (!response) {
     notification.error({
       description: '您的网络发生异常，无法连接服务器',

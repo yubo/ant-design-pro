@@ -174,7 +174,7 @@ const TableList: React.FC = () => {
         />
       ),
       hideInSearch: true,
-      hideInTable: true,
+      hideInTable: false,
     },
     {
       title: '创建者',

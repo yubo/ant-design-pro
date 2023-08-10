@@ -1,20 +1,17 @@
 import { PlusOutlined } from '@ant-design/icons';
 import { PageContainer } from '@ant-design/pro-layout';
-import { Descriptions, Space, Modal, Button, message, Drawer } from 'antd';
+import { List, Space, Image, Modal, Button, message, Drawer } from 'antd';
 import React, { useState, useRef } from 'react';
 import type { ProColumns, ActionType } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
-import { ModalForm, ProFormText, ProFormSelect } from '@ant-design/pro-form';
+import { ProFormDependency, ModalForm, ProFormText, ProFormSelect } from '@ant-design/pro-form';
 import type { ProDescriptionsItemProps } from '@ant-design/pro-descriptions';
 import ProDescriptions from '@ant-design/pro-descriptions';
 import type { FormValueType } from './components/UpdateForm';
 import UpdateForm from './components/UpdateForm';
-import SelectSpu from './components/SelectSpu';
 import { listSku, createSku, updateSku, deleteSkus } from '@/services/apiserver/sku';
-import { listQueryWithColumns, selectCourseRequest } from '@/services/util';
-import { useModel, useAccess, history } from 'umi';
-import moment from 'moment';
-import styles from './index.less';
+import { listQueryWithColumns, selectCourseRequest, selectTeacherRequest, selectOrgRequest } from '@/services/util';
+import { useModel, useAccess } from 'umi';
 
 const handleAdd = async (fields: API.Sku) => {
   const hide = message.loading('正在添加');
@@ -70,7 +67,6 @@ const handleRemove = async (selectedRows: API.Sku[]) => {
 };
 
 const TableList: React.FC = () => {
-  const spuId = history.location?.query?.spuId || 0;
   /**
    * @en-US Pop-up window of new window
    * @zh-CN 新建窗口的弹窗
@@ -84,8 +80,6 @@ const TableList: React.FC = () => {
 
   // 课程
   const [showDetail, setShowDetail] = useState<boolean>(false);
-
-  const [currentSpu, setCurrentSpu] = useState<API.Spu>();
 
   const actionRef = useRef<ActionType>();
   const [currentRow, setCurrentRow] = useState<API.Sku>();
@@ -102,68 +96,97 @@ const TableList: React.FC = () => {
   };
 
   // https://procomponents.ant.design/components/schema/#valuetype
-  const columns: ProColumns<API.Sku>[] = [
-    {
-      title: '名称',
-      dataIndex: 'name',
-      sorter: true,
-      query: ['name=~{name}'],
-      //tip: 'The sku name is the unique key',
-      render: (dom, entity) => (
-        <a
-          onClick={() => {
-            setCurrentRow(entity);
-            setCurrentImages(entity.images || []);
-            setShowDetail(true);
-          }}
-        >
-          {dom}
-        </a>
-      ),
-    },
-    {
+  const columns: ProColumns<API.Sku>[] = [ {
       width: 60,
       title: 'id',
       dataIndex: 'id',
       valueType: 'textarea',
+      hideInSearch: true,
       hideInTable: true,
-    },
-    {
+      query: ['id={id}'],
+    },{
+      title: '名称',
+      dataIndex: 'name',
+      sorter: true,
+      query: ['name~{name}'],
+      //tip: 'The sku name is the unique key',
+      render: (dom, entity) => (
+        <a onClick={() => {
+            setCurrentRow(entity);
+            setCurrentImages(entity.images || []);
+            setShowDetail(true);
+          }} > {dom} </a>
+      ),
+    }, {
+      title: '图片',
+      render: (_, entity) => (
+        <List
+          dataSource={entity.images || []}
+          renderItem={(item) => (
+            <List.Item>
+              <Image width={104} src={item} />
+            </List.Item>
+          )}
+        />
+      ),
+      hideInSearch: true,
+      hideInTable: false,
+    }, {
+      title: 'teacher',
+      dataIndex: 'teacher',
+      render: (_, entity) => <div>{entity.teacher?.name || '-'}</div>,
+      valueType: 'textarea',
+    }, {
+      title: '机构',
+      dataIndex: 'org',
+      render: (_, entity) => <div>{entity.org?.name || '-'}</div>,
+      query: ['org~{org}'],
+    }, {
+      title: '地址',
+      render: (_, entity) => <div>{entity.org?.address || '-'}</div>,
+      hideInSearch: true,
+    }, {
+      title: 'desc',
+      dataIndex: 'description',
+      valueType: 'textarea',
+    }, {
       title: '单节课价格',
-      render: (dom, entity) => {
+      render: (_, entity) => {
         return moneyFmt(entity.price);
       },
-    },
-    {
+    }, {
       title: '单节课折扣后价格',
-      render: (dom, entity) => {
+      render: (_, entity) => {
         return moneyFmt(entity.salePrice);
       },
-    },
-    {
+    }, {
       title: '数量',
       dataIndex: 'count',
       valueType: 'digit',
-    },
-    {
+    }, {
       title: '总价',
       render: (_, entity) => {
         return moneyFmt(entity.price * entity.count);
       },
-    },
-    {
+    }, {
       title: '折扣总价',
       render: (_, entity) => {
         return moneyFmt(entity.salePrice * entity.count);
       },
-    },
-    {
+    }, {
+      title: '状态',
+      dataIndex: 'available',
+      valueType: 'switch',
+      render: (_, entity) => <div>{entity.available ? '启用' : '禁用'}</div>,
+      hideInSearch: true,
+      hideInTable: false,
+    }, {
       title: '操作',
       width: 120,
       dataIndex: 'option',
       valueType: 'option',
       render: (_, record) => {
-        const disabled = access.canAdmin ? false : currentUser?.id != currentSpu.ownerId;
+        const disabled = access.canAdmin ? false : currentUser.id != record.ownerId;
         return [
           <a
             key="edit"
@@ -174,10 +197,7 @@ const TableList: React.FC = () => {
               setCurrentImages(record.images);
               handleUpdateModalVisible(true);
             }}
-          >
-            {' '}
-            修改{' '}
-          </a>,
+          > 修改 </a>,
           <a
             key="remove"
             disabled={!access.canAdmin}
@@ -193,49 +213,20 @@ const TableList: React.FC = () => {
                 },
               });
             }}
-          >
-            {' '}
-            删除{' '}
-          </a>,
+          > 删除 </a>,
         ];
       },
     },
   ];
 
-  const fmtDate = (ts) => {
-    return ts ? moment.unix(ts).format('YYYY-MM-DD HH:mm:ss') : '-';
-  };
+  //const fmtDate = (ts) => {
+  //  return ts ? moment.unix(ts).format('YYYY-MM-DD HH:mm:ss') : '-';
+  //};
 
-  const description = (
-    <Descriptions className={styles.headerList} size="small" column={2}>
-      <Descriptions.Item label="商品名称">{currentSpu?.name}</Descriptions.Item>
-      <Descriptions.Item label="机构名称">{currentSpu?.org?.name}</Descriptions.Item>
-      <Descriptions.Item label="创建者">{currentSpu?.creator}</Descriptions.Item>
-      <Descriptions.Item label="更新时间">{fmtDate(currentSpu?.updatedAt)}</Descriptions.Item>
-      <Descriptions.Item label="创建时间">{fmtDate(currentSpu?.createdAt)}</Descriptions.Item>
-      <Descriptions.Item label="描述">{currentSpu?.description}</Descriptions.Item>
-    </Descriptions>
-  );
-
-  const action = (
-    <SelectSpu
-      ownerId={ownerId}
-      onChange={(spu) => {
-        setCurrentSpu(spu);
-        if (actionRef.current) {
-          actionRef.current.reload();
-        }
-      }}
-      spuId={spuId}
-    />
-  );
+ const requestFilter = ownerId ? ['owner_id=' + ownerId] : [];
 
   return (
-    <PageContainer
-      extra={action}
-      content={description}
-      className={styles.pageHeader}
-      >
+    <PageContainer >
       <ProTable<API.Sku, API.PageParams>
         //headerTitle='Enquiry form'
         actionRef={actionRef}
@@ -244,7 +235,9 @@ const TableList: React.FC = () => {
           pageSize: 10,
           showSizeChanger: true,
         }}
-        search={false}
+        search={{
+          labelWidth: 120,
+        }}
         toolBarRender={() => [
           <Button
             type="primary"
@@ -256,7 +249,7 @@ const TableList: React.FC = () => {
             <PlusOutlined /> 新建
           </Button>,
         ]}
-        request={currentSpu ? listQueryWithColumns(listSku, columns, [`spu_id=${currentSpu?.id}`]) : null}
+        request={listQueryWithColumns(listSku, columns, requestFilter)}
         columns={columns}
         scroll={{ x: 1300 }}
         rowSelection={
@@ -299,12 +292,11 @@ const TableList: React.FC = () => {
       />
 
       <ModalForm
-        title={`新建课程 (产品: ${currentSpu?.name} - ${currentSpu?.org?.name})`}
+        title="新建课程"
         visible={createModalVisible}
         onVisibleChange={handleModalVisible}
         onFinish={async (value) => {
           const success = await handleAdd({
-            spuId: currentSpu.id,
             ...value,
           });
           if (success) {
@@ -315,6 +307,7 @@ const TableList: React.FC = () => {
           }
         }}
       >
+
         <ProFormText
           name="name"
           label="课程名称"
@@ -330,6 +323,44 @@ const TableList: React.FC = () => {
           request={selectCourseRequest}
           width="md"
         />
+
+        <ProFormSelect
+          name="orgId"
+          label="机构"
+          rules={[{ required: true, message: '机构为必选项' }]}
+          showSearch
+          debounceTime={300}
+          request={async (req) => {
+            return selectOrgRequest({ ownerId, ...req });
+          }}
+          width="md"
+        />
+
+        <ProFormDependency key="orgId" name={['orgId']}>
+          {({ orgId }) => {
+            return (
+              <ProFormSelect
+                name="teacherId"
+                label="老师"
+                params={{
+                  key: orgId,
+                }}
+                disabled={!orgId}
+                rules={[{ required: true, message: '老师为必选项' }]}
+                showSearch
+                debounceTime={300}
+                request={async (req) => {
+                  if (!orgId) {
+                    return [];
+                  }
+                  return selectTeacherRequest({ orgId, ...req });
+                }}
+                width="md"
+              />
+            );
+          }}
+        </ProFormDependency>
+
       </ModalForm>
 
       <UpdateForm
@@ -368,7 +399,7 @@ const TableList: React.FC = () => {
 
       <Drawer
         width={600}
-        open={showDetail}
+        visible={showDetail}
         onClose={() => {
           setCurrentRow(undefined);
           setShowDetail(false);

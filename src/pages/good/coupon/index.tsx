@@ -1,29 +1,23 @@
 import { PlusOutlined } from '@ant-design/icons';
-import { Space, List, Image, Modal, Button, message, Drawer } from 'antd';
-import React, { useState, useRef } from 'react';
 import { PageContainer } from '@ant-design/pro-layout';
+import { Space, Modal, Button, message, Drawer } from 'antd';
+import React, { useState, useRef } from 'react';
 import type { ProColumns, ActionType } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
-import { ModalForm, ProFormText } from '@ant-design/pro-form';
+import { ModalForm, ProFormText, ProFormSelect, ProFormDigit } from '@ant-design/pro-form';
 import type { ProDescriptionsItemProps } from '@ant-design/pro-descriptions';
 import ProDescriptions from '@ant-design/pro-descriptions';
 import type { FormValueType } from './components/UpdateForm';
 import UpdateForm from './components/UpdateForm';
-//import { rule, addRule, updateRule, removeRule } from '@/services/ant-design-pro/api';
-import { listCourse, createCourse, updateCourse, deleteCourses } from '@/services/apiserver/course';
-import { listQueryWithColumns } from '@/services/util';
-import { useAccess } from 'umi';
+import { listCoupon, createCoupon, updateCoupon, deleteCoupons } from '@/services/apiserver/coupon';
+import { listQueryWithColumns, selectUserRequestById, selectSkuRequest } from '@/services/util';
+import { useModel, useAccess } from 'umi';
 import moment from 'moment';
 
-/**
- * @en-US Add node
- * @zh-CN 添加节点
- * @param fields
- */
-const handleAdd = async (fields: API.Course) => {
+const handleAdd = async (fields: API.Coupon) => {
   const hide = message.loading('正在添加');
   try {
-    await createCourse({ ...fields });
+    await createCoupon({ ...fields });
     hide();
     message.success('Added successfully');
     return true;
@@ -34,18 +28,11 @@ const handleAdd = async (fields: API.Course) => {
   }
 };
 
-/**
- * @en-US Update node
- * @zh-CN 更新节点
- *
- * @param fields
- */
 const handleUpdate = async (fields: FormValueType) => {
   const { id, ...body } = fields;
-  console.log('update course', 'id', id, 'body', body);
   const hide = message.loading('Configuring');
   try {
-    await updateCourse({ id }, body);
+    await updateCoupon({ id }, body);
     hide();
 
     message.success('Configuration is successful');
@@ -63,11 +50,11 @@ const handleUpdate = async (fields: FormValueType) => {
  *
  * @param selectedRows
  */
-const handleRemove = async (selectedRows: API.Course[]) => {
+const handleRemove = async (selectedRows: API.Coupon[]) => {
   if (!selectedRows) return true;
   const hide = message.loading('正在删除');
   try {
-    await deleteCourses({
+    await deleteCoupons({
       id: selectedRows.map((row) => row.id),
     });
     hide();
@@ -92,71 +79,66 @@ const TableList: React.FC = () => {
    * */
   const [updateModalVisible, handleUpdateModalVisible] = useState<boolean>(false);
 
+  // 课程
   const [showDetail, setShowDetail] = useState<boolean>(false);
 
   const actionRef = useRef<ActionType>();
-  const [currentRow, setCurrentRow] = useState<API.Course>();
+  const [currentRow, setCurrentRow] = useState<API.Coupon>();
   const [currentImages, setCurrentImages] = useState<string[]>([]);
-  //const [selectedRowsState, setSelectedRows] = useState<API.Course[]>([]);
+  //const [selectedRowsState, setSelectedRows] = useState<API.Coupon[]>([]);
   const access = useAccess();
+
+  const { initialState } = useModel('@@initialState');
+  const { currentUser } = initialState || {};
+  const ownerId = access.canAdmin ? undefined : currentUser?.id;
+
+  const moneyFmt = (n) => {
+    return Intl.NumberFormat('zh-CN', { style: 'currency', currency: 'CNY' }).format(n / 100);
+  };
 
   const fmtDate = (ts) => {
     return ts ? moment.unix(ts).format('YYYY-MM-DD HH:mm:ss') : '-';
   };
 
-  /**
-   * @en-US International configuration
-   * @zh-CN 国际化配置
-   * */
   // https://procomponents.ant.design/components/schema/#valuetype
-  const columns: ProColumns<API.Course>[] = [
+  const columns: ProColumns<API.Coupon>[] = [
+    {
+      title: '名称',
+      dataIndex: 'name',
+      valueType: 'textarea',
+    },
     {
       width: 60,
       title: 'id',
       dataIndex: 'id',
       valueType: 'textarea',
-      hideInSearch: true,
       hideInTable: true,
-      query: ['id={id}'],
     },
     {
-      title: '课程名',
-      dataIndex: 'name',
-      sorter: true,
-      query: ['name=~{name}'],
-      //tip: 'The course name is the unique key',
-      render: (dom, entity) => (
-        <a
-          onClick={() => {
-            setCurrentRow(entity);
-            setCurrentImages(entity.images);
-            setShowDetail(true);
-          }}
-        >
-          {dom}
-        </a>
-      ),
-    },
-    {
-      title: '描述',
-      dataIndex: 'description',
+      title: 'userId',
+      dataIndex: 'userId',
       valueType: 'textarea',
-      query: ['description=~{description}'],
     },
     {
-      title: '图片',
-      render: (_, entity) => (
-        <List
-          dataSource={entity.images || []}
-          renderItem={(item) => (
-            <List.Item>
-              <Image width={104} src={item} />
-            </List.Item>
-          )}
-        />
-      ),
+      title: 'userName',
+      dataIndex: 'userName',
+      valueType: 'textarea',
+    },
+    {
+      title: 'sku',
+      dataIndex: 'skuName',
+      valueType: 'textarea',
+    },
+    {
+      title: 'status',
+      dataIndex: 'statusName',
+      valueType: 'textarea',
+    },
+    {
+      title: '创建者',
+      dataIndex: 'creator',
+      valueType: 'textarea',
       hideInSearch: true,
-      hideInTable: false,
     },
     {
       title: '更新时间',
@@ -173,19 +155,9 @@ const TableList: React.FC = () => {
       hideInSearch: true,
     },
     {
-      title: '创建时间',
-      dataIndex: 'createdAt',
-      valueType: 'dateRange',
-      hideInTable: true,
-      hideInDescriptions: true,
-      query: ['created_at>{startTime}', 'created_at<{endTime}'],
-      search: {
-        transform: (value) => {
-          return {
-            startTime: moment(value[0]).format('X'),
-            endTime: moment(value[1]).add(1, 'd').format('X'),
-          };
-        },
+      title: '优惠价格',
+      render: (dom, entity) => {
+        return moneyFmt(entity.deductionPrice);
       },
     },
     {
@@ -193,41 +165,32 @@ const TableList: React.FC = () => {
       width: 120,
       dataIndex: 'option',
       valueType: 'option',
-      hideInTable: !access.canAdmin,
-      render: (_, record) => [
-        <a
-          key="edit"
-          onClick={() => {
-            setCurrentRow(record);
-            setCurrentImages(record.images);
-            handleUpdateModalVisible(true);
-          }}
-        >
-          修改
-        </a>,
-        <a
-          key="remove"
-          onClick={() =>
-            Modal.confirm({
-              title: `确认要删除课程 ${record.name} (${record.id})吗?`,
-              onOk: async () => {
-                const success = await handleRemove([record]);
-                if (success) {
-                  actionRef.current?.reloadAndRest?.();
-                }
-              },
-            })
-          }
-        >
-          删除
-        </a>,
-      ],
+      render: (_, record) => {
+        return [
+          <a
+            key="remove"
+            onClick={() => {
+              Modal.confirm({
+                title: `确认要删除优惠券 ${record.name} (${record.id})吗?`,
+                onOk: async () => {
+                  const success = await handleRemove([record]);
+                  if (success) {
+                    actionRef.current?.reloadAndRest?.();
+                  }
+                },
+              });
+            }}
+          >
+            删除
+          </a>,
+        ];
+      },
     },
   ];
 
   return (
     <PageContainer>
-      <ProTable<API.Course, API.PageParams>
+      <ProTable<API.Coupon, API.PageParams>
         //headerTitle='Enquiry form'
         actionRef={actionRef}
         rowKey="id"
@@ -235,9 +198,7 @@ const TableList: React.FC = () => {
           pageSize: 10,
           showSizeChanger: true,
         }}
-        search={{
-          labelWidth: 120,
-        }}
+        search={false}
         toolBarRender={() => [
           <Button
             type="primary"
@@ -249,16 +210,9 @@ const TableList: React.FC = () => {
             <PlusOutlined /> 新建
           </Button>,
         ]}
-        request={listQueryWithColumns(listCourse, columns)}
+        request={listQueryWithColumns(listCoupon, columns)}
         columns={columns}
         scroll={{ x: 1300 }}
-        rowSelection={
-          {
-            //onChange: (_, selectedRows) => {
-            //  //setSelectedRows(selectedRows);
-            //},
-          }
-        }
         tableAlertRender={({ selectedRowKeys, onCleanSelected }) => (
           <Space size={24}>
             <span>
@@ -274,11 +228,10 @@ const TableList: React.FC = () => {
             <a
               onClick={() =>
                 Modal.confirm({
-                  title: `确认要删除课程吗 (共 ${selectedRowKeys.length} 项)?`,
+                  title: `确认要删除优惠券吗 (共 ${selectedRowKeys.length} 项)?`,
                   onOk: async () => {
                     const success = await handleRemove(selectedRows);
                     if (success) {
-                      //setSelectedRows([]);
                       actionRef.current?.reloadAndRest?.();
                     }
                   },
@@ -290,13 +243,15 @@ const TableList: React.FC = () => {
           </Space>
         )}
       />
+
       <ModalForm
-        title="添加课程"
-        width="400px"
+        title={`新建优惠券`}
         visible={createModalVisible}
         onVisibleChange={handleModalVisible}
         onFinish={async (value) => {
-          const success = await handleAdd(value as API.Course);
+          const success = await handleAdd({
+            ...value,
+          });
           if (success) {
             handleModalVisible(false);
             if (actionRef.current) {
@@ -305,17 +260,54 @@ const TableList: React.FC = () => {
           }
         }}
       >
-        <ProFormText
-          rules={[
-            {
-              required: true,
-              message: '课程名称为必填项',
-            },
-          ]}
+        <ProFormText name="name" label="名称" width="md" />
+
+        <ProFormSelect
+          name="userId"
+          label="用户"
+          rules={[{ required: true, message: '用户Id为必选项' }]}
+          showSearch
+          debounceTime={300}
+          request={async (req) => {
+            return selectUserRequestById({ ...req });
+          }}
           width="md"
-          name="name"
         />
+
+        <ProFormSelect
+          name="skuId"
+          label="课程"
+          rules={[{ required: true, message: '课程为必选项' }]}
+          showSearch
+          debounceTime={300}
+          request={async (req) => {
+            return selectSkuRequest({ ownerId, ...req });
+          }}
+          width="md"
+        />
+
+        <ProFormDigit
+          name="deductionPrice"
+          label="优惠价格(分)"
+          min={1}
+          width="md"
+          fieldProps={{ precision: 0 }}
+          rules={[{ required: true, message: '优惠价格为必选项' }]}
+        />
+
+
+        <ProFormDigit
+          name="expiresTime"
+          label="有效期(天)"
+          min={1}
+          width="md"
+          fieldProps={{ precision: 0 }}
+          rules={[{ required: true, message: '有效期为必选项' }]}
+        />
+
+
       </ModalForm>
+
       <UpdateForm
         onSubmit={async (value) => {
           const success = await handleUpdate({
@@ -338,7 +330,7 @@ const TableList: React.FC = () => {
         }}
         updateModalVisible={updateModalVisible}
         values={currentRow || {}}
-        images={currentImages || []}
+        images={currentImages}
         updateImages={async (images) => {
           const success = await handleUpdate({
             id: currentRow.id,
@@ -352,7 +344,7 @@ const TableList: React.FC = () => {
 
       <Drawer
         width={600}
-        visible={showDetail}
+        open={showDetail}
         onClose={() => {
           setCurrentRow(undefined);
           setShowDetail(false);
@@ -360,7 +352,7 @@ const TableList: React.FC = () => {
         closable={false}
       >
         {currentRow?.name && (
-          <ProDescriptions<API.Course>
+          <ProDescriptions<API.Coupon>
             column={2}
             title={currentRow?.name}
             request={async () => ({
@@ -369,7 +361,7 @@ const TableList: React.FC = () => {
             params={{
               id: currentRow?.name,
             }}
-            columns={columns as ProDescriptionsItemProps<API.Course>[]}
+            columns={columns as ProDescriptionsItemProps<API.Coupon>[]}
           />
         )}
       </Drawer>

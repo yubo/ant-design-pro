@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { ProForm, ProFormSelect, ModalForm, ProFormText, ProFormDigit, ProFormTextArea, ProFormSwitch } from '@ant-design/pro-form';
-import UploadImages from '@/components/UploadImages/UploadImages';
-import { selectCourseRequest, selectOrgRequest, selectTeacherRequest } from '@/services/util';
+import { ProForm, ProFormSelect, ModalForm, ProFormText, ProFormDigit } from '@ant-design/pro-form';
+import { selectCourseRequest } from '@/services/util';
 
 export type FormValueType = {
   id: number;
@@ -59,28 +58,6 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
       </ProForm.Group>
 
       <ProFormSelect
-        name="orgId"
-        label="机构"
-        showSearch
-        readonly
-        debounceTime={300}
-        request={selectOrgRequest}
-        valueEnum={{ [props.values.orgId]: props.values.org?.name }}
-        width="md"
-      />
-
-      <ProFormSelect
-        name="teacherId"
-        label="老师"
-        showSearch
-        readonly
-        debounceTime={300}
-        request={selectTeacherRequest}
-        valueEnum={{ [props.values.teacherId]: props.values.teacher?.name }}
-        width="md"
-      />
-
-      <ProFormSelect
         name="courseId"
         label="课程"
         showSearch
@@ -120,21 +97,6 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
           setCount(n);
         }}
       />
-
-      <ProFormTextArea name="description" width="md" label="描述" />
-      <ProFormSwitch
-        checkedChildren="启用"
-        unCheckedChildren="禁用"
-        name="available"
-        width="md"
-        label="状态"
-      />
-
-      <div>
-        <div>图片</div>
-        <UploadImages images={props.images || []} onChange={props.updateImages} />
-      </div>
-
     </ModalForm>
   );
 };

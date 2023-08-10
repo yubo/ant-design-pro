@@ -2,15 +2,95 @@
  "swagger": "2.0",
  "info": {
   "description": "fuxinzhumeng.com",
-  "title": "wx-server",
+  "title": "fxzm-server",
   "contact": {
-   "name": "yubo",
+   "name": "admin",
    "url": "http://fuxingzhumeng.com",
-   "email": "yubo@yubo.org"
+   "email": "admin@fuxinzhumeng.com"
   },
-  "version": "v0.0.0"
+  "version": "v0.1.0-34+749f7782581abd-dirty-dirty"
  },
  "paths": {
+  "/api/v1/app/create-order": {
+   "post": {
+    "consumes": [
+     "application/json"
+    ],
+    "produces": [
+     "application/json",
+     "*/*"
+    ],
+    "tags": [
+     "application"
+    ],
+    "summary": "创建订单",
+    "operationId": "createOrder",
+    "parameters": [
+     {
+      "name": "body",
+      "in": "body",
+      "required": true,
+      "schema": {
+       "$ref": "#/definitions/app.createOrderRequest"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "OK",
+      "schema": {
+       "$ref": "#/definitions/__umi__.app.createOrderResponse"
+      }
+     },
+     "400": {
+      "description": "Bad Request",
+      "schema": {
+       "$ref": "#/definitions/__umi__.Response400"
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/app/create-refund": {
+   "post": {
+    "consumes": [
+     "application/json"
+    ],
+    "produces": [
+     "application/json",
+     "*/*"
+    ],
+    "tags": [
+     "application"
+    ],
+    "summary": "创建退款单",
+    "operationId": "createRefund",
+    "parameters": [
+     {
+      "name": "body",
+      "in": "body",
+      "required": true,
+      "schema": {
+       "$ref": "#/definitions/app.createRefundRequest"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "OK",
+      "schema": {
+       "$ref": "#/definitions/__umi__.dao.Refund"
+      }
+     },
+     "400": {
+      "description": "Bad Request",
+      "schema": {
+       "$ref": "#/definitions/__umi__.Response400"
+      }
+     }
+    }
+   }
+  },
   "/api/v1/app/fetch-settle-detail": {
    "post": {
     "consumes": [
@@ -23,7 +103,7 @@
     "tags": [
      "application"
     ],
-    "summary": "fetch setle detail ",
+    "summary": "结算明细查询",
     "operationId": "fetchSettleDetail",
     "parameters": [
      {
@@ -51,7 +131,7 @@
     }
    }
   },
-  "/api/v1/app/schedule": {
+  "/api/v1/app/get-order-courses": {
    "get": {
     "consumes": [
      "application/json"
@@ -63,12 +143,644 @@
     "tags": [
      "application"
     ],
-    "summary": "get schedule data",
-    "operationId": "getScheduleData",
+    "summary": "获取订单课程",
+    "operationId": "getOrderCourses",
+    "parameters": [
+     {
+      "type": "string",
+      "name": "orderNo",
+      "in": "query"
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "OK",
+      "schema": {
+       "$ref": "#/definitions/__umi__.array.dao.BookedCourse"
+      }
+     },
+     "400": {
+      "description": "Bad Request",
+      "schema": {
+       "$ref": "#/definitions/__umi__.Response400"
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/app/get-order-detail": {
+   "get": {
+    "consumes": [
+     "application/json"
+    ],
+    "produces": [
+     "application/json",
+     "*/*"
+    ],
+    "tags": [
+     "application"
+    ],
+    "summary": "获取订单明细",
+    "operationId": "getOrderDetail",
+    "parameters": [
+     {
+      "type": "string",
+      "name": "orderNo",
+      "in": "query"
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "OK",
+      "schema": {
+       "$ref": "#/definitions/__umi__.dao.Order"
+      }
+     },
+     "400": {
+      "description": "Bad Request",
+      "schema": {
+       "$ref": "#/definitions/__umi__.Response400"
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/app/list-comment/teacher": {
+   "get": {
+    "consumes": [
+     "application/json"
+    ],
+    "produces": [
+     "application/json",
+     "*/*"
+    ],
+    "tags": [
+     "application"
+    ],
+    "summary": "老师查看评语",
+    "operationId": "listCommentByTeacher",
+    "parameters": [
+     {
+      "type": "string",
+      "description": "开始时间(2006-01-02)",
+      "name": "begin",
+      "in": "query"
+     },
+     {
+      "type": "string",
+      "description": "结束时间(2006-01-08)",
+      "name": "end",
+      "in": "query"
+     },
+     {
+      "type": "integer",
+      "description": "学生id, 选填",
+      "name": "studentId",
+      "in": "query"
+     },
+     {
+      "type": "integer",
+      "description": "老师id, 选填",
+      "name": "teacherId",
+      "in": "query"
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "OK",
+      "schema": {
+       "$ref": "#/definitions/__umi__.app.listCommentResponse"
+      }
+     },
+     "400": {
+      "description": "Bad Request",
+      "schema": {
+       "$ref": "#/definitions/__umi__.Response400"
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/app/list-comment/user": {
+   "get": {
+    "consumes": [
+     "application/json"
+    ],
+    "produces": [
+     "application/json",
+     "*/*"
+    ],
+    "tags": [
+     "application"
+    ],
+    "summary": "家长查看评语",
+    "operationId": "listCommentByUser",
+    "parameters": [
+     {
+      "type": "string",
+      "description": "开始时间(2006-01-02)",
+      "name": "begin",
+      "in": "query"
+     },
+     {
+      "type": "string",
+      "description": "结束时间(2006-01-08)",
+      "name": "end",
+      "in": "query"
+     },
+     {
+      "type": "integer",
+      "description": "学生id, 选填",
+      "name": "studentId",
+      "in": "query"
+     },
+     {
+      "type": "integer",
+      "description": "老师id, 选填",
+      "name": "teacherId",
+      "in": "query"
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "OK",
+      "schema": {
+       "$ref": "#/definitions/__umi__.app.listCommentResponse"
+      }
+     },
+     "400": {
+      "description": "Bad Request",
+      "schema": {
+       "$ref": "#/definitions/__umi__.Response400"
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/app/list-order": {
+   "get": {
+    "consumes": [
+     "application/json"
+    ],
+    "produces": [
+     "application/json",
+     "*/*"
+    ],
+    "tags": [
+     "application"
+    ],
+    "summary": "订单浏览",
+    "operationId": "listOrder",
     "parameters": [
      {
       "type": "integer",
-      "name": "skuId",
+      "description": "老师的id, 老师或者用户必须填一个",
+      "name": "teacherId",
+      "in": "query"
+     },
+     {
+      "type": "integer",
+      "description": "用户id(购课用户)",
+      "name": "userId",
+      "in": "query"
+     },
+     {
+      "type": "integer",
+      "description": "学生id, 选填",
+      "name": "studentId",
+      "in": "query"
+     },
+     {
+      "maximum": 500,
+      "type": "integer",
+      "default": 10,
+      "description": "page size",
+      "name": "pageSize",
+      "in": "query"
+     },
+     {
+      "type": "integer",
+      "default": 1,
+      "description": "current page number, start at 1(defualt)",
+      "name": "current",
+      "in": "query"
+     },
+     {
+      "type": "string",
+      "description": "column name",
+      "name": "sorter",
+      "in": "query"
+     },
+     {
+      "enum": [
+       "asc",
+       "desc"
+      ],
+      "type": "string",
+      "description": "asc(default)/desc",
+      "name": "order",
+      "in": "query"
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "OK",
+      "schema": {
+       "$ref": "#/definitions/__umi__.app.listOrderResponse"
+      }
+     },
+     "400": {
+      "description": "Bad Request",
+      "schema": {
+       "$ref": "#/definitions/__umi__.Response400"
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/app/out-account/detail": {
+   "get": {
+    "consumes": [
+     "application/json"
+    ],
+    "produces": [
+     "application/json",
+     "*/*"
+    ],
+    "tags": [
+     "application"
+    ],
+    "summary": "获取机构的分账详细信息",
+    "operationId": "getOrgOutAccount",
+    "parameters": [
+     {
+      "type": "integer",
+      "description": "可选, 如果为空，默认为useId的第一个老师身份",
+      "name": "teacherId",
+      "in": "query"
+     },
+     {
+      "type": "integer",
+      "description": "可选, 默认为当前登录用户",
+      "name": "userId",
+      "in": "query"
+     },
+     {
+      "type": "integer",
+      "description": "可选，默认为当前值",
+      "name": "date",
+      "in": "query"
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "OK",
+      "schema": {
+       "$ref": "#/definitions/__umi__.app.teacherScheduleSummaryResponse"
+      }
+     },
+     "400": {
+      "description": "Bad Request",
+      "schema": {
+       "$ref": "#/definitions/__umi__.Response400"
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/app/out-account/org": {
+   "get": {
+    "consumes": [
+     "application/json"
+    ],
+    "produces": [
+     "application/json",
+     "*/*"
+    ],
+    "tags": [
+     "application"
+    ],
+    "summary": "获取机构的分账信息",
+    "operationId": "getOrgOutAccount",
+    "parameters": [
+     {
+      "type": "integer",
+      "description": "可选, 如果为空，默认为useId的第一个老师身份",
+      "name": "teacherId",
+      "in": "query"
+     },
+     {
+      "type": "integer",
+      "description": "可选, 默认为当前登录用户",
+      "name": "userId",
+      "in": "query"
+     },
+     {
+      "type": "integer",
+      "description": "可选，默认为当前值",
+      "name": "date",
+      "in": "query"
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "OK",
+      "schema": {
+       "$ref": "#/definitions/__umi__.app.teacherScheduleSummaryResponse"
+      }
+     },
+     "400": {
+      "description": "Bad Request",
+      "schema": {
+       "$ref": "#/definitions/__umi__.Response400"
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/app/out-account/user": {
+   "get": {
+    "consumes": [
+     "application/json"
+    ],
+    "produces": [
+     "application/json",
+     "*/*"
+    ],
+    "tags": [
+     "application"
+    ],
+    "summary": "获取个人的分账信息",
+    "operationId": "getUserOutAccount",
+    "parameters": [
+     {
+      "type": "integer",
+      "description": "可选, 如果为空，默认为useId的第一个老师身份",
+      "name": "teacherId",
+      "in": "query"
+     },
+     {
+      "type": "integer",
+      "description": "可选, 默认为当前登录用户",
+      "name": "userId",
+      "in": "query"
+     },
+     {
+      "type": "integer",
+      "description": "可选，默认为当前值",
+      "name": "date",
+      "in": "query"
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "OK",
+      "schema": {
+       "$ref": "#/definitions/__umi__.app.teacherScheduleSummaryResponse"
+      }
+     },
+     "400": {
+      "description": "Bad Request",
+      "schema": {
+       "$ref": "#/definitions/__umi__.Response400"
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/app/qrcode/user": {
+   "post": {
+    "consumes": [
+     "application/json"
+    ],
+    "produces": [
+     "application/json",
+     "*/*"
+    ],
+    "tags": [
+     "application"
+    ],
+    "summary": "获取用户的推荐app二维码, https://developers.weixin.qq.com/miniprogram/dev/OpenApiDoc/qrcode-link/qr-code/getUnlimitedQRCode.html",
+    "operationId": "getUserQrcode",
+    "parameters": [
+     {
+      "name": "body",
+      "in": "body",
+      "required": true,
+      "schema": {
+       "$ref": "#/definitions/app.getUserQrcodeRequest"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "OK",
+      "schema": {
+       "$ref": "#/definitions/__umi__.Response200"
+      }
+     },
+     "400": {
+      "description": "Bad Request",
+      "schema": {
+       "$ref": "#/definitions/__umi__.Response400"
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/app/recharge-order": {
+   "post": {
+    "consumes": [
+     "application/json"
+    ],
+    "produces": [
+     "application/json",
+     "*/*"
+    ],
+    "tags": [
+     "application"
+    ],
+    "summary": "订单续费",
+    "operationId": "rechargeOrder",
+    "parameters": [
+     {
+      "name": "body",
+      "in": "body",
+      "required": true,
+      "schema": {
+       "$ref": "#/definitions/app.rechargeOrderRequest"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "OK",
+      "schema": {
+       "$ref": "#/definitions/__umi__.app.rechargeOrderResponse"
+      }
+     },
+     "400": {
+      "description": "Bad Request",
+      "schema": {
+       "$ref": "#/definitions/__umi__.Response400"
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/app/schedule-summary/student": {
+   "get": {
+    "consumes": [
+     "application/json"
+    ],
+    "produces": [
+     "application/json",
+     "*/*"
+    ],
+    "tags": [
+     "application"
+    ],
+    "summary": "获取学生的课程概要",
+    "operationId": "getStudentScheduleSummary",
+    "parameters": [
+     {
+      "type": "integer",
+      "name": "studentId",
+      "in": "query"
+     },
+     {
+      "type": "integer",
+      "description": "可选，默认为当前值",
+      "name": "date",
+      "in": "query"
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "OK",
+      "schema": {
+       "$ref": "#/definitions/__umi__.app.studentScheduleSummaryResponse"
+      }
+     },
+     "400": {
+      "description": "Bad Request",
+      "schema": {
+       "$ref": "#/definitions/__umi__.Response400"
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/app/schedule-summary/teacher": {
+   "get": {
+    "consumes": [
+     "application/json"
+    ],
+    "produces": [
+     "application/json",
+     "*/*"
+    ],
+    "tags": [
+     "application"
+    ],
+    "summary": "获取老师的课程概要",
+    "operationId": "getTeacherScheduleSummary",
+    "parameters": [
+     {
+      "type": "integer",
+      "description": "可选, 如果为空，默认为useId的第一个老师身份",
+      "name": "teacherId",
+      "in": "query"
+     },
+     {
+      "type": "integer",
+      "description": "可选, 默认为当前登录用户",
+      "name": "userId",
+      "in": "query"
+     },
+     {
+      "type": "integer",
+      "description": "可选，默认为当前值",
+      "name": "date",
+      "in": "query"
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "OK",
+      "schema": {
+       "$ref": "#/definitions/__umi__.app.teacherScheduleSummaryResponse"
+      }
+     },
+     "400": {
+      "description": "Bad Request",
+      "schema": {
+       "$ref": "#/definitions/__umi__.Response400"
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/app/schedule/available": {
+   "get": {
+    "consumes": [
+     "application/json"
+    ],
+    "produces": [
+     "application/json",
+     "*/*"
+    ],
+    "tags": [
+     "application"
+    ],
+    "summary": "获取 学生对老师 的可选课表，用于购买界面",
+    "operationId": "getAvailableSchedule",
+    "parameters": [
+     {
+      "type": "integer",
+      "name": "teacherId",
+      "in": "query"
+     },
+     {
+      "type": "integer",
+      "name": "studentId",
+      "in": "query"
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "OK",
+      "schema": {
+       "$ref": "#/definitions/__umi__.app.scheduleResponse"
+      }
+     },
+     "400": {
+      "description": "Bad Request",
+      "schema": {
+       "$ref": "#/definitions/__umi__.Response400"
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/app/schedule/student": {
+   "get": {
+    "consumes": [
+     "application/json"
+    ],
+    "produces": [
+     "application/json",
+     "*/*"
+    ],
+    "tags": [
+     "application"
+    ],
+    "summary": "获取学生的课程安排",
+    "operationId": "getStudentSchedule",
+    "parameters": [
+     {
+      "type": "integer",
+      "name": "studentId",
       "in": "query"
      },
      {
@@ -94,6 +806,135 @@
     }
    }
   },
+  "/api/v1/app/schedule/teacher": {
+   "get": {
+    "consumes": [
+     "application/json"
+    ],
+    "produces": [
+     "application/json",
+     "*/*"
+    ],
+    "tags": [
+     "application"
+    ],
+    "summary": "获取老师的课程安排",
+    "operationId": "getTeacherSchedule",
+    "parameters": [
+     {
+      "type": "integer",
+      "description": "可选, 如果为空，默认为useId的第一个老师身份",
+      "name": "teacherId",
+      "in": "query"
+     },
+     {
+      "type": "integer",
+      "name": "userId",
+      "in": "query"
+     },
+     {
+      "type": "integer",
+      "description": "staring of a week [start, end)",
+      "name": "date",
+      "in": "query"
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "OK",
+      "schema": {
+       "$ref": "#/definitions/__umi__.app.scheduleResponse"
+      }
+     },
+     "400": {
+      "description": "Bad Request",
+      "schema": {
+       "$ref": "#/definitions/__umi__.Response400"
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/app/set-comment/teacher": {
+   "post": {
+    "consumes": [
+     "application/json"
+    ],
+    "produces": [
+     "application/json",
+     "*/*"
+    ],
+    "tags": [
+     "application"
+    ],
+    "summary": "老师提交评语, 可以反复提交(未完成)",
+    "operationId": "setComment",
+    "parameters": [
+     {
+      "name": "body",
+      "in": "body",
+      "required": true,
+      "schema": {
+       "$ref": "#/definitions/app.setCommentRequest"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "OK",
+      "schema": {
+       "$ref": "#/definitions/__umi__.Response200"
+      }
+     },
+     "400": {
+      "description": "Bad Request",
+      "schema": {
+       "$ref": "#/definitions/__umi__.Response400"
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/app/update-user-phonenumber": {
+   "post": {
+    "consumes": [
+     "application/json"
+    ],
+    "produces": [
+     "application/json",
+     "*/*"
+    ],
+    "tags": [
+     "application"
+    ],
+    "summary": "获取\u0026更新用户手机号",
+    "operationId": "updateUserPhoneNumber",
+    "parameters": [
+     {
+      "name": "body",
+      "in": "body",
+      "required": true,
+      "schema": {
+       "$ref": "#/definitions/app.updateUserPhoneNumberRequest"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "OK",
+      "schema": {
+       "$ref": "#/definitions/__umi__.dao.User"
+      }
+     },
+     "400": {
+      "description": "Bad Request",
+      "schema": {
+       "$ref": "#/definitions/__umi__.Response400"
+      }
+     }
+    }
+   }
+  },
   "/api/v1/auth/authorize": {
    "get": {
     "consumes": [
@@ -101,8 +942,7 @@
      "*/*"
     ],
     "produces": [
-     "application/json",
-     "*/*"
+     "application/json"
     ],
     "tags": [
      "auth"
@@ -132,8 +972,7 @@
      "*/*"
     ],
     "produces": [
-     "application/json",
-     "*/*"
+     "application/json"
     ],
     "tags": [
      "auth"
@@ -173,8 +1012,7 @@
      "*/*"
     ],
     "produces": [
-     "application/json",
-     "*/*"
+     "application/json"
     ],
     "tags": [
      "auth"
@@ -185,7 +1023,7 @@
      "200": {
       "description": "OK",
       "schema": {
-       "$ref": "#/definitions/__umi__.api.User"
+       "$ref": "#/definitions/__umi__.dao.User"
       }
      },
      "400": {
@@ -204,8 +1042,7 @@
      "*/*"
     ],
     "produces": [
-     "application/json",
-     "*/*"
+     "application/json"
     ],
     "tags": [
      "auth"
@@ -226,7 +1063,7 @@
      "200": {
       "description": "OK",
       "schema": {
-       "$ref": "#/definitions/__umi__.api.User"
+       "$ref": "#/definitions/__umi__.dao.User"
       }
      },
      "400": {
@@ -245,8 +1082,7 @@
      "*/*"
     ],
     "produces": [
-     "application/json",
-     "*/*"
+     "application/json"
     ],
     "tags": [
      "auth"
@@ -276,8 +1112,7 @@
      "*/*"
     ],
     "produces": [
-     "application/json",
-     "*/*"
+     "application/json"
     ],
     "tags": [
      "auth"
@@ -322,6 +1157,330 @@
     }
    }
   },
+  "/api/v1/callback/refund": {
+   "post": {
+    "consumes": [
+     "application/json",
+     "*/*"
+    ],
+    "produces": [
+     "application/json"
+    ],
+    "tags": [
+     "callback"
+    ],
+    "summary": "callback refund",
+    "operationId": "callbackRefund",
+    "responses": {
+     "200": {
+      "description": "OK",
+      "schema": {
+       "$ref": "#/definitions/__umi__.Response200"
+      }
+     },
+     "400": {
+      "description": "Bad Request",
+      "schema": {
+       "$ref": "#/definitions/__umi__.Response400"
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/callback/transaction": {
+   "post": {
+    "consumes": [
+     "application/json",
+     "*/*"
+    ],
+    "produces": [
+     "application/json"
+    ],
+    "tags": [
+     "callback"
+    ],
+    "summary": "callback transaction",
+    "operationId": "callbackTransaction",
+    "responses": {
+     "200": {
+      "description": "OK",
+      "schema": {
+       "$ref": "#/definitions/__umi__.Response200"
+      }
+     },
+     "400": {
+      "description": "Bad Request",
+      "schema": {
+       "$ref": "#/definitions/__umi__.Response400"
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/coupons": {
+   "get": {
+    "consumes": [
+     "application/json",
+     "*/*"
+    ],
+    "produces": [
+     "application/json"
+    ],
+    "tags": [
+     "coupon"
+    ],
+    "summary": "search/list coupons",
+    "operationId": "listCoupon",
+    "parameters": [
+     {
+      "type": "string",
+      "description": "query",
+      "name": "query",
+      "in": "query"
+     },
+     {
+      "maximum": 500,
+      "type": "integer",
+      "default": 10,
+      "description": "page size",
+      "name": "pageSize",
+      "in": "query"
+     },
+     {
+      "type": "integer",
+      "default": 1,
+      "description": "current page number, start at 1(defualt)",
+      "name": "current",
+      "in": "query"
+     },
+     {
+      "type": "string",
+      "description": "column name",
+      "name": "sorter",
+      "in": "query"
+     },
+     {
+      "enum": [
+       "asc",
+       "desc"
+      ],
+      "type": "string",
+      "description": "asc(default)/desc",
+      "name": "order",
+      "in": "query"
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "OK",
+      "schema": {
+       "$ref": "#/definitions/__umi__.coupon.listOutput"
+      }
+     },
+     "400": {
+      "description": "Bad Request",
+      "schema": {
+       "$ref": "#/definitions/__umi__.Response400"
+      }
+     }
+    }
+   },
+   "post": {
+    "consumes": [
+     "application/json",
+     "*/*"
+    ],
+    "produces": [
+     "application/json"
+    ],
+    "tags": [
+     "coupon"
+    ],
+    "summary": "create coupon",
+    "operationId": "createCoupon",
+    "parameters": [
+     {
+      "name": "body",
+      "in": "body",
+      "required": true,
+      "schema": {
+       "$ref": "#/definitions/coupon.createRequest"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "OK",
+      "schema": {
+       "$ref": "#/definitions/__umi__.Response200"
+      }
+     },
+     "400": {
+      "description": "Bad Request",
+      "schema": {
+       "$ref": "#/definitions/__umi__.Response400"
+      }
+     }
+    }
+   },
+   "delete": {
+    "consumes": [
+     "application/json",
+     "*/*"
+    ],
+    "produces": [
+     "application/json"
+    ],
+    "tags": [
+     "coupon"
+    ],
+    "summary": "delete coupons",
+    "operationId": "deleteCoupons",
+    "parameters": [
+     {
+      "type": "string",
+      "description": "coupon id",
+      "name": "id",
+      "in": "query"
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "OK",
+      "schema": {
+       "$ref": "#/definitions/__umi__.Response200"
+      }
+     },
+     "400": {
+      "description": "Bad Request",
+      "schema": {
+       "$ref": "#/definitions/__umi__.Response400"
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/coupons/{id}": {
+   "get": {
+    "consumes": [
+     "application/json",
+     "*/*"
+    ],
+    "produces": [
+     "application/json"
+    ],
+    "tags": [
+     "coupon"
+    ],
+    "summary": "get coupon",
+    "operationId": "getCoupon",
+    "parameters": [
+     {
+      "type": "integer",
+      "description": "coupon id",
+      "name": "id",
+      "in": "path",
+      "required": true
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "OK",
+      "schema": {
+       "$ref": "#/definitions/__umi__.dao.Coupon"
+      }
+     },
+     "400": {
+      "description": "Bad Request",
+      "schema": {
+       "$ref": "#/definitions/__umi__.Response400"
+      }
+     }
+    }
+   },
+   "put": {
+    "consumes": [
+     "application/json",
+     "*/*"
+    ],
+    "produces": [
+     "application/json"
+    ],
+    "tags": [
+     "coupon"
+    ],
+    "summary": "update coupon",
+    "operationId": "updateCoupon",
+    "parameters": [
+     {
+      "type": "integer",
+      "description": "coupon id",
+      "name": "id",
+      "in": "path",
+      "required": true
+     },
+     {
+      "name": "body",
+      "in": "body",
+      "required": true,
+      "schema": {
+       "$ref": "#/definitions/coupon.updateRequest"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "OK",
+      "schema": {
+       "$ref": "#/definitions/__umi__.Response200"
+      }
+     },
+     "400": {
+      "description": "Bad Request",
+      "schema": {
+       "$ref": "#/definitions/__umi__.Response400"
+      }
+     }
+    }
+   },
+   "delete": {
+    "consumes": [
+     "application/json",
+     "*/*"
+    ],
+    "produces": [
+     "application/json"
+    ],
+    "tags": [
+     "coupon"
+    ],
+    "summary": "delete coupon",
+    "operationId": "deleteCoupon",
+    "parameters": [
+     {
+      "type": "integer",
+      "description": "coupon id",
+      "name": "id",
+      "in": "path",
+      "required": true
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "OK",
+      "schema": {
+       "$ref": "#/definitions/__umi__.Response200"
+      }
+     },
+     "400": {
+      "description": "Bad Request",
+      "schema": {
+       "$ref": "#/definitions/__umi__.Response400"
+      }
+     }
+    }
+   }
+  },
   "/api/v1/courses": {
    "get": {
     "consumes": [
@@ -329,8 +1488,7 @@
      "*/*"
     ],
     "produces": [
-     "application/json",
-     "*/*"
+     "application/json"
     ],
     "tags": [
      "course"
@@ -397,8 +1555,7 @@
      "*/*"
     ],
     "produces": [
-     "application/json",
-     "*/*"
+     "application/json"
     ],
     "tags": [
      "course"
@@ -436,8 +1593,7 @@
      "*/*"
     ],
     "produces": [
-     "application/json",
-     "*/*"
+     "application/json"
     ],
     "tags": [
      "course"
@@ -475,8 +1631,7 @@
      "*/*"
     ],
     "produces": [
-     "application/json",
-     "*/*"
+     "application/json"
     ],
     "tags": [
      "course"
@@ -496,7 +1651,7 @@
      "200": {
       "description": "OK",
       "schema": {
-       "$ref": "#/definitions/__umi__.api.Course"
+       "$ref": "#/definitions/__umi__.dao.Course"
       }
      },
      "400": {
@@ -513,8 +1668,7 @@
      "*/*"
     ],
     "produces": [
-     "application/json",
-     "*/*"
+     "application/json"
     ],
     "tags": [
      "course"
@@ -559,8 +1713,7 @@
      "*/*"
     ],
     "produces": [
-     "application/json",
-     "*/*"
+     "application/json"
     ],
     "tags": [
      "course"
@@ -599,8 +1752,7 @@
      "*/*"
     ],
     "produces": [
-     "application/json",
-     "*/*"
+     "application/json"
     ],
     "tags": [
      "file"
@@ -628,8 +1780,7 @@
      "*/*"
     ],
     "produces": [
-     "application/json",
-     "*/*"
+     "application/json"
     ],
     "tags": [
      "file"
@@ -663,12 +1814,10 @@
   "/api/v1/geographic/city/{province}": {
    "get": {
     "consumes": [
-     "application/json",
-     "*/*"
+     "application/json"
     ],
     "produces": [
-     "application/json",
-     "*/*"
+     "application/json"
     ],
     "tags": [
      "geographic"
@@ -702,12 +1851,10 @@
   "/api/v1/geographic/province": {
    "get": {
     "consumes": [
-     "application/json",
-     "*/*"
+     "application/json"
     ],
     "produces": [
-     "application/json",
-     "*/*"
+     "application/json"
     ],
     "tags": [
      "geographic"
@@ -736,8 +1883,7 @@
      "*/*"
     ],
     "produces": [
-     "application/json",
-     "*/*"
+     "application/json"
     ],
     "tags": [
      "good"
@@ -806,8 +1952,7 @@
      "*/*"
     ],
     "produces": [
-     "application/json",
-     "*/*"
+     "application/json"
     ],
     "tags": [
      "good"
@@ -846,8 +1991,7 @@
      "*/*"
     ],
     "produces": [
-     "application/json",
-     "*/*"
+     "application/json"
     ],
     "tags": [
      "holiday"
@@ -914,8 +2058,7 @@
      "*/*"
     ],
     "produces": [
-     "application/json",
-     "*/*"
+     "application/json"
     ],
     "tags": [
      "holiday"
@@ -953,8 +2096,7 @@
      "*/*"
     ],
     "produces": [
-     "application/json",
-     "*/*"
+     "application/json"
     ],
     "tags": [
      "holiday"
@@ -992,8 +2134,7 @@
      "*/*"
     ],
     "produces": [
-     "application/json",
-     "*/*"
+     "application/json"
     ],
     "tags": [
      "holiday"
@@ -1013,7 +2154,7 @@
      "200": {
       "description": "OK",
       "schema": {
-       "$ref": "#/definitions/__umi__.api.Holiday"
+       "$ref": "#/definitions/__umi__.dao.Holiday"
       }
      },
      "400": {
@@ -1030,8 +2171,7 @@
      "*/*"
     ],
     "produces": [
-     "application/json",
-     "*/*"
+     "application/json"
     ],
     "tags": [
      "holiday"
@@ -1063,6 +2203,252 @@
     }
    }
   },
+  "/api/v1/logs/org/{org-id}": {
+   "get": {
+    "consumes": [
+     "application/json",
+     "*/*"
+    ],
+    "produces": [
+     "application/json"
+    ],
+    "tags": [
+     "log"
+    ],
+    "summary": "查看机构日志",
+    "operationId": "listLog",
+    "parameters": [
+     {
+      "type": "integer",
+      "description": "org id",
+      "name": "org-id",
+      "in": "path",
+      "required": true
+     },
+     {
+      "type": "string",
+      "description": "按月查询时间(2006-01)",
+      "name": "time",
+      "in": "query"
+     },
+     {
+      "type": "string",
+      "description": "query",
+      "name": "query",
+      "in": "query"
+     },
+     {
+      "maximum": 500,
+      "type": "integer",
+      "default": 10,
+      "description": "page size",
+      "name": "pageSize",
+      "in": "query"
+     },
+     {
+      "type": "integer",
+      "default": 1,
+      "description": "current page number, start at 1(defualt)",
+      "name": "current",
+      "in": "query"
+     },
+     {
+      "type": "string",
+      "description": "column name",
+      "name": "sorter",
+      "in": "query"
+     },
+     {
+      "enum": [
+       "asc",
+       "desc"
+      ],
+      "type": "string",
+      "description": "asc(default)/desc",
+      "name": "order",
+      "in": "query"
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "OK",
+      "schema": {
+       "$ref": "#/definitions/__umi__.log.listOutput"
+      }
+     },
+     "400": {
+      "description": "Bad Request",
+      "schema": {
+       "$ref": "#/definitions/__umi__.Response400"
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/logs/teacher/{teacher-id}": {
+   "get": {
+    "consumes": [
+     "application/json",
+     "*/*"
+    ],
+    "produces": [
+     "application/json"
+    ],
+    "tags": [
+     "log"
+    ],
+    "summary": "查看老师日志",
+    "operationId": "listLog",
+    "parameters": [
+     {
+      "type": "integer",
+      "description": "teacher id",
+      "name": "teacher-id",
+      "in": "path",
+      "required": true
+     },
+     {
+      "type": "string",
+      "description": "按月查询时间(2006-01)",
+      "name": "time",
+      "in": "query"
+     },
+     {
+      "type": "string",
+      "description": "query",
+      "name": "query",
+      "in": "query"
+     },
+     {
+      "maximum": 500,
+      "type": "integer",
+      "default": 10,
+      "description": "page size",
+      "name": "pageSize",
+      "in": "query"
+     },
+     {
+      "type": "integer",
+      "default": 1,
+      "description": "current page number, start at 1(defualt)",
+      "name": "current",
+      "in": "query"
+     },
+     {
+      "type": "string",
+      "description": "column name",
+      "name": "sorter",
+      "in": "query"
+     },
+     {
+      "enum": [
+       "asc",
+       "desc"
+      ],
+      "type": "string",
+      "description": "asc(default)/desc",
+      "name": "order",
+      "in": "query"
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "OK",
+      "schema": {
+       "$ref": "#/definitions/__umi__.log.listOutput"
+      }
+     },
+     "400": {
+      "description": "Bad Request",
+      "schema": {
+       "$ref": "#/definitions/__umi__.Response400"
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/logs/user/{user-id}": {
+   "get": {
+    "consumes": [
+     "application/json",
+     "*/*"
+    ],
+    "produces": [
+     "application/json"
+    ],
+    "tags": [
+     "log"
+    ],
+    "summary": "查看用户日志",
+    "operationId": "listLog",
+    "parameters": [
+     {
+      "type": "integer",
+      "description": "user id",
+      "name": "user-id",
+      "in": "path",
+      "required": true
+     },
+     {
+      "type": "string",
+      "description": "按月查询时间(2006-01)",
+      "name": "time",
+      "in": "query"
+     },
+     {
+      "type": "string",
+      "description": "query",
+      "name": "query",
+      "in": "query"
+     },
+     {
+      "maximum": 500,
+      "type": "integer",
+      "default": 10,
+      "description": "page size",
+      "name": "pageSize",
+      "in": "query"
+     },
+     {
+      "type": "integer",
+      "default": 1,
+      "description": "current page number, start at 1(defualt)",
+      "name": "current",
+      "in": "query"
+     },
+     {
+      "type": "string",
+      "description": "column name",
+      "name": "sorter",
+      "in": "query"
+     },
+     {
+      "enum": [
+       "asc",
+       "desc"
+      ],
+      "type": "string",
+      "description": "asc(default)/desc",
+      "name": "order",
+      "in": "query"
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "OK",
+      "schema": {
+       "$ref": "#/definitions/__umi__.log.listOutput"
+      }
+     },
+     "400": {
+      "description": "Bad Request",
+      "schema": {
+       "$ref": "#/definitions/__umi__.Response400"
+      }
+     }
+    }
+   }
+  },
   "/api/v1/notices": {
    "get": {
     "consumes": [
@@ -1070,8 +2456,7 @@
      "*/*"
     ],
     "produces": [
-     "application/json",
-     "*/*"
+     "application/json"
     ],
     "tags": [
      "notice"
@@ -1137,8 +2522,7 @@
      "*/*"
     ],
     "produces": [
-     "application/json",
-     "*/*"
+     "application/json"
     ],
     "tags": [
      "notice"
@@ -1177,18 +2561,17 @@
      "*/*"
     ],
     "produces": [
-     "application/json",
-     "*/*"
+     "application/json"
     ],
     "tags": [
      "order"
     ],
-    "summary": "search/list orders",
+    "summary": "search/list orders acl(login)",
     "operationId": "listOrder",
     "parameters": [
      {
       "type": "string",
-      "description": "query",
+      "description": "status=pay_success|pay_failure",
       "name": "query",
       "in": "query"
      },
@@ -1245,13 +2628,12 @@
      "*/*"
     ],
     "produces": [
-     "application/json",
-     "*/*"
+     "application/json"
     ],
     "tags": [
      "order"
     ],
-    "summary": "create order",
+    "summary": "create order acl(forbidden)",
     "operationId": "createOrder",
     "parameters": [
      {
@@ -1284,13 +2666,12 @@
      "*/*"
     ],
     "produces": [
-     "application/json",
-     "*/*"
+     "application/json"
     ],
     "tags": [
      "order"
     ],
-    "summary": "delete orders",
+    "summary": "delete orders acl(forbidden)",
     "operationId": "deleteOrders",
     "parameters": [
      {
@@ -1323,13 +2704,12 @@
      "*/*"
     ],
     "produces": [
-     "application/json",
-     "*/*"
+     "application/json"
     ],
     "tags": [
      "order"
     ],
-    "summary": "get order",
+    "summary": "get order acl(login)",
     "operationId": "getOrder",
     "parameters": [
      {
@@ -1344,7 +2724,7 @@
      "200": {
       "description": "OK",
       "schema": {
-       "$ref": "#/definitions/__umi__.api.Order"
+       "$ref": "#/definitions/__umi__.dao.Order"
       }
      },
      "400": {
@@ -1361,13 +2741,12 @@
      "*/*"
     ],
     "produces": [
-     "application/json",
-     "*/*"
+     "application/json"
     ],
     "tags": [
      "order"
     ],
-    "summary": "update order",
+    "summary": "update order acl(forbidden)",
     "operationId": "updateOrder",
     "parameters": [
      {
@@ -1407,13 +2786,12 @@
      "*/*"
     ],
     "produces": [
-     "application/json",
-     "*/*"
+     "application/json"
     ],
     "tags": [
      "order"
     ],
-    "summary": "delete order",
+    "summary": "delete order acl(forbidden)",
     "operationId": "deleteOrder",
     "parameters": [
      {
@@ -1447,8 +2825,7 @@
      "*/*"
     ],
     "produces": [
-     "application/json",
-     "*/*"
+     "application/json"
     ],
     "tags": [
      "org"
@@ -1515,8 +2892,7 @@
      "*/*"
     ],
     "produces": [
-     "application/json",
-     "*/*"
+     "application/json"
     ],
     "tags": [
      "org"
@@ -1554,8 +2930,7 @@
      "*/*"
     ],
     "produces": [
-     "application/json",
-     "*/*"
+     "application/json"
     ],
     "tags": [
      "org"
@@ -1593,8 +2968,7 @@
      "*/*"
     ],
     "produces": [
-     "application/json",
-     "*/*"
+     "application/json"
     ],
     "tags": [
      "org"
@@ -1614,7 +2988,7 @@
      "200": {
       "description": "OK",
       "schema": {
-       "$ref": "#/definitions/__umi__.api.Org"
+       "$ref": "#/definitions/__umi__.dao.Org"
       }
      },
      "400": {
@@ -1631,8 +3005,7 @@
      "*/*"
     ],
     "produces": [
-     "application/json",
-     "*/*"
+     "application/json"
     ],
     "tags": [
      "org"
@@ -1677,8 +3050,7 @@
      "*/*"
     ],
     "produces": [
-     "application/json",
-     "*/*"
+     "application/json"
     ],
     "tags": [
      "org"
@@ -1717,8 +3089,7 @@
      "*/*"
     ],
     "produces": [
-     "application/json",
-     "*/*"
+     "application/json"
     ],
     "tags": [
      "payment"
@@ -1785,8 +3156,7 @@
      "*/*"
     ],
     "produces": [
-     "application/json",
-     "*/*"
+     "application/json"
     ],
     "tags": [
      "payment"
@@ -1824,8 +3194,7 @@
      "*/*"
     ],
     "produces": [
-     "application/json",
-     "*/*"
+     "application/json"
     ],
     "tags": [
      "payment"
@@ -1863,8 +3232,7 @@
      "*/*"
     ],
     "produces": [
-     "application/json",
-     "*/*"
+     "application/json"
     ],
     "tags": [
      "payment"
@@ -1884,7 +3252,7 @@
      "200": {
       "description": "OK",
       "schema": {
-       "$ref": "#/definitions/__umi__.api.Payment"
+       "$ref": "#/definitions/__umi__.dao.Payment"
       }
      },
      "400": {
@@ -1901,8 +3269,7 @@
      "*/*"
     ],
     "produces": [
-     "application/json",
-     "*/*"
+     "application/json"
     ],
     "tags": [
      "payment"
@@ -1947,8 +3314,7 @@
      "*/*"
     ],
     "produces": [
-     "application/json",
-     "*/*"
+     "application/json"
     ],
     "tags": [
      "payment"
@@ -1987,13 +3353,12 @@
      "*/*"
     ],
     "produces": [
-     "application/json",
-     "*/*"
+     "application/json"
     ],
     "tags": [
      "refund"
     ],
-    "summary": "search/list refunds",
+    "summary": "search/list refunds acl(login)",
     "operationId": "listRefund",
     "parameters": [
      {
@@ -2055,13 +3420,12 @@
      "*/*"
     ],
     "produces": [
-     "application/json",
-     "*/*"
+     "application/json"
     ],
     "tags": [
      "refund"
     ],
-    "summary": "create refund",
+    "summary": "create refund acl(login)",
     "operationId": "createRefund",
     "parameters": [
      {
@@ -2094,13 +3458,12 @@
      "*/*"
     ],
     "produces": [
-     "application/json",
-     "*/*"
+     "application/json"
     ],
     "tags": [
      "refund"
     ],
-    "summary": "delete refunds",
+    "summary": "delete refunds acl(forbidden)",
     "operationId": "deleteRefunds",
     "parameters": [
      {
@@ -2133,13 +3496,12 @@
      "*/*"
     ],
     "produces": [
-     "application/json",
-     "*/*"
+     "application/json"
     ],
     "tags": [
      "refund"
     ],
-    "summary": "get refund",
+    "summary": "get refund acl(login)",
     "operationId": "getRefund",
     "parameters": [
      {
@@ -2154,7 +3516,7 @@
      "200": {
       "description": "OK",
       "schema": {
-       "$ref": "#/definitions/__umi__.api.Refund"
+       "$ref": "#/definitions/__umi__.dao.Refund"
       }
      },
      "400": {
@@ -2171,13 +3533,12 @@
      "*/*"
     ],
     "produces": [
-     "application/json",
-     "*/*"
+     "application/json"
     ],
     "tags": [
      "refund"
     ],
-    "summary": "update refund",
+    "summary": "update refund acl(forbidden)",
     "operationId": "updateRefund",
     "parameters": [
      {
@@ -2217,13 +3578,12 @@
      "*/*"
     ],
     "produces": [
-     "application/json",
-     "*/*"
+     "application/json"
     ],
     "tags": [
      "refund"
     ],
-    "summary": "delete refund",
+    "summary": "delete refund acl(forbidden)",
     "operationId": "deleteRefund",
     "parameters": [
      {
@@ -2257,8 +3617,7 @@
      "*/*"
     ],
     "produces": [
-     "application/json",
-     "*/*"
+     "application/json"
     ],
     "tags": [
      "sku"
@@ -2325,8 +3684,7 @@
      "*/*"
     ],
     "produces": [
-     "application/json",
-     "*/*"
+     "application/json"
     ],
     "tags": [
      "sku"
@@ -2364,8 +3722,7 @@
      "*/*"
     ],
     "produces": [
-     "application/json",
-     "*/*"
+     "application/json"
     ],
     "tags": [
      "sku"
@@ -2403,8 +3760,7 @@
      "*/*"
     ],
     "produces": [
-     "application/json",
-     "*/*"
+     "application/json"
     ],
     "tags": [
      "sku"
@@ -2424,7 +3780,7 @@
      "200": {
       "description": "OK",
       "schema": {
-       "$ref": "#/definitions/__umi__.api.Sku"
+       "$ref": "#/definitions/__umi__.dao.Sku"
       }
      },
      "400": {
@@ -2441,8 +3797,7 @@
      "*/*"
     ],
     "produces": [
-     "application/json",
-     "*/*"
+     "application/json"
     ],
     "tags": [
      "sku"
@@ -2487,8 +3842,7 @@
      "*/*"
     ],
     "produces": [
-     "application/json",
-     "*/*"
+     "application/json"
     ],
     "tags": [
      "sku"
@@ -2520,276 +3874,6 @@
     }
    }
   },
-  "/api/v1/spus": {
-   "get": {
-    "consumes": [
-     "application/json",
-     "*/*"
-    ],
-    "produces": [
-     "application/json",
-     "*/*"
-    ],
-    "tags": [
-     "spu"
-    ],
-    "summary": "search/list spus",
-    "operationId": "listSpu",
-    "parameters": [
-     {
-      "type": "string",
-      "description": "query",
-      "name": "query",
-      "in": "query"
-     },
-     {
-      "maximum": 500,
-      "type": "integer",
-      "default": 10,
-      "description": "page size",
-      "name": "pageSize",
-      "in": "query"
-     },
-     {
-      "type": "integer",
-      "default": 1,
-      "description": "current page number, start at 1(defualt)",
-      "name": "current",
-      "in": "query"
-     },
-     {
-      "type": "string",
-      "description": "column name",
-      "name": "sorter",
-      "in": "query"
-     },
-     {
-      "enum": [
-       "asc",
-       "desc"
-      ],
-      "type": "string",
-      "description": "asc(default)/desc",
-      "name": "order",
-      "in": "query"
-     }
-    ],
-    "responses": {
-     "200": {
-      "description": "OK",
-      "schema": {
-       "$ref": "#/definitions/__umi__.spu.listOutput"
-      }
-     },
-     "400": {
-      "description": "Bad Request",
-      "schema": {
-       "$ref": "#/definitions/__umi__.Response400"
-      }
-     }
-    }
-   },
-   "post": {
-    "consumes": [
-     "application/json",
-     "*/*"
-    ],
-    "produces": [
-     "application/json",
-     "*/*"
-    ],
-    "tags": [
-     "spu"
-    ],
-    "summary": "create spu",
-    "operationId": "createSpu",
-    "parameters": [
-     {
-      "name": "body",
-      "in": "body",
-      "required": true,
-      "schema": {
-       "$ref": "#/definitions/spu.createRequest"
-      }
-     }
-    ],
-    "responses": {
-     "200": {
-      "description": "OK",
-      "schema": {
-       "$ref": "#/definitions/__umi__.Response200"
-      }
-     },
-     "400": {
-      "description": "Bad Request",
-      "schema": {
-       "$ref": "#/definitions/__umi__.Response400"
-      }
-     }
-    }
-   },
-   "delete": {
-    "consumes": [
-     "application/json",
-     "*/*"
-    ],
-    "produces": [
-     "application/json",
-     "*/*"
-    ],
-    "tags": [
-     "spu"
-    ],
-    "summary": "delete spu",
-    "operationId": "deleteSpus",
-    "parameters": [
-     {
-      "type": "string",
-      "description": "spu id",
-      "name": "id",
-      "in": "query"
-     }
-    ],
-    "responses": {
-     "200": {
-      "description": "OK",
-      "schema": {
-       "$ref": "#/definitions/__umi__.Response200"
-      }
-     },
-     "400": {
-      "description": "Bad Request",
-      "schema": {
-       "$ref": "#/definitions/__umi__.Response400"
-      }
-     }
-    }
-   }
-  },
-  "/api/v1/spus/{id}": {
-   "get": {
-    "consumes": [
-     "application/json",
-     "*/*"
-    ],
-    "produces": [
-     "application/json",
-     "*/*"
-    ],
-    "tags": [
-     "spu"
-    ],
-    "summary": "get spu",
-    "operationId": "getSpu",
-    "parameters": [
-     {
-      "type": "integer",
-      "description": "spu id",
-      "name": "id",
-      "in": "path",
-      "required": true
-     }
-    ],
-    "responses": {
-     "200": {
-      "description": "OK",
-      "schema": {
-       "$ref": "#/definitions/__umi__.api.Spu"
-      }
-     },
-     "400": {
-      "description": "Bad Request",
-      "schema": {
-       "$ref": "#/definitions/__umi__.Response400"
-      }
-     }
-    }
-   },
-   "put": {
-    "consumes": [
-     "application/json",
-     "*/*"
-    ],
-    "produces": [
-     "application/json",
-     "*/*"
-    ],
-    "tags": [
-     "spu"
-    ],
-    "summary": "update spu",
-    "operationId": "updateSpu",
-    "parameters": [
-     {
-      "type": "integer",
-      "description": "spu id",
-      "name": "id",
-      "in": "path",
-      "required": true
-     },
-     {
-      "name": "body",
-      "in": "body",
-      "required": true,
-      "schema": {
-       "$ref": "#/definitions/spu.updateRequest"
-      }
-     }
-    ],
-    "responses": {
-     "200": {
-      "description": "OK",
-      "schema": {
-       "$ref": "#/definitions/__umi__.Response200"
-      }
-     },
-     "400": {
-      "description": "Bad Request",
-      "schema": {
-       "$ref": "#/definitions/__umi__.Response400"
-      }
-     }
-    }
-   },
-   "delete": {
-    "consumes": [
-     "application/json",
-     "*/*"
-    ],
-    "produces": [
-     "application/json",
-     "*/*"
-    ],
-    "tags": [
-     "spu"
-    ],
-    "summary": "delete spu",
-    "operationId": "deleteSpu",
-    "parameters": [
-     {
-      "type": "integer",
-      "description": "spu id",
-      "name": "id",
-      "in": "path",
-      "required": true
-     }
-    ],
-    "responses": {
-     "200": {
-      "description": "OK",
-      "schema": {
-       "$ref": "#/definitions/__umi__.Response200"
-      }
-     },
-     "400": {
-      "description": "Bad Request",
-      "schema": {
-       "$ref": "#/definitions/__umi__.Response400"
-      }
-     }
-    }
-   }
-  },
   "/api/v1/students": {
    "get": {
     "consumes": [
@@ -2797,8 +3881,7 @@
      "*/*"
     ],
     "produces": [
-     "application/json",
-     "*/*"
+     "application/json"
     ],
     "tags": [
      "student"
@@ -2810,6 +3893,12 @@
       "type": "string",
       "description": "query",
       "name": "query",
+      "in": "query"
+     },
+     {
+      "type": "boolean",
+      "description": "显示所有学生，仅管理员使用",
+      "name": "all",
       "in": "query"
      },
      {
@@ -2865,8 +3954,7 @@
      "*/*"
     ],
     "produces": [
-     "application/json",
-     "*/*"
+     "application/json"
     ],
     "tags": [
      "student"
@@ -2887,7 +3975,7 @@
      "200": {
       "description": "OK",
       "schema": {
-       "$ref": "#/definitions/__umi__.Response200"
+       "$ref": "#/definitions/__umi__.dao.Student"
       }
      },
      "400": {
@@ -2906,8 +3994,7 @@
      "*/*"
     ],
     "produces": [
-     "application/json",
-     "*/*"
+     "application/json"
     ],
     "tags": [
      "student"
@@ -2927,7 +4014,7 @@
      "200": {
       "description": "OK",
       "schema": {
-       "$ref": "#/definitions/__umi__.api.Student"
+       "$ref": "#/definitions/__umi__.dao.Student"
       }
      },
      "400": {
@@ -2944,8 +4031,7 @@
      "*/*"
     ],
     "produces": [
-     "application/json",
-     "*/*"
+     "application/json"
     ],
     "tags": [
      "student"
@@ -2990,8 +4076,7 @@
      "*/*"
     ],
     "produces": [
-     "application/json",
-     "*/*"
+     "application/json"
     ],
     "tags": [
      "student"
@@ -3026,12 +4111,10 @@
   "/api/v1/teachers": {
    "get": {
     "consumes": [
-     "application/json",
-     "*/*"
+     "application/json"
     ],
     "produces": [
-     "application/json",
-     "*/*"
+     "application/json"
     ],
     "tags": [
      "teacher"
@@ -3094,12 +4177,10 @@
    },
    "post": {
     "consumes": [
-     "application/json",
-     "*/*"
+     "application/json"
     ],
     "produces": [
-     "application/json",
-     "*/*"
+     "application/json"
     ],
     "tags": [
      "teacher"
@@ -3133,12 +4214,10 @@
    },
    "delete": {
     "consumes": [
-     "application/json",
-     "*/*"
+     "application/json"
     ],
     "produces": [
-     "application/json",
-     "*/*"
+     "application/json"
     ],
     "tags": [
      "teacher"
@@ -3172,12 +4251,10 @@
   "/api/v1/teachers/{id}": {
    "get": {
     "consumes": [
-     "application/json",
-     "*/*"
+     "application/json"
     ],
     "produces": [
-     "application/json",
-     "*/*"
+     "application/json"
     ],
     "tags": [
      "teacher"
@@ -3197,7 +4274,7 @@
      "200": {
       "description": "OK",
       "schema": {
-       "$ref": "#/definitions/__umi__.api.Teacher"
+       "$ref": "#/definitions/__umi__.dao.Teacher"
       }
      },
      "400": {
@@ -3210,12 +4287,10 @@
    },
    "put": {
     "consumes": [
-     "application/json",
-     "*/*"
+     "application/json"
     ],
     "produces": [
-     "application/json",
-     "*/*"
+     "application/json"
     ],
     "tags": [
      "teacher"
@@ -3256,12 +4331,10 @@
    },
    "delete": {
     "consumes": [
-     "application/json",
-     "*/*"
+     "application/json"
     ],
     "produces": [
-     "application/json",
-     "*/*"
+     "application/json"
     ],
     "tags": [
      "teacher"
@@ -3300,8 +4373,7 @@
      "*/*"
     ],
     "produces": [
-     "application/json",
-     "*/*"
+     "application/json"
     ],
     "tags": [
      "user"
@@ -3362,20 +4434,64 @@
      }
     }
    },
+   "put": {
+    "consumes": [
+     "application/json",
+     "*/*"
+    ],
+    "produces": [
+     "application/json"
+    ],
+    "tags": [
+     "user"
+    ],
+    "summary": "更新自己的信息 acl(login)",
+    "operationId": "updateSelf",
+    "parameters": [
+     {
+      "type": "integer",
+      "description": "user id",
+      "name": "id",
+      "in": "path",
+      "required": true
+     },
+     {
+      "name": "body",
+      "in": "body",
+      "required": true,
+      "schema": {
+       "$ref": "#/definitions/user.updateSelfRequest"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "OK",
+      "schema": {
+       "$ref": "#/definitions/__umi__.Response200"
+      }
+     },
+     "400": {
+      "description": "Bad Request",
+      "schema": {
+       "$ref": "#/definitions/__umi__.Response400"
+      }
+     }
+    }
+   },
    "post": {
     "consumes": [
      "application/json",
      "*/*"
     ],
     "produces": [
-     "application/json",
-     "*/*"
+     "application/json"
     ],
     "tags": [
      "user"
     ],
     "summary": "create user acl(admin)",
-    "operationId": "createUser",
+    "operationId": "create",
     "parameters": [
      {
       "name": "body",
@@ -3407,8 +4523,7 @@
      "*/*"
     ],
     "produces": [
-     "application/json",
-     "*/*"
+     "application/json"
     ],
     "tags": [
      "user"
@@ -3446,8 +4561,7 @@
      "*/*"
     ],
     "produces": [
-     "application/json",
-     "*/*"
+     "application/json"
     ],
     "tags": [
      "user"
@@ -3467,7 +4581,7 @@
      "200": {
       "description": "OK",
       "schema": {
-       "$ref": "#/definitions/__umi__.api.User"
+       "$ref": "#/definitions/__umi__.dao.User"
       }
      },
      "400": {
@@ -3484,8 +4598,7 @@
      "*/*"
     ],
     "produces": [
-     "application/json",
-     "*/*"
+     "application/json"
     ],
     "tags": [
      "user"
@@ -3530,8 +4643,7 @@
      "*/*"
     ],
     "produces": [
-     "application/json",
-     "*/*"
+     "application/json"
     ],
     "tags": [
      "user"
@@ -3619,25 +4731,6 @@
     }
    }
   },
-  "__umi__.api.Course": {
-   "required": [
-    "success"
-   ],
-   "properties": {
-    "data": {
-     "$ref": "#/definitions/api.Course"
-    },
-    "host": {
-     "type": "string"
-    },
-    "success": {
-     "type": "boolean"
-    },
-    "traceId": {
-     "type": "string"
-    }
-   }
-  },
   "__umi__.api.Good": {
    "required": [
     "success"
@@ -3657,184 +4750,13 @@
     }
    }
   },
-  "__umi__.api.Holiday": {
+  "__umi__.app.createOrderResponse": {
    "required": [
     "success"
    ],
    "properties": {
     "data": {
-     "$ref": "#/definitions/api.Holiday"
-    },
-    "host": {
-     "type": "string"
-    },
-    "success": {
-     "type": "boolean"
-    },
-    "traceId": {
-     "type": "string"
-    }
-   }
-  },
-  "__umi__.api.Order": {
-   "required": [
-    "success"
-   ],
-   "properties": {
-    "data": {
-     "$ref": "#/definitions/api.Order"
-    },
-    "host": {
-     "type": "string"
-    },
-    "success": {
-     "type": "boolean"
-    },
-    "traceId": {
-     "type": "string"
-    }
-   }
-  },
-  "__umi__.api.Org": {
-   "required": [
-    "success"
-   ],
-   "properties": {
-    "data": {
-     "$ref": "#/definitions/api.Org"
-    },
-    "host": {
-     "type": "string"
-    },
-    "success": {
-     "type": "boolean"
-    },
-    "traceId": {
-     "type": "string"
-    }
-   }
-  },
-  "__umi__.api.Payment": {
-   "required": [
-    "success"
-   ],
-   "properties": {
-    "data": {
-     "$ref": "#/definitions/api.Payment"
-    },
-    "host": {
-     "type": "string"
-    },
-    "success": {
-     "type": "boolean"
-    },
-    "traceId": {
-     "type": "string"
-    }
-   }
-  },
-  "__umi__.api.Refund": {
-   "required": [
-    "success"
-   ],
-   "properties": {
-    "data": {
-     "$ref": "#/definitions/api.Refund"
-    },
-    "host": {
-     "type": "string"
-    },
-    "success": {
-     "type": "boolean"
-    },
-    "traceId": {
-     "type": "string"
-    }
-   }
-  },
-  "__umi__.api.Sku": {
-   "required": [
-    "success"
-   ],
-   "properties": {
-    "data": {
-     "$ref": "#/definitions/api.Sku"
-    },
-    "host": {
-     "type": "string"
-    },
-    "success": {
-     "type": "boolean"
-    },
-    "traceId": {
-     "type": "string"
-    }
-   }
-  },
-  "__umi__.api.Spu": {
-   "required": [
-    "success"
-   ],
-   "properties": {
-    "data": {
-     "$ref": "#/definitions/api.Spu"
-    },
-    "host": {
-     "type": "string"
-    },
-    "success": {
-     "type": "boolean"
-    },
-    "traceId": {
-     "type": "string"
-    }
-   }
-  },
-  "__umi__.api.Student": {
-   "required": [
-    "success"
-   ],
-   "properties": {
-    "data": {
-     "$ref": "#/definitions/api.Student"
-    },
-    "host": {
-     "type": "string"
-    },
-    "success": {
-     "type": "boolean"
-    },
-    "traceId": {
-     "type": "string"
-    }
-   }
-  },
-  "__umi__.api.Teacher": {
-   "required": [
-    "success"
-   ],
-   "properties": {
-    "data": {
-     "$ref": "#/definitions/api.Teacher"
-    },
-    "host": {
-     "type": "string"
-    },
-    "success": {
-     "type": "boolean"
-    },
-    "traceId": {
-     "type": "string"
-    }
-   }
-  },
-  "__umi__.api.User": {
-   "required": [
-    "success"
-   ],
-   "properties": {
-    "data": {
-     "$ref": "#/definitions/api.User"
+     "$ref": "#/definitions/app.createOrderResponse"
     },
     "host": {
      "type": "string"
@@ -3866,6 +4788,63 @@
     }
    }
   },
+  "__umi__.app.listCommentResponse": {
+   "required": [
+    "success"
+   ],
+   "properties": {
+    "data": {
+     "$ref": "#/definitions/app.listCommentResponse"
+    },
+    "host": {
+     "type": "string"
+    },
+    "success": {
+     "type": "boolean"
+    },
+    "traceId": {
+     "type": "string"
+    }
+   }
+  },
+  "__umi__.app.listOrderResponse": {
+   "required": [
+    "success"
+   ],
+   "properties": {
+    "data": {
+     "$ref": "#/definitions/app.listOrderResponse"
+    },
+    "host": {
+     "type": "string"
+    },
+    "success": {
+     "type": "boolean"
+    },
+    "traceId": {
+     "type": "string"
+    }
+   }
+  },
+  "__umi__.app.rechargeOrderResponse": {
+   "required": [
+    "success"
+   ],
+   "properties": {
+    "data": {
+     "$ref": "#/definitions/app.rechargeOrderResponse"
+    },
+    "host": {
+     "type": "string"
+    },
+    "success": {
+     "type": "boolean"
+    },
+    "traceId": {
+     "type": "string"
+    }
+   }
+  },
   "__umi__.app.scheduleResponse": {
    "required": [
     "success"
@@ -3873,6 +4852,66 @@
    "properties": {
     "data": {
      "$ref": "#/definitions/app.scheduleResponse"
+    },
+    "host": {
+     "type": "string"
+    },
+    "success": {
+     "type": "boolean"
+    },
+    "traceId": {
+     "type": "string"
+    }
+   }
+  },
+  "__umi__.app.studentScheduleSummaryResponse": {
+   "required": [
+    "success"
+   ],
+   "properties": {
+    "data": {
+     "$ref": "#/definitions/app.studentScheduleSummaryResponse"
+    },
+    "host": {
+     "type": "string"
+    },
+    "success": {
+     "type": "boolean"
+    },
+    "traceId": {
+     "type": "string"
+    }
+   }
+  },
+  "__umi__.app.teacherScheduleSummaryResponse": {
+   "required": [
+    "success"
+   ],
+   "properties": {
+    "data": {
+     "$ref": "#/definitions/app.teacherScheduleSummaryResponse"
+    },
+    "host": {
+     "type": "string"
+    },
+    "success": {
+     "type": "boolean"
+    },
+    "traceId": {
+     "type": "string"
+    }
+   }
+  },
+  "__umi__.array.dao.BookedCourse": {
+   "required": [
+    "success"
+   ],
+   "properties": {
+    "data": {
+     "type": "array",
+     "items": {
+      "$ref": "#/definitions/dao.BookedCourse"
+     }
     },
     "host": {
      "type": "string"
@@ -3970,6 +5009,25 @@
     }
    }
   },
+  "__umi__.coupon.listOutput": {
+   "required": [
+    "success"
+   ],
+   "properties": {
+    "data": {
+     "$ref": "#/definitions/coupon.listOutput"
+    },
+    "host": {
+     "type": "string"
+    },
+    "success": {
+     "type": "boolean"
+    },
+    "traceId": {
+     "type": "string"
+    }
+   }
+  },
   "__umi__.course.listOutput": {
    "required": [
     "success"
@@ -3977,6 +5035,215 @@
    "properties": {
     "data": {
      "$ref": "#/definitions/course.listOutput"
+    },
+    "host": {
+     "type": "string"
+    },
+    "success": {
+     "type": "boolean"
+    },
+    "traceId": {
+     "type": "string"
+    }
+   }
+  },
+  "__umi__.dao.Coupon": {
+   "required": [
+    "success"
+   ],
+   "properties": {
+    "data": {
+     "$ref": "#/definitions/dao.Coupon"
+    },
+    "host": {
+     "type": "string"
+    },
+    "success": {
+     "type": "boolean"
+    },
+    "traceId": {
+     "type": "string"
+    }
+   }
+  },
+  "__umi__.dao.Course": {
+   "required": [
+    "success"
+   ],
+   "properties": {
+    "data": {
+     "$ref": "#/definitions/dao.Course"
+    },
+    "host": {
+     "type": "string"
+    },
+    "success": {
+     "type": "boolean"
+    },
+    "traceId": {
+     "type": "string"
+    }
+   }
+  },
+  "__umi__.dao.Holiday": {
+   "required": [
+    "success"
+   ],
+   "properties": {
+    "data": {
+     "$ref": "#/definitions/dao.Holiday"
+    },
+    "host": {
+     "type": "string"
+    },
+    "success": {
+     "type": "boolean"
+    },
+    "traceId": {
+     "type": "string"
+    }
+   }
+  },
+  "__umi__.dao.Order": {
+   "required": [
+    "success"
+   ],
+   "properties": {
+    "data": {
+     "$ref": "#/definitions/dao.Order"
+    },
+    "host": {
+     "type": "string"
+    },
+    "success": {
+     "type": "boolean"
+    },
+    "traceId": {
+     "type": "string"
+    }
+   }
+  },
+  "__umi__.dao.Org": {
+   "required": [
+    "success"
+   ],
+   "properties": {
+    "data": {
+     "$ref": "#/definitions/dao.Org"
+    },
+    "host": {
+     "type": "string"
+    },
+    "success": {
+     "type": "boolean"
+    },
+    "traceId": {
+     "type": "string"
+    }
+   }
+  },
+  "__umi__.dao.Payment": {
+   "required": [
+    "success"
+   ],
+   "properties": {
+    "data": {
+     "$ref": "#/definitions/dao.Payment"
+    },
+    "host": {
+     "type": "string"
+    },
+    "success": {
+     "type": "boolean"
+    },
+    "traceId": {
+     "type": "string"
+    }
+   }
+  },
+  "__umi__.dao.Refund": {
+   "required": [
+    "success"
+   ],
+   "properties": {
+    "data": {
+     "$ref": "#/definitions/dao.Refund"
+    },
+    "host": {
+     "type": "string"
+    },
+    "success": {
+     "type": "boolean"
+    },
+    "traceId": {
+     "type": "string"
+    }
+   }
+  },
+  "__umi__.dao.Sku": {
+   "required": [
+    "success"
+   ],
+   "properties": {
+    "data": {
+     "$ref": "#/definitions/dao.Sku"
+    },
+    "host": {
+     "type": "string"
+    },
+    "success": {
+     "type": "boolean"
+    },
+    "traceId": {
+     "type": "string"
+    }
+   }
+  },
+  "__umi__.dao.Student": {
+   "required": [
+    "success"
+   ],
+   "properties": {
+    "data": {
+     "$ref": "#/definitions/dao.Student"
+    },
+    "host": {
+     "type": "string"
+    },
+    "success": {
+     "type": "boolean"
+    },
+    "traceId": {
+     "type": "string"
+    }
+   }
+  },
+  "__umi__.dao.Teacher": {
+   "required": [
+    "success"
+   ],
+   "properties": {
+    "data": {
+     "$ref": "#/definitions/dao.Teacher"
+    },
+    "host": {
+     "type": "string"
+    },
+    "success": {
+     "type": "boolean"
+    },
+    "traceId": {
+     "type": "string"
+    }
+   }
+  },
+  "__umi__.dao.User": {
+   "required": [
+    "success"
+   ],
+   "properties": {
+    "data": {
+     "$ref": "#/definitions/dao.User"
     },
     "host": {
      "type": "string"
@@ -4034,6 +5301,25 @@
    "properties": {
     "data": {
      "$ref": "#/definitions/holiday.listOutput"
+    },
+    "host": {
+     "type": "string"
+    },
+    "success": {
+     "type": "boolean"
+    },
+    "traceId": {
+     "type": "string"
+    }
+   }
+  },
+  "__umi__.log.listOutput": {
+   "required": [
+    "success"
+   ],
+   "properties": {
+    "data": {
+     "$ref": "#/definitions/log.listOutput"
     },
     "host": {
      "type": "string"
@@ -4160,25 +5446,6 @@
     }
    }
   },
-  "__umi__.spu.listOutput": {
-   "required": [
-    "success"
-   ],
-   "properties": {
-    "data": {
-     "$ref": "#/definitions/spu.listOutput"
-    },
-    "host": {
-     "type": "string"
-    },
-    "success": {
-     "type": "boolean"
-    },
-    "traceId": {
-     "type": "string"
-    }
-   }
-  },
   "__umi__.student.listOutput": {
    "required": [
     "success"
@@ -4255,7 +5522,1099 @@
     }
    }
   },
-  "api.Course": {
+  "api.Color": {
+   "required": [
+    "r",
+    "g",
+    "b"
+   ],
+   "properties": {
+    "b": {
+     "type": "string"
+    },
+    "g": {
+     "type": "string"
+    },
+    "r": {
+     "type": "string"
+    }
+   }
+  },
+  "api.Good": {
+   "required": [
+    "spuId",
+    "orgId",
+    "title",
+    "description",
+    "images",
+    "video",
+    "available",
+    "org",
+    "teacher",
+    "sku"
+   ],
+   "properties": {
+    "available": {
+     "type": "boolean"
+    },
+    "description": {
+     "type": "string"
+    },
+    "images": {
+     "type": "array",
+     "items": {
+      "type": "string"
+     }
+    },
+    "org": {
+     "$ref": "#/definitions/dao.Org"
+    },
+    "orgId": {
+     "type": "integer",
+     "format": "int64"
+    },
+    "sku": {
+     "$ref": "#/definitions/dao.Sku"
+    },
+    "spuId": {
+     "type": "integer",
+     "format": "int64"
+    },
+    "teacher": {
+     "$ref": "#/definitions/dao.Teacher"
+    },
+    "title": {
+     "type": "string"
+    },
+    "video": {
+     "type": "string"
+    }
+   }
+  },
+  "app.Comment": {
+   "required": [
+    "id",
+    "bookedCourseId",
+    "courseName",
+    "courseCnt",
+    "comment",
+    "studentId",
+    "studentName",
+    "teacherId",
+    "teacherName",
+    "updatedAt",
+    "createdAt"
+   ],
+   "properties": {
+    "bookedCourseId": {
+     "description": "课程id",
+     "type": "integer",
+     "format": "int64"
+    },
+    "comment": {
+     "description": "评语内容",
+     "type": "string"
+    },
+    "courseCnt": {
+     "description": "课程数量",
+     "type": "integer",
+     "format": "int32"
+    },
+    "courseName": {
+     "description": "课程名称",
+     "type": "string"
+    },
+    "createdAt": {
+     "description": "创建时间",
+     "type": "integer",
+     "format": "int64"
+    },
+    "id": {
+     "description": "评语id",
+     "type": "integer",
+     "format": "int64"
+    },
+    "studentId": {
+     "description": "学生id",
+     "type": "integer",
+     "format": "int64"
+    },
+    "studentName": {
+     "description": "学生姓名",
+     "type": "string"
+    },
+    "teacherId": {
+     "description": "老师id",
+     "type": "integer",
+     "format": "int64"
+    },
+    "teacherName": {
+     "description": "老师姓名",
+     "type": "string"
+    },
+    "updatedAt": {
+     "description": "更新时间",
+     "type": "integer",
+     "format": "int64"
+    }
+   }
+  },
+  "app.CourseTime": {
+   "required": [
+    "start",
+    "stop",
+    "seq",
+    "name",
+    "teacherId",
+    "teacherName",
+    "studentId",
+    "studentName",
+    "teacherPhone",
+    "orgAddress"
+   ],
+   "properties": {
+    "name": {
+     "description": "课程名称",
+     "type": "string"
+    },
+    "orgAddress": {
+     "description": "机构地址",
+     "type": "string"
+    },
+    "seq": {
+     "type": "integer",
+     "format": "int32"
+    },
+    "start": {
+     "type": "integer",
+     "format": "int64"
+    },
+    "stop": {
+     "type": "integer",
+     "format": "int64"
+    },
+    "studentId": {
+     "description": "学生 id",
+     "type": "integer",
+     "format": "int64"
+    },
+    "studentName": {
+     "description": "学生名称",
+     "type": "string"
+    },
+    "teacherId": {
+     "description": "老师id",
+     "type": "integer",
+     "format": "int64"
+    },
+    "teacherName": {
+     "description": "老师名称",
+     "type": "string"
+    },
+    "teacherPhone": {
+     "description": "老师电话",
+     "type": "string"
+    }
+   }
+  },
+  "app.Good": {
+   "required": [
+    "GoodRequest",
+    "title",
+    "image",
+    "price",
+    "num",
+    "orgName",
+    "teacherName",
+    "totalPrice",
+    "totalPromotionAmount",
+    "totalGoodCount",
+    "totalAmount",
+    "settleType"
+   ],
+   "properties": {
+    "GoodRequest": {
+     "$ref": "#/definitions/app.GoodRequest"
+    },
+    "image": {
+     "description": "图片",
+     "type": "string"
+    },
+    "num": {
+     "description": "购买数量",
+     "type": "integer",
+     "format": "int32"
+    },
+    "orgName": {
+     "description": "机构名称",
+     "type": "string"
+    },
+    "price": {
+     "description": "原始价格",
+     "type": "integer",
+     "format": "int32"
+    },
+    "settleType": {
+     "type": "integer",
+     "format": "int32"
+    },
+    "teacherName": {
+     "description": "老师名称",
+     "type": "string"
+    },
+    "title": {
+     "description": "课程名称",
+     "type": "string"
+    },
+    "totalAmount": {
+     "description": "实际支付",
+     "type": "integer",
+     "format": "int32"
+    },
+    "totalGoodCount": {
+     "description": "总计多少课程",
+     "type": "integer",
+     "format": "int32"
+    },
+    "totalPrice": {
+     "description": "商品总额",
+     "type": "integer",
+     "format": "int32"
+    },
+    "totalPromotionAmount": {
+     "description": "活动优惠",
+     "type": "integer",
+     "format": "int32"
+    }
+   }
+  },
+  "app.GoodRequest": {
+   "required": [
+    "quantity",
+    "skuId",
+    "checked"
+   ],
+   "properties": {
+    "checked": {
+     "type": "boolean"
+    },
+    "quantity": {
+     "type": "integer",
+     "format": "int32"
+    },
+    "skuId": {
+     "type": "integer",
+     "format": "int64"
+    }
+   }
+  },
+  "app.Schedule": {
+   "required": [
+    "slected",
+    "checked"
+   ],
+   "properties": {
+    "checked": {
+     "type": "boolean"
+    },
+    "slected": {
+     "type": "array",
+     "items": {
+      "$ref": "#/definitions/app.Schedule.slected"
+     }
+    }
+   }
+  },
+  "app.Schedule.slected": {
+   "type": "array",
+   "items": {
+    "type": "integer"
+   }
+  },
+  "app.ScheduleDay": {
+   "required": [
+    "date",
+    "dateRemark",
+    "course",
+    "bookedCourse"
+   ],
+   "properties": {
+    "bookedCourse": {
+     "type": "array",
+     "items": {
+      "$ref": "#/definitions/app.CourseTime"
+     }
+    },
+    "course": {
+     "type": "array",
+     "items": {
+      "$ref": "#/definitions/app.CourseTime"
+     }
+    },
+    "date": {
+     "type": "integer",
+     "format": "int64"
+    },
+    "dateRemark": {
+     "type": "string"
+    }
+   }
+  },
+  "app.Student": {
+   "required": [
+    "creator",
+    "updatedAt",
+    "id",
+    "name",
+    "isDefault",
+    "idNum",
+    "createdAt",
+    "displayName",
+    "owner",
+    "phone",
+    "checked"
+   ],
+   "properties": {
+    "checked": {
+     "type": "boolean"
+    },
+    "createdAt": {
+     "type": "integer",
+     "format": "int64"
+    },
+    "creator": {
+     "type": "string"
+    },
+    "displayName": {
+     "description": "学生显示名称",
+     "type": "string"
+    },
+    "id": {
+     "description": "id",
+     "type": "integer",
+     "format": "int64"
+    },
+    "idNum": {
+     "description": "学生身份证",
+     "type": "string"
+    },
+    "isDefault": {
+     "description": "is default",
+     "type": "integer",
+     "format": "int32"
+    },
+    "name": {
+     "description": "学生账号名",
+     "type": "string"
+    },
+    "owner": {
+     "description": "家长",
+     "type": "string"
+    },
+    "phone": {
+     "type": "string"
+    },
+    "updatedAt": {
+     "type": "integer",
+     "format": "int64"
+    }
+   }
+  },
+  "app.createOrderRequest": {
+   "required": [
+    "comment",
+    "count",
+    "skuId",
+    "couponId",
+    "selectedCourse",
+    "date",
+    "studentId",
+    "totalAmount"
+   ],
+   "properties": {
+    "comment": {
+     "description": "备注信息",
+     "type": "string"
+    },
+    "count": {
+     "description": "购买课程的数量",
+     "type": "integer",
+     "format": "int32"
+    },
+    "couponId": {
+     "description": "优惠券id",
+     "type": "integer",
+     "format": "int64"
+    },
+    "date": {
+     "description": "开始上课时间时间, 格式 timestamp, 单位秒",
+     "type": "integer",
+     "format": "int64"
+    },
+    "selectedCourse": {
+     "description": "选择的课程, 礼拜天:0, 礼拜一: 1, ..., 第一节课是0， 第二节课是2， 以此类推",
+     "type": "array",
+     "items": {
+      "$ref": "#/definitions/app.createOrderRequest.selectedCourse"
+     }
+    },
+    "skuId": {
+     "description": "sku id",
+     "type": "integer",
+     "format": "int64"
+    },
+    "studentId": {
+     "description": "学生id",
+     "type": "integer",
+     "format": "int64"
+    },
+    "totalAmount": {
+     "description": "总价",
+     "type": "integer",
+     "format": "int64"
+    }
+   }
+  },
+  "app.createOrderRequest.selectedCourse": {
+   "type": "array",
+   "items": {
+    "type": "integer"
+   }
+  },
+  "app.createOrderResponse": {
+   "required": [
+    "orderNo",
+    "totalAmount",
+    "prepayResp"
+   ],
+   "properties": {
+    "orderNo": {
+     "description": "订单号",
+     "type": "string"
+    },
+    "prepayResp": {
+     "description": "微信的订单详情，用于微信提交支付",
+     "$ref": "#/definitions/jsapi.PrepayWithRequestPaymentResponse"
+    },
+    "totalAmount": {
+     "description": "总价",
+     "type": "integer",
+     "format": "int64"
+    }
+   }
+  },
+  "app.createRefundRequest": {
+   "required": [
+    "orderNo",
+    "reason"
+   ],
+   "properties": {
+    "orderNo": {
+     "description": "订单号",
+     "type": "string"
+    },
+    "reason": {
+     "description": "退款原因",
+     "type": "string"
+    }
+   }
+  },
+  "app.fetchSettleDetailRequest": {
+   "required": [
+    "good",
+    "student",
+    "schedule"
+   ],
+   "properties": {
+    "good": {
+     "$ref": "#/definitions/app.Good"
+    },
+    "schedule": {
+     "$ref": "#/definitions/app.Schedule"
+    },
+    "student": {
+     "$ref": "#/definitions/app.Student"
+    }
+   }
+  },
+  "app.fetchSettleDetailResponse": {
+   "properties": {
+    "good": {
+     "$ref": "#/definitions/app.Good"
+    },
+    "schedule": {
+     "$ref": "#/definitions/app.Schedule"
+    },
+    "student": {
+     "$ref": "#/definitions/app.Student"
+    }
+   }
+  },
+  "app.getUserQrcodeRequest": {
+   "required": [
+    "check_path"
+   ],
+   "properties": {
+    "auto_color": {
+     "description": "自动配置线条颜色，如果颜色依然是黑色，则说明不建议配置主色调，默认 false",
+     "type": "boolean"
+    },
+    "check_path": {
+     "description": "默认是true，检查page 是否存在，为 true 时 page 必须是已经发布的小程序存在的页面（否则报错）；为 false 时允许小程序未发布或者 page 不存在， 但page 有数量上限（60000个）请勿滥用。",
+     "type": "boolean"
+    },
+    "env_version": {
+     "description": "要打开的小程序版本。正式版为\"release\"，体验版为 \"trial\"，开发版为 \"develop\"。默认是正式版。",
+     "type": "string"
+    },
+    "is_hyaline": {
+     "description": "默认是false，是否需要透明底色，为 true 时，生成透明底色的小程序",
+     "type": "boolean"
+    },
+    "line_color": {
+     "description": "默认是{'r':0,'g':0,'b':0} 。auto_color 为 false 时生效，使用 rgb 设置颜色 例如 {'r':'xxx','g':'xxx','b':'xxx'} 十进制表示",
+     "$ref": "#/definitions/api.Color"
+    },
+    "page": {
+     "description": "默认是主页，页面 page，例如 pages/index/index，根路径前不要填加 /，不能携带参数（参数请放在scene字段里），如果不填写这个字段，默认跳主页面。scancode_time为系统保留参数，不允许配置",
+     "type": "string"
+    },
+    "width": {
+     "description": "默认430，二维码的宽度，单位 px，最小 280px，最大 1280px",
+     "type": "integer",
+     "format": "int32"
+    }
+   }
+  },
+  "app.listCommentResponse": {
+   "required": [
+    "list",
+    "total"
+   ],
+   "properties": {
+    "list": {
+     "type": "array",
+     "items": {
+      "$ref": "#/definitions/app.Comment"
+     }
+    },
+    "total": {
+     "type": "integer",
+     "format": "int32"
+    }
+   }
+  },
+  "app.listOrderResponse": {
+   "required": [
+    "list",
+    "total"
+   ],
+   "properties": {
+    "list": {
+     "type": "array",
+     "items": {
+      "$ref": "#/definitions/dao.Order"
+     }
+    },
+    "total": {
+     "type": "integer",
+     "format": "int32"
+    }
+   }
+  },
+  "app.rechargeOrderRequest": {
+   "required": [
+    "orderNo",
+    "comment",
+    "couponId",
+    "count",
+    "totalAmount"
+   ],
+   "properties": {
+    "comment": {
+     "description": "备注信息",
+     "type": "string"
+    },
+    "count": {
+     "description": "续费课程的数量",
+     "type": "integer",
+     "format": "int32"
+    },
+    "couponId": {
+     "description": "优惠券id",
+     "type": "integer",
+     "format": "int64"
+    },
+    "orderNo": {
+     "description": "续费的原始订单号",
+     "type": "string"
+    },
+    "totalAmount": {
+     "description": "总价",
+     "type": "integer",
+     "format": "int64"
+    }
+   }
+  },
+  "app.rechargeOrderResponse": {
+   "required": [
+    "orderNo",
+    "totalAmount",
+    "prepayResp"
+   ],
+   "properties": {
+    "orderNo": {
+     "description": "订单号",
+     "type": "string"
+    },
+    "prepayResp": {
+     "description": "微信的订单详情，用于微信提交支付",
+     "$ref": "#/definitions/jsapi.PrepayWithRequestPaymentResponse"
+    },
+    "totalAmount": {
+     "description": "总价",
+     "type": "integer",
+     "format": "int64"
+    }
+   }
+  },
+  "app.scheduleResponse": {
+   "required": [
+    "type",
+    "date",
+    "data"
+   ],
+   "properties": {
+    "data": {
+     "type": "array",
+     "items": {
+      "$ref": "#/definitions/app.ScheduleDay"
+     }
+    },
+    "date": {
+     "type": "integer",
+     "format": "int64"
+    },
+    "type": {
+     "type": "string"
+    }
+   }
+  },
+  "app.setCommentRequest": {
+   "required": [
+    "bookedCourseId",
+    "comment"
+   ],
+   "properties": {
+    "bookedCourseId": {
+     "description": "课程id号，为时间范围内的第一节课",
+     "type": "integer",
+     "format": "int64"
+    },
+    "comment": {
+     "description": "老师评语",
+     "type": "string"
+    }
+   }
+  },
+  "app.studentScheduleSummaryResponse": {
+   "required": [
+    "data"
+   ],
+   "properties": {
+    "data": {
+     "type": "array",
+     "items": {
+      "$ref": "#/definitions/dao.StudentScheduleSummary"
+     }
+    }
+   }
+  },
+  "app.teacherScheduleSummaryResponse": {
+   "required": [
+    "data"
+   ],
+   "properties": {
+    "data": {
+     "type": "array",
+     "items": {
+      "$ref": "#/definitions/dao.TeacherScheduleSummary"
+     }
+    }
+   }
+  },
+  "app.updateUserPhoneNumberRequest": {
+   "required": [
+    "code"
+   ],
+   "properties": {
+    "code": {
+     "description": "手机号获取凭证 https://developers.weixin.qq.com/miniprogram/dev/OpenApiDoc/user-info/phone-number/getPhoneNumber.html",
+     "type": "string"
+    }
+   }
+  },
+  "auth.LoginRequest": {
+   "required": [
+    "type",
+    "autoLogin",
+    "username",
+    "password",
+    "phone",
+    "captcha",
+    "code",
+    "state"
+   ],
+   "properties": {
+    "autoLogin": {
+     "description": "自动登陆",
+     "type": "boolean"
+    },
+    "captcha": {
+     "description": "手机验证码",
+     "type": "string"
+    },
+    "code": {
+     "description": "oauth2 code, https://developers.weixin.qq.com/miniprogram/dev/framework/open-ability/login.html",
+     "type": "string"
+    },
+    "password": {
+     "type": "string"
+    },
+    "phone": {
+     "description": "手机号，用于手机验证码登陆",
+     "type": "string"
+    },
+    "state": {
+     "description": "oauth2 state",
+     "type": "string"
+    },
+    "type": {
+     "description": "登陆类型",
+     "type": "string",
+     "enum": [
+      "miniprogram",
+      "weixin",
+      "password",
+      "phone"
+     ]
+    },
+    "username": {
+     "type": "string"
+    }
+   }
+  },
+  "auth.captchaRequest": {
+   "required": [
+    "phone"
+   ],
+   "properties": {
+    "phone": {
+     "type": "string"
+    }
+   }
+  },
+  "auth.captchaResponse": {
+   "required": [
+    "fakeCaptcha"
+   ],
+   "properties": {
+    "fakeCaptcha": {
+     "type": "string"
+    }
+   }
+  },
+  "coupon.createRequest": {
+   "required": [
+    "name",
+    "userId",
+    "skuId",
+    "deductionPrice",
+    "expiresTime"
+   ],
+   "properties": {
+    "deductionPrice": {
+     "description": "在折扣价格上，继续扣减的金额，类似代金券, 单位分",
+     "type": "integer",
+     "format": "int32"
+    },
+    "expiresTime": {
+     "description": "有效期(天)",
+     "type": "integer",
+     "format": "int32"
+    },
+    "name": {
+     "description": "优惠券名称",
+     "type": "string"
+    },
+    "skuId": {
+     "description": "sku id",
+     "type": "integer",
+     "format": "int64"
+    },
+    "userId": {
+     "description": "user id",
+     "type": "integer",
+     "format": "int64"
+    }
+   }
+  },
+  "coupon.listOutput": {
+   "required": [
+    "list",
+    "total"
+   ],
+   "properties": {
+    "list": {
+     "type": "array",
+     "items": {
+      "$ref": "#/definitions/dao.Coupon"
+     }
+    },
+    "total": {
+     "type": "integer",
+     "format": "int32"
+    }
+   }
+  },
+  "coupon.updateRequest": {
+   "required": [
+    "deductionPrice",
+    "expiresAt"
+   ],
+   "properties": {
+    "deductionPrice": {
+     "description": "在折扣价格上，继续扣减的金额，类似代金券, 单位分",
+     "type": "integer",
+     "format": "int32"
+    },
+    "expiresAt": {
+     "description": "失效时间",
+     "type": "integer",
+     "format": "int64"
+    }
+   }
+  },
+  "course.createRequest": {
+   "required": [
+    "name"
+   ],
+   "properties": {
+    "name": {
+     "type": "string"
+    }
+   }
+  },
+  "course.listOutput": {
+   "required": [
+    "list",
+    "total"
+   ],
+   "properties": {
+    "list": {
+     "type": "array",
+     "items": {
+      "$ref": "#/definitions/dao.Course"
+     }
+    },
+    "total": {
+     "type": "integer",
+     "format": "int32"
+    }
+   }
+  },
+  "course.updateRequest": {
+   "required": [
+    "description",
+    "images"
+   ],
+   "properties": {
+    "description": {
+     "description": "课程描述",
+     "type": "string"
+    },
+    "images": {
+     "description": "简介图片",
+     "type": "array",
+     "items": {
+      "type": "string"
+     }
+    }
+   }
+  },
+  "dao.BookedCourse": {
+   "required": [
+    "id",
+    "orderId",
+    "courseName",
+    "origId",
+    "changeId",
+    "studentId",
+    "teacherId",
+    "date",
+    "start",
+    "stop",
+    "seq",
+    "status",
+    "statusName",
+    "creator",
+    "updatedAt",
+    "createdAt"
+   ],
+   "properties": {
+    "changeId": {
+     "description": "换课课程id",
+     "type": "integer",
+     "format": "int64"
+    },
+    "courseName": {
+     "description": "课程名称",
+     "type": "string"
+    },
+    "createdAt": {
+     "type": "integer",
+     "format": "int64"
+    },
+    "creator": {
+     "type": "string"
+    },
+    "date": {
+     "description": "date format: 2006-01-02",
+     "type": "string"
+    },
+    "id": {
+     "description": "课程id",
+     "type": "integer",
+     "format": "int64"
+    },
+    "orderId": {
+     "description": "order id",
+     "type": "integer",
+     "format": "int64"
+    },
+    "origId": {
+     "description": "原课程id",
+     "type": "integer",
+     "format": "int64"
+    },
+    "seq": {
+     "description": "课程编号, 一天的第几节课",
+     "type": "integer",
+     "format": "int32"
+    },
+    "start": {
+     "description": "start time",
+     "type": "integer",
+     "format": "int64"
+    },
+    "status": {
+     "description": "状态",
+     "type": "string"
+    },
+    "statusName": {
+     "description": "状态",
+     "type": "string"
+    },
+    "stop": {
+     "description": "stop time",
+     "type": "integer",
+     "format": "int64"
+    },
+    "studentId": {
+     "description": "学生 id",
+     "type": "integer",
+     "format": "int64"
+    },
+    "teacherId": {
+     "description": "老师 id",
+     "type": "integer",
+     "format": "int64"
+    },
+    "updatedAt": {
+     "type": "integer",
+     "format": "int64"
+    }
+   }
+  },
+  "dao.Coupon": {
+   "required": [
+    "id",
+    "name",
+    "userId",
+    "userName",
+    "skuId",
+    "skuName",
+    "status",
+    "statusName",
+    "deductionPrice",
+    "expiresAt",
+    "creator",
+    "updatedAt",
+    "createdAt"
+   ],
+   "properties": {
+    "createdAt": {
+     "description": "创建时间",
+     "type": "integer",
+     "format": "int64"
+    },
+    "creator": {
+     "description": "创建者",
+     "type": "string"
+    },
+    "deductionPrice": {
+     "description": "在折扣价格上，继续扣减的金额，类似代金券, 单位分",
+     "type": "integer",
+     "format": "int32"
+    },
+    "expiresAt": {
+     "description": "失效时间",
+     "type": "integer",
+     "format": "int64"
+    },
+    "id": {
+     "description": "优惠券id",
+     "type": "integer",
+     "format": "int64"
+    },
+    "name": {
+     "description": "优惠券标题",
+     "type": "string"
+    },
+    "skuId": {
+     "description": "购买单元商品id",
+     "type": "integer",
+     "format": "int64"
+    },
+    "skuName": {
+     "description": "购买单元商品名称",
+     "type": "string"
+    },
+    "status": {
+     "description": "状态",
+     "type": "string"
+    },
+    "statusName": {
+     "description": "订单状态说明",
+     "type": "string"
+    },
+    "updatedAt": {
+     "description": "更新时间",
+     "type": "integer",
+     "format": "int64"
+    },
+    "userId": {
+     "description": "用户id",
+     "type": "integer",
+     "format": "int64"
+    },
+    "userName": {
+     "description": "用户名",
+     "type": "string"
+    }
+   }
+  },
+  "dao.Course": {
    "required": [
     "id",
     "name",
@@ -4299,71 +6658,7 @@
     }
    }
   },
-  "api.Good": {
-   "required": [
-    "spuId",
-    "orgId",
-    "title",
-    "description",
-    "images",
-    "video",
-    "available",
-    "maxLinePrice",
-    "minSalePrice",
-    "org",
-    "teacher",
-    "skuList"
-   ],
-   "properties": {
-    "available": {
-     "type": "boolean"
-    },
-    "description": {
-     "type": "string"
-    },
-    "images": {
-     "type": "array",
-     "items": {
-      "type": "string"
-     }
-    },
-    "maxLinePrice": {
-     "type": "integer",
-     "format": "int32"
-    },
-    "minSalePrice": {
-     "type": "integer",
-     "format": "int32"
-    },
-    "org": {
-     "$ref": "#/definitions/api.Org"
-    },
-    "orgId": {
-     "type": "integer",
-     "format": "int64"
-    },
-    "skuList": {
-     "type": "array",
-     "items": {
-      "$ref": "#/definitions/api.Sku"
-     }
-    },
-    "spuId": {
-     "type": "integer",
-     "format": "int64"
-    },
-    "teacher": {
-     "$ref": "#/definitions/api.Teacher"
-    },
-    "title": {
-     "type": "string"
-    },
-    "video": {
-     "type": "string"
-    }
-   }
-  },
-  "api.Holiday": {
+  "dao.Holiday": {
    "required": [
     "id",
     "name",
@@ -4399,7 +6694,62 @@
     }
    }
   },
-  "api.Notice": {
+  "dao.Log": {
+   "required": [
+    "id",
+    "orderNo",
+    "orgId",
+    "teacherId",
+    "userId",
+    "event",
+    "message",
+    "totalAmount",
+    "createdAt"
+   ],
+   "properties": {
+    "createdAt": {
+     "type": "integer",
+     "format": "int64"
+    },
+    "event": {
+     "description": "动作事件",
+     "type": "string"
+    },
+    "id": {
+     "description": "id",
+     "type": "integer",
+     "format": "int64"
+    },
+    "message": {
+     "description": "message",
+     "type": "string"
+    },
+    "orderNo": {
+     "type": "string"
+    },
+    "orgId": {
+     "description": "所属机构Id",
+     "type": "integer",
+     "format": "int64"
+    },
+    "teacherId": {
+     "description": "老师 id",
+     "type": "integer",
+     "format": "int64"
+    },
+    "totalAmount": {
+     "description": "实际支付总价",
+     "type": "integer",
+     "format": "int64"
+    },
+    "userId": {
+     "description": "用户id",
+     "type": "integer",
+     "format": "int64"
+    }
+   }
+  },
+  "dao.Notice": {
    "required": [
     "id",
     "userName",
@@ -4452,44 +6802,102 @@
     }
    }
   },
-  "api.Order": {
+  "dao.Order": {
    "required": [
     "id",
+    "orderNo",
     "payment",
     "skuId",
     "sku",
+    "steacherId",
+    "steacherName",
     "studentId",
     "student",
     "comment",
     "status",
+    "statusName",
+    "count",
+    "selectedCourse",
+    "date",
+    "begin",
+    "end",
+    "payer",
+    "totalPrice",
+    "couponId",
+    "deductionPrice",
+    "totalAmount",
     "creator",
     "updatedAt",
     "createdAt"
    ],
    "properties": {
+    "begin": {
+     "description": "开始上课时间",
+     "type": "integer",
+     "format": "int64"
+    },
     "comment": {
-     "description": "课程备注, 课堂笔记",
+     "description": "订单备注",
      "type": "string"
     },
+    "count": {
+     "description": "课程数量",
+     "type": "integer",
+     "format": "int32"
+    },
+    "couponId": {
+     "description": "优惠券id",
+     "type": "integer",
+     "format": "int64"
+    },
     "createdAt": {
+     "description": "创建时间",
      "type": "integer",
      "format": "int64"
     },
     "creator": {
+     "description": "创建者",
      "type": "string"
+    },
+    "date": {
+     "type": "integer",
+     "format": "int64"
+    },
+    "deductionPrice": {
+     "description": "在折扣价格上，继续扣减的金额，类似代金券, 单位分",
+     "type": "integer",
+     "format": "int32"
+    },
+    "end": {
+     "description": "结束时间",
+     "type": "integer",
+     "format": "int64"
     },
     "id": {
      "description": "课程id",
      "type": "integer",
      "format": "int64"
     },
+    "orderNo": {
+     "type": "string"
+    },
+    "payer": {
+     "description": "openid, 微信小程序",
+     "type": "string"
+    },
     "payment": {
      "description": "订单号",
      "type": "string"
     },
+    "selectedCourse": {
+     "type": "array",
+     "items": {
+      "$ref": "#/definitions/dao.Order.selectedCourse"
+     }
+    },
     "sku": {
      "description": "购买的课程镜像",
-     "$ref": "#/definitions/api.Sku"
+     "$ref": "#/definitions/dao.Sku"
     },
     "skuId": {
      "description": "课程id",
@@ -4497,24 +6905,55 @@
      "format": "int64"
     },
     "status": {
-     "description": "课程状态",
+     "description": "订单状态",
+     "type": "string"
+    },
+    "statusName": {
+     "description": "订单状态说明",
+     "type": "string"
+    },
+    "steacherId": {
+     "description": "老师id",
+     "type": "integer",
+     "format": "int64"
+    },
+    "steacherName": {
+     "description": "老师名称",
      "type": "string"
     },
     "student": {
      "description": "学生id",
-     "$ref": "#/definitions/api.Student"
+     "$ref": "#/definitions/dao.Student"
     },
     "studentId": {
      "description": "学生id",
-     "type": "string"
+     "type": "integer",
+     "format": "int64"
+    },
+    "totalAmount": {
+     "description": "实际支付总价",
+     "type": "integer",
+     "format": "int64"
+    },
+    "totalPrice": {
+     "description": "原价",
+     "type": "integer",
+     "format": "int64"
     },
     "updatedAt": {
+     "description": "更新时间",
      "type": "integer",
      "format": "int64"
     }
    }
   },
-  "api.Org": {
+  "dao.Order.selectedCourse": {
+   "type": "array",
+   "items": {
+    "type": "integer"
+   }
+  },
+  "dao.Org": {
    "required": [
     "id",
     "name",
@@ -4576,7 +7015,7 @@
     },
     "payAccount": {
      "description": "支付方式",
-     "$ref": "#/definitions/api.PayAccount"
+     "$ref": "#/definitions/dao.PayAccount"
     },
     "updatedAt": {
      "type": "integer",
@@ -4584,7 +7023,7 @@
     }
    }
   },
-  "api.PayAccount": {
+  "dao.PayAccount": {
    "required": [
     "id",
     "userId",
@@ -4622,7 +7061,7 @@
     }
    }
   },
-  "api.Payment": {
+  "dao.Payment": {
    "required": [
     "id",
     "name",
@@ -4720,17 +7159,26 @@
     }
    }
   },
-  "api.Refund": {
+  "dao.Refund": {
    "required": [
     "id",
-    "name",
-    "payment",
+    "orderNo",
+    "refundNo",
+    "amount",
+    "order",
     "status",
+    "statusName",
+    "reason",
     "creator",
     "updatedAt",
     "createdAt"
    ],
    "properties": {
+    "amount": {
+     "description": "退款额，单位分",
+     "type": "integer",
+     "format": "int64"
+    },
     "createdAt": {
      "type": "integer",
      "format": "int64"
@@ -4743,14 +7191,26 @@
      "type": "integer",
      "format": "int64"
     },
-    "name": {
+    "order": {
+     "description": "原订单",
+     "$ref": "#/definitions/dao.Order"
+    },
+    "orderNo": {
      "type": "string"
     },
-    "payment": {
-     "description": "订单号",
+    "reason": {
+     "description": "退票原因",
+     "type": "string"
+    },
+    "refundNo": {
      "type": "string"
     },
     "status": {
+     "description": "退款单状态",
+     "type": "string"
+    },
+    "statusName": {
+     "description": "退款单状态说明",
      "type": "string"
     },
     "updatedAt": {
@@ -4759,7 +7219,7 @@
     }
    }
   },
-  "api.ScheduleSchema": {
+  "dao.ScheduleSchema": {
    "required": [
     "workDays",
     "courseDuration",
@@ -4780,7 +7240,7 @@
      "format": "int64"
     },
     "courseDuration": {
-     "description": "每节课市场(包括课间休息)",
+     "description": "每节课时长(包括课间休息)",
      "type": "integer",
      "format": "int64"
     },
@@ -4803,12 +7263,18 @@
     }
    }
   },
-  "api.Sku": {
+  "dao.Sku": {
    "required": [
     "id",
-    "spuId",
     "name",
+    "description",
     "available",
+    "images",
+    "orgId",
+    "org",
+    "ownerId",
+    "teacherId",
+    "teacher",
     "courseId",
     "courseName",
     "price",
@@ -4824,7 +7290,7 @@
      "type": "boolean"
     },
     "count": {
-     "description": "课程数量",
+     "description": "课程数量,用户在购买时无法修改",
      "type": "integer",
      "format": "int32"
     },
@@ -4844,73 +7310,12 @@
     "creator": {
      "type": "string"
     },
-    "id": {
-     "description": "课程id",
-     "type": "integer",
-     "format": "int64"
-    },
-    "name": {
-     "description": "课程标题",
-     "type": "string"
-    },
-    "price": {
-     "description": "每节课价格，单位: 分",
-     "type": "integer",
-     "format": "int32"
-    },
-    "salePrice": {
-     "description": "每节课折扣价格，单位: 分",
-     "type": "integer",
-     "format": "int32"
-    },
-    "spuId": {
-     "description": "商品id",
-     "type": "integer",
-     "format": "int64"
-    },
-    "updatedAt": {
-     "type": "integer",
-     "format": "int64"
-    }
-   }
-  },
-  "api.Spu": {
-   "required": [
-    "id",
-    "name",
-    "description",
-    "available",
-    "maxLinePrice",
-    "minSalePrice",
-    "skuTotal",
-    "images",
-    "orgId",
-    "org",
-    "ownerId",
-    "teacherId",
-    "teacher",
-    "creator",
-    "updatedAt",
-    "createdAt"
-   ],
-   "properties": {
-    "available": {
-     "description": "available",
-     "type": "boolean"
-    },
-    "createdAt": {
-     "type": "integer",
-     "format": "int64"
-    },
-    "creator": {
-     "type": "string"
-    },
     "description": {
      "description": "商品描述",
      "type": "string"
     },
     "id": {
-     "description": "spu id",
+     "description": "课程id",
      "type": "integer",
      "format": "int64"
     },
@@ -4921,23 +7326,13 @@
       "type": "string"
      }
     },
-    "maxLinePrice": {
-     "description": "max line price",
-     "type": "integer",
-     "format": "int32"
-    },
-    "minSalePrice": {
-     "description": "min sale Price",
-     "type": "integer",
-     "format": "int32"
-    },
     "name": {
-     "description": "商品标题",
+     "description": "课程标题",
      "type": "string"
     },
     "org": {
      "description": "org",
-     "$ref": "#/definitions/api.Org"
+     "$ref": "#/definitions/dao.Org"
     },
     "orgId": {
      "description": "OrgId",
@@ -4949,13 +7344,19 @@
      "type": "integer",
      "format": "int64"
     },
-    "skuTotal": {
+    "price": {
+     "description": "每节课价格，单位: 分",
+     "type": "integer",
+     "format": "int32"
+    },
+    "salePrice": {
+     "description": "每节课折扣价格，单位: 分",
      "type": "integer",
      "format": "int32"
     },
     "teacher": {
      "description": "teacher",
-     "$ref": "#/definitions/api.Teacher"
+     "$ref": "#/definitions/dao.Teacher"
     },
     "teacherId": {
      "description": "teacher id",
@@ -4968,7 +7369,7 @@
     }
    }
   },
-  "api.Student": {
+  "dao.Student": {
    "required": [
     "id",
     "name",
@@ -5024,7 +7425,39 @@
     }
    }
   },
-  "api.Teacher": {
+  "dao.StudentScheduleSummary": {
+   "required": [
+    "name",
+    "courseCnt",
+    "teacherId",
+    "teacherName",
+    "phoneNumber",
+    "address"
+   ],
+   "properties": {
+    "address": {
+     "type": "string"
+    },
+    "courseCnt": {
+     "type": "integer",
+     "format": "int32"
+    },
+    "name": {
+     "type": "string"
+    },
+    "phoneNumber": {
+     "type": "string"
+    },
+    "teacherId": {
+     "type": "integer",
+     "format": "int64"
+    },
+    "teacherName": {
+     "type": "string"
+    }
+   }
+  },
+  "dao.Teacher": {
    "required": [
     "id",
     "name",
@@ -5147,7 +7580,7 @@
      "type": "string"
     },
     "scheduleSchema": {
-     "$ref": "#/definitions/api.ScheduleSchema"
+     "$ref": "#/definitions/dao.ScheduleSchema"
     },
     "updatedAt": {
      "type": "integer",
@@ -5176,7 +7609,44 @@
     }
    }
   },
-  "api.User": {
+  "dao.TeacherScheduleSummary": {
+   "required": [
+    "name",
+    "courseCnt",
+    "studentId",
+    "studentName",
+    "teacherId",
+    "teacherName",
+    "phoneNumber"
+   ],
+   "properties": {
+    "courseCnt": {
+     "type": "integer",
+     "format": "int32"
+    },
+    "name": {
+     "type": "string"
+    },
+    "phoneNumber": {
+     "type": "string"
+    },
+    "studentId": {
+     "type": "integer",
+     "format": "int64"
+    },
+    "studentName": {
+     "type": "string"
+    },
+    "teacherId": {
+     "type": "integer",
+     "format": "int64"
+    },
+    "teacherName": {
+     "type": "string"
+    }
+   }
+  },
+  "dao.User": {
    "required": [
     "id",
     "name",
@@ -5197,12 +7667,15 @@
     "phone",
     "accountNo",
     "shareNo",
-    "introducer",
+    "introducerId",
     "creator",
     "payAccount",
     "country",
     "province",
     "city",
+    "district",
+    "street",
+    "community",
     "updatedAt",
     "createdAt"
    ],
@@ -5218,9 +7691,15 @@
      "type": "string"
     },
     "city": {
+     "description": "城市",
+     "type": "string"
+    },
+    "community": {
+     "description": "社区",
      "type": "string"
     },
     "country": {
+     "description": "国家",
      "type": "string"
     },
     "createdAt": {
@@ -5228,6 +7707,10 @@
      "format": "int64"
     },
     "creator": {
+     "type": "string"
+    },
+    "district": {
+     "description": "区",
      "type": "string"
     },
     "email": {
@@ -5245,9 +7728,10 @@
      "type": "integer",
      "format": "int64"
     },
-    "introducer": {
-     "description": "介绍人, user.Name",
-     "type": "string"
+    "introducerId": {
+     "description": "介绍人, user.id",
+     "type": "integer",
+     "format": "int64"
     },
     "isAdmin": {
      "description": "管理员",
@@ -5278,7 +7762,7 @@
     },
     "payAccount": {
      "description": "支付方式",
-     "$ref": "#/definitions/api.PayAccount"
+     "$ref": "#/definitions/dao.PayAccount"
     },
     "phone": {
      "description": "手机号",
@@ -5288,6 +7772,7 @@
      "type": "string"
     },
     "province": {
+     "description": "省",
      "type": "string"
     },
     "sex": {
@@ -5297,6 +7782,10 @@
     },
     "shareNo": {
      "description": "对外分享号",
+     "type": "string"
+    },
+    "street": {
+     "description": "街道",
      "type": "string"
     },
     "unionid": {
@@ -5310,354 +7799,6 @@
     "wOpenid": {
      "description": "website openid",
      "type": "string"
-    }
-   }
-  },
-  "app.Good": {
-   "required": [
-    "GoodRequest",
-    "title",
-    "image",
-    "price",
-    "num",
-    "orgName",
-    "totalSalePrice",
-    "totalPromionAmount",
-    "totalGoodCount",
-    "totalPayAmount",
-    "settleType"
-   ],
-   "properties": {
-    "GoodRequest": {
-     "$ref": "#/definitions/app.GoodRequest"
-    },
-    "image": {
-     "type": "string"
-    },
-    "num": {
-     "type": "integer",
-     "format": "int32"
-    },
-    "orgName": {
-     "type": "string"
-    },
-    "price": {
-     "type": "integer",
-     "format": "int32"
-    },
-    "settleType": {
-     "type": "integer",
-     "format": "int32"
-    },
-    "title": {
-     "type": "string"
-    },
-    "totalGoodCount": {
-     "type": "integer",
-     "format": "int32"
-    },
-    "totalPayAmount": {
-     "type": "integer",
-     "format": "int32"
-    },
-    "totalPromionAmount": {
-     "type": "integer",
-     "format": "int32"
-    },
-    "totalSalePrice": {
-     "type": "integer",
-     "format": "int32"
-    }
-   }
-  },
-  "app.GoodRequest": {
-   "required": [
-    "quantity",
-    "spuId",
-    "skuId",
-    "checked"
-   ],
-   "properties": {
-    "checked": {
-     "type": "boolean"
-    },
-    "quantity": {
-     "type": "integer",
-     "format": "int32"
-    },
-    "skuId": {
-     "type": "integer",
-     "format": "int64"
-    },
-    "spuId": {
-     "type": "integer",
-     "format": "int64"
-    }
-   }
-  },
-  "app.Schedule": {
-   "required": [
-    "checked"
-   ],
-   "properties": {
-    "checked": {
-     "type": "boolean"
-    }
-   }
-  },
-  "app.ScheduleCourse": {
-   "required": [
-    "start",
-    "stop"
-   ],
-   "properties": {
-    "start": {
-     "type": "integer",
-     "format": "int64"
-    },
-    "stop": {
-     "type": "integer",
-     "format": "int64"
-    }
-   }
-  },
-  "app.ScheduleDay": {
-   "required": [
-    "date",
-    "course",
-    "bookedCourse"
-   ],
-   "properties": {
-    "bookedCourse": {
-     "type": "array",
-     "items": {
-      "$ref": "#/definitions/app.ScheduleCourse"
-     }
-    },
-    "course": {
-     "type": "array",
-     "items": {
-      "$ref": "#/definitions/app.ScheduleCourse"
-     }
-    },
-    "date": {
-     "type": "integer",
-     "format": "int64"
-    }
-   }
-  },
-  "app.Student": {
-   "required": [
-    "idNum",
-    "creator",
-    "isDefault",
-    "phone",
-    "updatedAt",
-    "createdAt",
-    "id",
-    "name",
-    "displayName",
-    "owner",
-    "checked"
-   ],
-   "properties": {
-    "checked": {
-     "type": "boolean"
-    },
-    "createdAt": {
-     "type": "integer",
-     "format": "int64"
-    },
-    "creator": {
-     "type": "string"
-    },
-    "displayName": {
-     "description": "学生显示名称",
-     "type": "string"
-    },
-    "id": {
-     "description": "id",
-     "type": "integer",
-     "format": "int64"
-    },
-    "idNum": {
-     "description": "学生身份证",
-     "type": "string"
-    },
-    "isDefault": {
-     "description": "is default",
-     "type": "integer",
-     "format": "int32"
-    },
-    "name": {
-     "description": "学生账号名",
-     "type": "string"
-    },
-    "owner": {
-     "description": "家长",
-     "type": "string"
-    },
-    "phone": {
-     "type": "string"
-    },
-    "updatedAt": {
-     "type": "integer",
-     "format": "int64"
-    }
-   }
-  },
-  "app.fetchSettleDetailRequest": {
-   "required": [
-    "good",
-    "student",
-    "schedule"
-   ],
-   "properties": {
-    "good": {
-     "$ref": "#/definitions/app.Good"
-    },
-    "schedule": {
-     "$ref": "#/definitions/app.Schedule"
-    },
-    "student": {
-     "$ref": "#/definitions/app.Student"
-    }
-   }
-  },
-  "app.fetchSettleDetailResponse": {
-   "properties": {
-    "good": {
-     "$ref": "#/definitions/app.Good"
-    },
-    "schedule": {
-     "$ref": "#/definitions/app.Schedule"
-    },
-    "student": {
-     "$ref": "#/definitions/app.Student"
-    }
-   }
-  },
-  "app.scheduleResponse": {
-   "required": [
-    "date"
-   ],
-   "properties": {
-    "date": {
-     "type": "array",
-     "items": {
-      "$ref": "#/definitions/app.ScheduleDay"
-     }
-    }
-   }
-  },
-  "auth.LoginRequest": {
-   "required": [
-    "type",
-    "autoLogin",
-    "username",
-    "password",
-    "phone",
-    "captcha",
-    "code",
-    "state"
-   ],
-   "properties": {
-    "autoLogin": {
-     "description": "自动登陆",
-     "type": "boolean"
-    },
-    "captcha": {
-     "description": "手机验证码",
-     "type": "string"
-    },
-    "code": {
-     "description": "oauth2 code, https://developers.weixin.qq.com/miniprogram/dev/framework/open-ability/login.html",
-     "type": "string"
-    },
-    "password": {
-     "type": "string"
-    },
-    "phone": {
-     "description": "手机号，用于手机验证码登陆",
-     "type": "string"
-    },
-    "state": {
-     "description": "oauth2 state",
-     "type": "string"
-    },
-    "type": {
-     "description": "登陆类型, weixin, password, phone",
-     "type": "string"
-    },
-    "username": {
-     "type": "string"
-    }
-   }
-  },
-  "auth.captchaRequest": {
-   "required": [
-    "phone"
-   ],
-   "properties": {
-    "phone": {
-     "type": "string"
-    }
-   }
-  },
-  "auth.captchaResponse": {
-   "required": [
-    "fakeCaptcha"
-   ],
-   "properties": {
-    "fakeCaptcha": {
-     "type": "string"
-    }
-   }
-  },
-  "course.createRequest": {
-   "required": [
-    "name"
-   ],
-   "properties": {
-    "name": {
-     "type": "string"
-    }
-   }
-  },
-  "course.listOutput": {
-   "required": [
-    "list",
-    "total"
-   ],
-   "properties": {
-    "list": {
-     "type": "array",
-     "items": {
-      "$ref": "#/definitions/api.Course"
-     }
-    },
-    "total": {
-     "type": "integer",
-     "format": "int32"
-    }
-   }
-  },
-  "course.updateRequest": {
-   "required": [
-    "description",
-    "images"
-   ],
-   "properties": {
-    "description": {
-     "description": "课程描述",
-     "type": "string"
-    },
-    "images": {
-     "description": "简介图片",
-     "type": "array",
-     "items": {
-      "type": "string"
-     }
     }
    }
   },
@@ -5750,7 +7891,59 @@
     "list": {
      "type": "array",
      "items": {
-      "$ref": "#/definitions/api.Holiday"
+      "$ref": "#/definitions/dao.Holiday"
+     }
+    },
+    "total": {
+     "type": "integer",
+     "format": "int32"
+    }
+   }
+  },
+  "jsapi.PrepayWithRequestPaymentResponse": {
+   "required": [
+    "prepay_id",
+    "appId",
+    "timeStamp",
+    "nonceStr",
+    "package",
+    "signType",
+    "paySign"
+   ],
+   "properties": {
+    "appId": {
+     "type": "string"
+    },
+    "nonceStr": {
+     "type": "string"
+    },
+    "package": {
+     "type": "string"
+    },
+    "paySign": {
+     "type": "string"
+    },
+    "prepay_id": {
+     "type": "string"
+    },
+    "signType": {
+     "type": "string"
+    },
+    "timeStamp": {
+     "type": "string"
+    }
+   }
+  },
+  "log.listOutput": {
+   "required": [
+    "list",
+    "total"
+   ],
+   "properties": {
+    "list": {
+     "type": "array",
+     "items": {
+      "$ref": "#/definitions/dao.Log"
      }
     },
     "total": {
@@ -5768,7 +7961,7 @@
     "list": {
      "type": "array",
      "items": {
-      "$ref": "#/definitions/api.Notice"
+      "$ref": "#/definitions/dao.Notice"
      }
     },
     "total": {
@@ -5801,7 +7994,7 @@
     "list": {
      "type": "array",
      "items": {
-      "$ref": "#/definitions/api.Order"
+      "$ref": "#/definitions/dao.Order"
      }
     },
     "total": {
@@ -5830,7 +8023,7 @@
     "list": {
      "type": "array",
      "items": {
-      "$ref": "#/definitions/api.Org"
+      "$ref": "#/definitions/dao.Org"
      }
     },
     "total": {
@@ -5880,7 +8073,7 @@
     },
     "payAccount": {
      "description": "支付方式",
-     "$ref": "#/definitions/api.PayAccount"
+     "$ref": "#/definitions/dao.PayAccount"
     }
    }
   },
@@ -5903,7 +8096,7 @@
     "list": {
      "type": "array",
      "items": {
-      "$ref": "#/definitions/api.Payment"
+      "$ref": "#/definitions/dao.Payment"
      }
     },
     "total": {
@@ -5915,10 +8108,15 @@
   "payment.updateRequest": {},
   "refund.createRequest": {
    "required": [
-    "name"
+    "orderNo",
+    "reason"
    ],
    "properties": {
-    "name": {
+    "orderNo": {
+     "type": "string"
+    },
+    "reason": {
+     "description": "退票原因",
      "type": "string"
     }
    }
@@ -5932,7 +8130,7 @@
     "list": {
      "type": "array",
      "items": {
-      "$ref": "#/definitions/api.Refund"
+      "$ref": "#/definitions/dao.Refund"
      }
     },
     "total": {
@@ -5945,7 +8143,6 @@
   "sku.createRequest": {
    "required": [
     "name",
-    "spuId",
     "courseId"
    ],
    "properties": {
@@ -5956,11 +8153,6 @@
     },
     "name": {
      "type": "string"
-    },
-    "spuId": {
-     "description": "商品id",
-     "type": "integer",
-     "format": "int64"
     }
    }
   },
@@ -5973,7 +8165,7 @@
     "list": {
      "type": "array",
      "items": {
-      "$ref": "#/definitions/api.Sku"
+      "$ref": "#/definitions/dao.Sku"
      }
     },
     "total": {
@@ -6011,73 +8203,6 @@
     }
    }
   },
-  "spu.createRequest": {
-   "required": [
-    "name",
-    "teacherId",
-    "orgId"
-   ],
-   "properties": {
-    "name": {
-     "type": "string"
-    },
-    "orgId": {
-     "type": "integer",
-     "format": "int64"
-    },
-    "teacherId": {
-     "type": "integer",
-     "format": "int64"
-    }
-   }
-  },
-  "spu.listOutput": {
-   "required": [
-    "list",
-    "total"
-   ],
-   "properties": {
-    "list": {
-     "type": "array",
-     "items": {
-      "$ref": "#/definitions/api.Spu"
-     }
-    },
-    "total": {
-     "type": "integer",
-     "format": "int32"
-    }
-   }
-  },
-  "spu.updateRequest": {
-   "required": [
-    "name",
-    "description",
-    "available",
-    "images"
-   ],
-   "properties": {
-    "available": {
-     "description": "available",
-     "type": "boolean"
-    },
-    "description": {
-     "description": "商品描述",
-     "type": "string"
-    },
-    "images": {
-     "description": "简介图片",
-     "type": "array",
-     "items": {
-      "type": "string"
-     }
-    },
-    "name": {
-     "description": "商品标题",
-     "type": "string"
-    }
-   }
-  },
   "student.createRequest": {
    "required": [
     "name",
@@ -6107,7 +8232,7 @@
     "list": {
      "type": "array",
      "items": {
-      "$ref": "#/definitions/api.Student"
+      "$ref": "#/definitions/dao.Student"
      }
     },
     "total": {
@@ -6119,7 +8244,8 @@
   "student.updateRequest": {
    "required": [
     "id",
-    "name"
+    "name",
+    "phone"
    ],
    "properties": {
     "id": {
@@ -6127,6 +8253,9 @@
      "format": "int64"
     },
     "name": {
+     "type": "string"
+    },
+    "phone": {
      "type": "string"
     }
    }
@@ -6163,7 +8292,7 @@
     "list": {
      "type": "array",
      "items": {
-      "$ref": "#/definitions/api.Teacher"
+      "$ref": "#/definitions/dao.Teacher"
      }
     },
     "total": {
@@ -6286,7 +8415,7 @@
     "list": {
      "type": "array",
      "items": {
-      "$ref": "#/definitions/api.User"
+      "$ref": "#/definitions/dao.User"
      }
     },
     "total": {
@@ -6309,7 +8438,10 @@
     "isTeacher",
     "country",
     "province",
-    "city"
+    "city",
+    "district",
+    "street",
+    "community"
    ],
    "properties": {
     "address": {
@@ -6320,9 +8452,19 @@
      "type": "string"
     },
     "city": {
+     "description": "城市",
+     "type": "string"
+    },
+    "community": {
+     "description": "社区",
      "type": "string"
     },
     "country": {
+     "description": "国家",
+     "type": "string"
+    },
+    "district": {
+     "description": "区",
      "type": "string"
     },
     "email": {
@@ -6353,6 +8495,70 @@
      "type": "string"
     },
     "province": {
+     "description": "省",
+     "type": "string"
+    },
+    "street": {
+     "description": "街道",
+     "type": "string"
+    }
+   }
+  },
+  "user.updateSelfRequest": {
+   "required": [
+    "address",
+    "email",
+    "profile",
+    "avatar",
+    "nickname",
+    "country",
+    "province",
+    "city",
+    "district",
+    "street",
+    "community"
+   ],
+   "properties": {
+    "address": {
+     "description": "家庭住址",
+     "type": "string"
+    },
+    "avatar": {
+     "type": "string"
+    },
+    "city": {
+     "description": "城市",
+     "type": "string"
+    },
+    "community": {
+     "description": "社区",
+     "type": "string"
+    },
+    "country": {
+     "description": "国家",
+     "type": "string"
+    },
+    "district": {
+     "description": "区",
+     "type": "string"
+    },
+    "email": {
+     "description": "email",
+     "type": "string"
+    },
+    "nickname": {
+     "type": "string"
+    },
+    "profile": {
+     "description": "profile",
+     "type": "string"
+    },
+    "province": {
+     "description": "省",
+     "type": "string"
+    },
+    "street": {
+     "description": "街道",
      "type": "string"
     }
    }
@@ -6418,14 +8624,32 @@
    }
   }
  },
+ "securityDefinitions": {
+  "BearerToken": {
+   "type": "apiKey",
+   "name": "Authorization",
+   "in": "header",
+   "scopes": {
+    "admin": "manage(global) client, authorization, access, user"
+   }
+  }
+ },
  "tags": [
   {
    "description": "authorization/authentication",
    "name": "auth"
   },
   {
-   "description": "app",
-   "name": "app"
+   "description": "callback",
+   "name": "callback"
+  },
+  {
+   "description": "优惠券",
+   "name": "coupon"
+  },
+  {
+   "description": "小程序接口",
+   "name": "application"
   },
   {
    "description": "good",
@@ -6460,10 +8684,6 @@
    "name": "sku"
   },
   {
-   "description": "spu",
-   "name": "spu"
-  },
-  {
    "description": "student",
    "name": "student"
   },
@@ -6486,6 +8706,10 @@
   {
    "description": "geographic",
    "name": "geographic"
+  },
+  {
+   "description": "日志",
+   "name": "log"
   }
  ]
 }
